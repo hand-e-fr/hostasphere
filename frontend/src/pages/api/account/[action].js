@@ -1,4 +1,11 @@
-import { createAccount, login, listAccount, deleteAccount, getAccount, updateAccount } from '@/server/accountServiceClient';
+import {
+    createAccount,
+    deleteAccount,
+    getAccount,
+    listAccount,
+    login,
+    updateAccount
+} from '@/server/accountServiceClient';
 
 export default async function handler(req, res) {
     const { action } = req.query;

@@ -1,7 +1,6 @@
-import { FiMail } from "react-icons/fi";
 import Link from "next/link";
-import { useContext } from "react";
-import { useRouter } from "next/router";
+import {useContext} from "react";
+import {useRouter} from "next/router";
 import {SidebarContext, SidebarContextType} from "@/context/SidebarContext";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';

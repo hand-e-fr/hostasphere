@@ -1,4 +1,4 @@
-import {createContext, useState, ReactNode, useEffect} from "react";
+import {createContext, ReactNode, useState} from "react";
 
 interface SidebarContextType {
     isCollapsed: boolean;

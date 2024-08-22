@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import './globals.css';
 import Sidebar from "@/components/Sidebar";
 import {useRouter} from "next/router";

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NextPage } from 'next';
+import {NextPage} from 'next';
 import {useRouter} from "next/router";
 
 const Custom404: NextPage = () => {

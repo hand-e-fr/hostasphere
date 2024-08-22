@@ -1,6 +1,6 @@
 import '../app/globals.css';
-import type { AppProps } from 'next/app';
-import React, { useEffect } from "react";
+import type {AppProps} from 'next/app';
+import React from "react";
 import RootLayout from "@/app/Layout";
 import {SidebarProvider} from "@/context/SidebarContext";
 
