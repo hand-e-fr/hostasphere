@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package protofile.account;
+
+option go_package = "protofile/account";
+
+service GithubAccountService {
+  rpc CreateGithubAccount (CreateGithubAccountRequest) returns (CreateGithubAccountResponse);
+}
+
+message CreateGithubAccountRequest {
+  string code = 1;
+}
+
+message CreateGithubAccountResponse {
+  bool ok = 1;
+  string token = 2;
+}
