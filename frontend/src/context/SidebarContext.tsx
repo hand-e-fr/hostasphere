@@ -1,13 +1,15 @@
-import { createContext, useState, ReactNode } from "react";
+import {createContext, useState, ReactNode, useEffect} from "react";
 
 interface SidebarContextType {
     isCollapsed: boolean;
     toggleSidebarcollapse: () => void;
+    setSidebarCollapsed?: (collapsed: boolean) => void;
 }
 
 const initialValue: SidebarContextType = { 
     isCollapsed: false, 
-    toggleSidebarcollapse: () => {} 
+    toggleSidebarcollapse: () => {},
+    setSidebarCollapsed: () => {}
 };
 
 const SidebarContext = createContext<SidebarContextType>(initialValue);
@@ -19,12 +21,17 @@ interface SidebarProviderProps {
 const SidebarProvider = ({ children }: SidebarProviderProps) => {
     const [isCollapsed, setCollapse] = useState<boolean>(false);
 
+    const setSidebarCollapsed = (collapsed: boolean) => {
+        setCollapse(collapsed);
+        localStorage.setItem('sidebarCollapsed', collapsed.toString());
+    }
+
     const toggleSidebarcollapse = () => {
-        setCollapse((prevState) => !prevState);
+        setSidebarCollapsed(!isCollapsed);
     };
 
     return (
-        <SidebarContext.Provider value={{ isCollapsed, toggleSidebarcollapse }}>
+        <SidebarContext.Provider value={{ isCollapsed, toggleSidebarcollapse, setSidebarCollapsed }}>
             {children}
         </SidebarContext.Provider>
     );

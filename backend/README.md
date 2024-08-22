@@ -2,11 +2,21 @@
 
 ## Hostasphere - backend
 
-### Auteurs
+### Installation
+```bash
+go mod download
+```
+
+### How to run
+```bash
+docker-compose up --build
+```
+
+### Authors
 
 - [**William JOLIVET**](https://github.com/WilliamJlvt)
 
-### Bibliothèques Utilisées
+### Libraries used
 - [Go](https://golang.org/)
 - [Grpc](https://grpc.io/)
 - [MongoDB](https://www.mongodb.com/)

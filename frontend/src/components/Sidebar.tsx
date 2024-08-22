@@ -8,6 +8,7 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import DataArrayIcon from '@mui/icons-material/DataArray';
 import HomeIcon from '@mui/icons-material/Home';
 import SpaIcon from '@mui/icons-material/Spa';
+import useAccount from "@/hooks/useAccount";
 
 interface SidebarItem {
     name: string;
@@ -34,34 +35,14 @@ const sidebarItems: SidebarItem[] = [
         href: "/accounts",
         icon: DataArrayIcon,
         requiresAuth: true,
+        requiresRoles: ["admin"],
     }
 ];
-
-const ProfileIcon = () => {
-    return (
-        <div className="flex items-center justify-center">
-            <div className="dropdown dropdown-top fixed bottom-3">
-                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                    <div className="w-10 rounded-full">
-                        <img
-                            alt="Tailwind CSS Navbar component"
-                            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"/>
-                    </div>
-                </div>
-                <ul
-                    tabIndex={0}
-                    className="menu dropdown-content bg-base-300 rounded-box z-[1] mt-4 w-52 p-2 shadow">
-                    <li><a>Profil</a></li>
-                    <li><a className="text-error">Se déconnecter</a></li>
-                </ul>
-            </div>
-        </div>
-    )
-}
 
 const Sidebar = () => {
     const router = useRouter();
     const {isCollapsed, toggleSidebarcollapse} = useContext<SidebarContextType>(SidebarContext);
+    const { isConnected, isLoaded, account } = useAccount();
 
     return (
         <div className="relative">
@@ -71,7 +52,7 @@ const Sidebar = () => {
                 {isCollapsed ? <ArrowCircleRightIcon/> : <ArrowCircleLeftIcon/>}
             </button>
             <aside
-                className={`transition-all duration-400 ease-in-out overflow-hidden ${isCollapsed ? "w-20" : "w-64"} h-full bg-base-100 p-4 flex flex-col justify-between`}>
+                className={`transition-all duration-400 ease-in-out overflow-hidden ${isCollapsed ? "w-20" : "w-64"} min-h-screen bg-base-100 p-4 flex flex-col justify-between`}>
                 <div className="flex flex-col w-full">
                     {!isCollapsed ? (
                         <p className="text-xl font-semibold flex items-center">
@@ -85,7 +66,15 @@ const Sidebar = () => {
                     )}
                     <div className="divider before:bg-white after:bg-white mt-3"></div>
                     <ul className="list-none">
-                        {sidebarItems.map(({name, href, icon: Icon}) => (
+                        {sidebarItems
+                            .filter(({requiresAuth}) => !requiresAuth || (requiresAuth && isConnected && isLoaded))
+                            .filter(({requiresRoles}) => {
+                                if (!requiresRoles) return true;
+                                if (!account || !account.roles) return false;
+                                const roleNames = account.roles.map(role => role.name).toString();
+                                return requiresRoles.includes(roleNames);
+                            })
+                            .map(({name, href, icon: Icon}) => (
                             <li key={name} className="mb-4">
                                 <Link
                                     href={href}
@@ -102,9 +91,6 @@ const Sidebar = () => {
                             </li>
                         ))}
                     </ul>
-                </div>
-                <div>
-                    <ProfileIcon/>
                 </div>
             </aside>
         </div>

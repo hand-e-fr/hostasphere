@@ -11,6 +11,7 @@ service AccountService {
   rpc DeleteAccount (DeleteAccountRequest) returns (DeleteAccountResponse);
   rpc GetAccount (GetAccountRequest) returns (GetAccountResponse);
   rpc UpdateAccount (UpdateAccountRequest) returns (UpdateAccountResponse);
+  rpc AddRole (AddRoleRequest) returns (UpdateAccountResponse);
 }
 
 message Account {
@@ -30,6 +31,11 @@ message UpdateAccountRequest {
   string password = 4;
   repeated string roles = 5;
   repeated string organizations = 6;
+}
+
+message AddRoleRequest {
+  string id = 1;
+  string role = 2;
 }
 
 message UpdateAccountResponse {

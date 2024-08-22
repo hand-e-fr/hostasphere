@@ -4,6 +4,17 @@
 var grpc = require('grpc');
 var account_service_pb = require('./account_service_pb.js');
 
+function serialize_protofile_account_AddRoleRequest(arg) {
+  if (!(arg instanceof account_service_pb.AddRoleRequest)) {
+    throw new Error('Expected argument of type protofile.account.AddRoleRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_protofile_account_AddRoleRequest(buffer_arg) {
+  return account_service_pb.AddRoleRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_protofile_account_CreateAccountRequest(arg) {
   if (!(arg instanceof account_service_pb.CreateAccountRequest)) {
     throw new Error('Expected argument of type protofile.account.CreateAccountRequest');
@@ -201,6 +212,17 @@ var AccountServiceService = exports.AccountServiceService = {
     responseType: account_service_pb.UpdateAccountResponse,
     requestSerialize: serialize_protofile_account_UpdateAccountRequest,
     requestDeserialize: deserialize_protofile_account_UpdateAccountRequest,
+    responseSerialize: serialize_protofile_account_UpdateAccountResponse,
+    responseDeserialize: deserialize_protofile_account_UpdateAccountResponse,
+  },
+  addRole: {
+    path: '/protofile.account.AccountService/AddRole',
+    requestStream: false,
+    responseStream: false,
+    requestType: account_service_pb.AddRoleRequest,
+    responseType: account_service_pb.UpdateAccountResponse,
+    requestSerialize: serialize_protofile_account_AddRoleRequest,
+    requestDeserialize: deserialize_protofile_account_AddRoleRequest,
     responseSerialize: serialize_protofile_account_UpdateAccountResponse,
     responseDeserialize: deserialize_protofile_account_UpdateAccountResponse,
   },

@@ -23,7 +23,8 @@ import (
 var jwtKey = []byte(os.Getenv("JWT_KEY"))
 
 type Claims struct {
-	Email string `json:"email"`
+	Email string   `json:"email"`
+	Roles []string `json:"roles"`
 	jwt.RegisteredClaims
 }
 
@@ -67,6 +68,7 @@ func (s *Server) CreateAccount(ctx context.Context, req *accountpb.CreateAccount
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Email: newAccount.Email,
+		Roles: newAccount.Roles,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -119,6 +121,7 @@ func (s *Server) Login(ctx context.Context, req *accountpb.LoginRequest) (*accou
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &Claims{
 		Email: account.Email,
+		Roles: account.Roles,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -317,4 +320,62 @@ func (s *Server) UpdateAccount(ctx context.Context, req *accountpb.UpdateAccount
 	}
 
 	return &accountpb.UpdateAccountResponse{Ok: true}, nil
+}
+
+func (s *Server) AddRole(ctx context.Context, req *accountpb.AddRoleRequest) (*accountpb.UpdateAccountResponse, error) {
+	if req.Id == "" || req.Role == "" {
+		return nil, errors.New("account ID and role are required")
+	}
+
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Errorf(codes.Unauthenticated, "missing metadata")
+	}
+
+	authHeader, ok := md["authorization"]
+	if !ok || len(authHeader) == 0 {
+		return nil, status.Errorf(codes.Unauthenticated, "missing authorization header")
+	}
+
+	tokenString := strings.TrimPrefix(authHeader[0], "Bearer ")
+	claims := &Claims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil || !token.Valid {
+		return nil, status.Errorf(codes.Unauthenticated, "invalid token")
+	}
+
+	// Check if the user has admin role
+	if !contains(claims.Roles, "admin") {
+		return nil, status.Errorf(codes.PermissionDenied, "admin role required")
+	}
+
+	collection := db.MongoClient.Database("accountDB").Collection("accounts")
+	var account accountpb.Account
+	err = collection.FindOne(ctx, bson.M{"id": req.Id}).Decode(&account)
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		return nil, errors.New("account not found")
+	} else if err != nil {
+		return nil, err
+	}
+
+	// Add the new role to the account
+	account.Roles = append(account.Roles, req.Role)
+
+	_, err = collection.UpdateOne(ctx, bson.M{"id": req.Id}, bson.M{"$set": bson.M{"roles": account.Roles}})
+	if err != nil {
+		return nil, err
+	}
+
+	return &accountpb.UpdateAccountResponse{Ok: true}, nil
+}
+
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
 }

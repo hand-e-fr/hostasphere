@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
 interface Account {
-    roles: any[];
+    // roles is an array of strings
+    roles: string[];
     organizations: any[];
     id: string;
     username: string;
