@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 interface Account {
-    // roles is an array of strings
     roles: string[];
     organizations: any[];
     id: string;
@@ -44,7 +43,6 @@ const useAccount = () => {
 
                 const data = await res.json();
                 setAccount(data.account);
-                console.log(account);
                 setIsConnected(true);
                 setIsLoaded(true);
             } catch (err: unknown) {

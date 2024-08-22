@@ -9,6 +9,7 @@ const MyAccount = () => {
             {isLoaded && isConnected && account && (
                 <div>
                     <p>Username: {account.username}</p>
+                    <p>{account.roles.length > 1 ? 'Roles' : 'Role'}: {account.roles.join(', ')}</p>
                     <p>Email: {account.email}</p>
                     <p>Created At: {new Date(Number(account.created_at)).toLocaleString()}</p>
                 </div>

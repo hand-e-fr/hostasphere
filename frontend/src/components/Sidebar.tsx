@@ -71,8 +71,8 @@ const Sidebar = () => {
                             .filter(({requiresRoles}) => {
                                 if (!requiresRoles) return true;
                                 if (!account || !account.roles) return false;
-                                const roleNames = account.roles.map(role => role.name).toString();
-                                return requiresRoles.includes(roleNames);
+                                const roleNames = account.roles.toString();
+                                return roleNames.includes(requiresRoles.join()) || requiresRoles.includes(roleNames);
                             })
                             .map(({name, href, icon: Icon}) => (
                             <li key={name} className="mb-4">
