@@ -17,6 +17,7 @@
     "@headlessui/react": "^2.1.2",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
+    "express": "^4.19.2",
     "framer-motion": "^11.3.28",
     "google-protobuf": "^3.21.4",
     "grpc-tools": "^1.12.4",
@@ -33,6 +34,7 @@
     "ts-proto": "^2.0.2"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

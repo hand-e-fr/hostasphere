@@ -1,5 +1,5 @@
-import {createContext, ReactNode} from "react";
-import useAccount, {Account, AccountList} from "@/hooks/useAccount";
+import { createContext, ReactNode } from "react";
+import useAccount, { Account, AccountList } from "@/hooks/useAccount";
 
 interface UserContextType {
     isConnected: boolean;
@@ -13,7 +13,7 @@ interface UserContextType {
     haveRoles: (roles: string[]) => boolean;
     fetchAccount: (token: string) => Promise<void>;
     clearAccount: () => void;
-    getAccounts: (page: number, limit: number) => Promise<AccountList>;
+    getAccounts: (page: number, limit: number, query: string) => Promise<AccountList>;
 }
 
 const initialValue: UserContextType = {
@@ -28,7 +28,7 @@ const initialValue: UserContextType = {
     haveRoles: () => false,
     fetchAccount: async () => {},
     clearAccount: () => {},
-    getAccounts: async () => ({ accounts: [], total: 0 }),
+    getAccounts: async () => ({ accounts: [], total: 0, query: '' }),
 };
 
 const UserContext = createContext<UserContextType>(initialValue);

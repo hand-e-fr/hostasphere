@@ -1,15 +1,24 @@
 import React, {useContext, useEffect} from 'react';
 import {UserContext, UserContextType} from "@/context/UserContext";
 import {AccountList} from "@/hooks/useAccount";
+import _error from "@/pages/_error";
 
 const Accounts = () => {
-    const {getAccounts} = useContext<UserContextType>(UserContext);
+    const {getAccounts, account} = useContext<UserContextType>(UserContext);
+
+    if (!account || !account.roles.includes('admin')) {
+        return (
+            <_error statusCode={403} />
+        );
+    }
+
     const [accountList, setAccountList] = React.useState<AccountList>({ accounts: [], total: 0 });
     const [page, setPage] = React.useState(1);
-    const limit = 20;
+    const limit = 8;
+    const [query, setQuery] = React.useState('');
 
     useEffect(() => {
-        getAccounts(1, limit).then((data) => {
+        getAccounts(1, limit, query).then((data) => {
             setAccountList(data);
         });
     }, []);
@@ -18,10 +27,14 @@ const Accounts = () => {
         if (page < 1) {
             page = 1;
         }
-        getAccounts(page, limit).then((data) => {
+        getAccounts(page, limit, query).then((data) => {
             setAccountList(data);
             setPage(page);
         });
+    }
+
+    const updateQuery = () => (e: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(e.target.value);
     }
 
     return (
@@ -41,7 +54,7 @@ const Accounts = () => {
                     </thead>
                     <tbody>
                     {accountList.accounts.map((account, index) => (
-                        <tr key={account.id} className={index % 2 === 0 ? 'bg-base-200' : ''}>
+                        <tr key={account.id} className={`${index % 2 === 0 ? 'bg-base-100' : ''} h-[5.5em]  `}>
                             <td>{index + 1}</td>
                             <td>{account.username}</td>
                             <td>{account.email}</td>
@@ -53,9 +66,25 @@ const Accounts = () => {
                             </td>
                         </tr>
                     ))}
+                    {Array.from({length: limit - accountList.accounts.length}).map((_, index) => (
+                        <tr key={index}
+                            className={`${(limit - accountList.accounts.length + index) % 2 === 0 ? 'bg-base-100' : ''} h-[5.5em]`}>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    ))}
                     </tbody>
                 </table>
+                <div className="divider mt-3"></div>
                 <div className="flex justify-between items-center mt-4">
+                    <div className="search">
+                        <input type="text" className="input input-bordered" placeholder="Search" value={query}
+                               onChange={updateQuery()}/>
+                    </div>
                     <div className="join">
                         <button className="join-item btn" onClick={() => handlePage(page - 1)}>«</button>
                         <button className="join-item btn">Page {page}</button>

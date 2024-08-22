@@ -136,8 +136,8 @@ func (s *Server) Login(ctx context.Context, req *accountpb.LoginRequest) (*accou
 }
 
 func (s *Server) ListAccount(ctx context.Context, req *accountpb.ListAccountRequest) (*accountpb.ListAccountResponse, error) {
-	if req.Page < 1 || req.Limit < 1 {
-		return nil, errors.New("page and limit must be greater than 0")
+	if req.Page < 1 || req.Limit < 1 || req.Limit > 100 {
+		return nil, errors.New("page and limit must be greater than 0 and limit must be less than or equal to 100")
 	}
 
 	filter := bson.M{}

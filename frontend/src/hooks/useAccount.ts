@@ -48,19 +48,20 @@ const useAccount = () => {
         }
     };
 
-    const getAccounts = async (page: number = 1, limit: number = 10) => {
+    const getAccounts = async (page: number = 1, limit: number = 10, query: string = '') => {
         const res = await fetch('/api/account/list', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'authorization': `Bearer ${localStorage.getItem('token') || ''}`,
             },
-            body: JSON.stringify({ page, limit }),
+            body: JSON.stringify({ page, limit, query }),
         });
 
         if (!res.ok) {
             const errorData = await res.json();
-            throw new Error(errorData.error);
+            setError(errorData.error);
+            return { accounts: [], total: 0 } as AccountList;
         }
 
         const data = await res.json();
