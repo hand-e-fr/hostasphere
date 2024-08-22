@@ -43,9 +43,12 @@ const login = (data) => {
     });
 };
 
-const listAccount = (data) => {
+const listAccount = (data, authorization) => {
     return new Promise((resolve, reject) => {
-        client.ListAccount(data, (error, response) => {
+        const metadata = new grpc.Metadata();
+        metadata.add('authorization', authorization);
+
+        client.ListAccount(data, metadata, (error, response) => {
             if (error) {
                 console.error('gRPC Error:', error);
                 reject(error);

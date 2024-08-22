@@ -19,7 +19,7 @@ export default async function handler(req, res) {
                 const loginResponse = await login(req.body);
                 return res.status(200).json(loginResponse);
             case 'list':
-                const listResponse = await listAccount(req.body);
+                const listResponse = await listAccount(req.body, req.headers.authorization);
                 return res.status(200).json(listResponse);
             case 'delete':
                 const deleteResponse = await deleteAccount(req.body);

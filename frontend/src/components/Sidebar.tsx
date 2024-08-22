@@ -7,7 +7,9 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import DataArrayIcon from '@mui/icons-material/DataArray';
 import HomeIcon from '@mui/icons-material/Home';
 import SpaIcon from '@mui/icons-material/Spa';
-import useAccount from "@/hooks/useAccount";
+import Person2Icon from '@mui/icons-material/Person2';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import {UserContext, UserContextType} from "@/context/UserContext";
 
 interface SidebarItem {
     name: string;
@@ -32,16 +34,22 @@ const sidebarItems: SidebarItem[] = [
     {
         name: "Accounts",
         href: "/accounts",
-        icon: DataArrayIcon,
+        icon: PeopleAltIcon,
         requiresAuth: true,
         requiresRoles: ["admin"],
+    },
+    {
+        name: "My Account",
+        href: "/accounts/me",
+        icon: Person2Icon,
+        requiresAuth: true,
     }
 ];
 
 const Sidebar = () => {
     const router = useRouter();
     const {isCollapsed, toggleSidebarcollapse} = useContext<SidebarContextType>(SidebarContext);
-    const { isConnected, isLoaded, account } = useAccount();
+    const { isAuth, haveRoles } = useContext<UserContextType>(UserContext);
 
     return (
         <div className="relative">
@@ -66,13 +74,8 @@ const Sidebar = () => {
                     <div className="divider before:bg-white after:bg-white mt-3"></div>
                     <ul className="list-none">
                         {sidebarItems
-                            .filter(({requiresAuth}) => !requiresAuth || (requiresAuth && isConnected && isLoaded))
-                            .filter(({requiresRoles}) => {
-                                if (!requiresRoles) return true;
-                                if (!account || !account.roles) return false;
-                                const roleNames = account.roles.toString();
-                                return roleNames.includes(requiresRoles.join()) || requiresRoles.includes(roleNames);
-                            })
+                            .filter(({requiresAuth}) => !requiresAuth || (requiresAuth && isAuth))
+                            .filter(({requiresRoles}) => !requiresRoles || haveRoles(requiresRoles))
                             .map(({name, href, icon: Icon}) => (
                             <li key={name} className="mb-4">
                                 <Link

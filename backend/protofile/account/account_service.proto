@@ -38,6 +38,14 @@ message AddRoleRequest {
   string role = 2;
 }
 
+message GetRolesRequest {
+  string id = 1;
+}
+
+message GetRolesResponse {
+  repeated string roles = 1;
+}
+
 message UpdateAccountResponse {
   bool ok = 1;
 }

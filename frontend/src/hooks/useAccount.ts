@@ -1,13 +1,18 @@
 import {useEffect, useState} from 'react';
 
 interface Account {
+    username: string;
+    id: string;
+    email: string;
+    created_at: string;
     roles: string[];
     organizations: any[];
-    id: string;
-    username: string;
-    email: string;
     password: string;
-    created_at: string;
+}
+
+interface AccountList {
+    accounts: Account[];
+    total: number;
 }
 
 const useAccount = () => {
@@ -16,46 +21,75 @@ const useAccount = () => {
     const [account, setAccount] = useState<Account | null>(null);
     const [error, setError] = useState<string | null>(null);
 
+    const fetchAccount = async (token: string = localStorage.getItem('token') || '') => {
+        try {
+            const res = await fetch('/api/account/get', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${token}`,
+                },
+                body: "{}",
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(errorData.error);
+            }
+
+            const data = await res.json();
+            setAccount(data.account);
+            setIsConnected(true);
+            setIsLoaded(true);
+        } catch (err: unknown) {
+            setError((err as Error).message);
+            setIsConnected(false);
+            setIsLoaded(true);
+        }
+    };
+
+    const getAccounts = async (page: number = 1, limit: number = 10) => {
+        const res = await fetch('/api/account/list', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+            },
+            body: JSON.stringify({ page, limit }),
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.error);
+        }
+
+        const data = await res.json();
+        return data as AccountList;
+    }
+
+    const clearAccount = () => {
+        setAccount(null);
+        setIsConnected(false);
+        setIsLoaded(true);
+    }
+
     useEffect(() => {
         const token = localStorage.getItem('token');
-
+    
         if (!token) {
             setIsConnected(false);
             setIsLoaded(true);
             return;
         }
-
-        const fetchAccount = async () => {
-            try {
-                const res = await fetch('/api/account/get', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'authorization': `Bearer ${token}`,
-                    },
-                    body: "{}",
-                });
-
-                if (!res.ok) {
-                    const errorData = await res.json();
-                    throw new Error(errorData.error);
-                }
-
-                const data = await res.json();
-                setAccount(data.account);
-                setIsConnected(true);
-                setIsLoaded(true);
-            } catch (err: unknown) {
-                setError((err as Error).message);
-                setIsConnected(false);
-                setIsLoaded(true);
-            }
-        };
-
-        fetchAccount().then();
+    
+        fetchAccount(token).then(() => {
+            console.log('Account fetched');
+        });
     }, []);
 
-    return { isConnected, isLoaded, account, error, setIsConnected, setIsLoaded, setAccount };
+    return { isConnected, isLoaded, account, error, setIsConnected, setIsLoaded, setAccount, fetchAccount, clearAccount, getAccounts };
 };
 
 export default useAccount;
+export type { Account };
+export type { AccountList };

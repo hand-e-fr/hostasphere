@@ -1,7 +1,8 @@
-import useAccount from "@/hooks/useAccount";
+import {useContext} from "react";
+import {UserContext, UserContextType} from "@/context/UserContext";
 
 const MyAccount = () => {
-    const { isConnected, isLoaded, account } = useAccount();
+    const { isConnected, isLoaded, account } = useContext<UserContextType>(UserContext);
 
     return (
         <div className="w-full max-w-md p-8 space-y-3 rounded-xl bg-base-100 shadow-md">
