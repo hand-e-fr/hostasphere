@@ -14,6 +14,7 @@ interface UserContextType {
     fetchAccount: (token: string) => Promise<void>;
     clearAccount: () => void;
     getAccounts: (page: number, limit: number, query: string) => Promise<AccountList>;
+    refreshAccount: () => Promise<boolean>;
 }
 
 const initialValue: UserContextType = {
@@ -29,6 +30,7 @@ const initialValue: UserContextType = {
     fetchAccount: async () => {},
     clearAccount: () => {},
     getAccounts: async () => ({ accounts: [], total: 0, query: '' }),
+    refreshAccount: async () => false,
 };
 
 const UserContext = createContext<UserContextType>(initialValue);
@@ -39,7 +41,7 @@ interface UserProviderProps {
 
 const UserProvider = ({ children }: UserProviderProps) => {
     const { isConnected, isLoaded, account, error, setIsConnected, setIsLoaded,
-        setAccount, fetchAccount, clearAccount, getAccounts } = useAccount();
+        setAccount, fetchAccount, clearAccount, getAccounts, refreshAccount } = useAccount();
 
     const isAuth = () => {
         return isConnected && isLoaded;
@@ -51,7 +53,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
 
     return (
         <UserContext.Provider value={{ isConnected, isLoaded, account, error, setIsConnected, setIsLoaded,
-            setAccount, isAuth, haveRoles, fetchAccount, clearAccount, getAccounts }}>
+            setAccount, isAuth, haveRoles, fetchAccount, clearAccount, getAccounts, refreshAccount }}>
             {children}
         </UserContext.Provider>
     );

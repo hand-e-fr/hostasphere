@@ -28,7 +28,9 @@ const Register = () => {
 
             const data = await res.json();
             localStorage.setItem('token', data.token);
-            await router.push('/login');
+            await router.push('/').then(
+                () => window.location.reload(),
+            );
         } catch (err: any) {
             setError(err.message);
         }
@@ -69,7 +71,7 @@ const Register = () => {
                     />
                 </div>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
-                <button type="submit" className="block w-full px-4 py-2 font-semibold text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                <button type="submit" className="btn btn-secondary w-full">
                     Register
                 </button>
             </form>

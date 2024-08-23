@@ -39,6 +39,7 @@ const useAccount = () => {
 
             const data = await res.json();
             setAccount(data.account);
+            console.log('useAccount fetchAccount:', data.account);
             setIsConnected(true);
             setIsLoaded(true);
         } catch (err: unknown) {
@@ -74,21 +75,33 @@ const useAccount = () => {
         setIsLoaded(true);
     }
 
-    useEffect(() => {
+    const refreshAccount = async () => {
         const token = localStorage.getItem('token');
-    
         if (!token) {
             setIsConnected(false);
             setIsLoaded(true);
-            return;
+            return false;
         }
-    
-        fetchAccount(token).then(() => {
-            console.log('Account fetched');
-        });
+
+        try {
+            await fetchAccount(token);
+            setIsLoaded(true);
+            setIsConnected(true);
+            return true;
+        } catch {
+            setIsLoaded(true);
+            setIsConnected(false);
+            localStorage.removeItem('token');
+            return false;
+        }
+    }
+
+    useEffect(() => {
+        refreshAccount().then();
     }, []);
 
-    return { isConnected, isLoaded, account, error, setIsConnected, setIsLoaded, setAccount, fetchAccount, clearAccount, getAccounts };
+    return { isConnected, isLoaded, account, error, setIsConnected, setIsLoaded,
+        setAccount, fetchAccount, clearAccount, getAccounts, refreshAccount };
 };
 
 export default useAccount;

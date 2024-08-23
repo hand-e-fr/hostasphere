@@ -1,7 +1,7 @@
 import '../app/globals.css';
 import type {AppProps} from 'next/app';
 import React from "react";
-import RootLayout from "@/app/Layout";
+import RootLayout from "@/components/Layout";
 import {SidebarProvider} from "@/context/SidebarContext";
 import {UserProvider} from "@/context/UserContext";
 

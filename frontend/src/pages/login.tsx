@@ -1,5 +1,6 @@
-import {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useRouter} from 'next/router';
+import {UserContext, UserContextType} from "@/context/UserContext";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -27,11 +28,17 @@ const Login = () => {
 
             const data = await res.json();
             localStorage.setItem('token', data.token);
-            await router.push('/login');
+            await router.push('/').then(
+                () => window.location.reload(),
+            );
         } catch (err: any) {
             setError(err.message);
         }
     };
+
+    const goRegisterPage = () => {
+        router.push("/register").then();
+    }
 
     return (
         <div className="w-full max-w-md p-8 space-y-3 rounded-xl bg-base-100 shadow-md">
@@ -58,10 +65,11 @@ const Login = () => {
                     />
                 </div>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
-                <button type="submit" className="block w-full px-4 py-2 font-semibold text-center text-white bg-blue-600 rounded-md hover:bg-blue-700">
+                <button type="submit" className="btn btn-secondary w-full">
                     Login
                 </button>
             </form>
+            <button className="btn btn-link mt-6 text-secondary w-full text-center" onClick={goRegisterPage}>Not registered yet? Register now</button>
         </div>
     );
 };
