@@ -12,6 +12,7 @@ service AccountService {
   rpc GetAccount (GetAccountRequest) returns (GetAccountResponse);
   rpc UpdateAccount (UpdateAccountRequest) returns (UpdateAccountResponse);
   rpc AddRole (AddRoleRequest) returns (UpdateAccountResponse);
+  rpc GetRoles (GetRolesRequest) returns (GetRolesResponse);
 }
 
 message Account {
@@ -51,6 +52,7 @@ message UpdateAccountResponse {
 }
 
 message GetAccountRequest {
+  string id = 1;
 }
 
 message GetAccountResponse {

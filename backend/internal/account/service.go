@@ -25,6 +25,7 @@ var jwtKey = []byte(os.Getenv("JWT_KEY"))
 type Claims struct {
 	Email string   `json:"email"`
 	Roles []string `json:"roles"`
+	ID    string   `json:"id"`
 	jwt.RegisteredClaims
 }
 
@@ -69,6 +70,7 @@ func (s *Server) CreateAccount(ctx context.Context, req *accountpb.CreateAccount
 	claims := &Claims{
 		Email: newAccount.Email,
 		Roles: newAccount.Roles,
+		ID:    newAccount.Id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -122,6 +124,7 @@ func (s *Server) Login(ctx context.Context, req *accountpb.LoginRequest) (*accou
 	claims := &Claims{
 		Email: account.Email,
 		Roles: account.Roles,
+		ID:    account.Id,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -227,7 +230,7 @@ func (s *Server) DeleteAccount(ctx context.Context, req *accountpb.DeleteAccount
 	return &accountpb.DeleteAccountResponse{Ok: true}, nil
 }
 
-func (s *Server) GetAccount(ctx context.Context, _ *accountpb.GetAccountRequest) (*accountpb.GetAccountResponse, error) {
+func (s *Server) GetAccount(ctx context.Context, req *accountpb.GetAccountRequest) (*accountpb.GetAccountResponse, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, status.Errorf(codes.Unauthenticated, "missing metadata")
@@ -245,6 +248,22 @@ func (s *Server) GetAccount(ctx context.Context, _ *accountpb.GetAccountRequest)
 	})
 	if err != nil || !token.Valid {
 		return nil, status.Errorf(codes.Unauthenticated, "invalid token")
+	}
+
+	if req.Id != claims.ID && req.Id != "" {
+		if !contains(claims.Roles, "admin") && claims.Email != req.Id {
+			return nil, status.Errorf(codes.PermissionDenied, "you can only get your own account")
+		} else {
+			collection := db.MongoClient.Database("accountDB").Collection("accounts")
+			var account accountpb.Account
+			err = collection.FindOne(ctx, bson.M{"id": req.Id}).Decode(&account)
+			if errors.Is(err, mongo.ErrNoDocuments) {
+				return nil, errors.New("account not found")
+			} else if err != nil {
+				return nil, err
+			}
+			return &accountpb.GetAccountResponse{Account: &account}, nil
+		}
 	}
 
 	collection := db.MongoClient.Database("accountDB").Collection("accounts")
@@ -369,6 +388,49 @@ func (s *Server) AddRole(ctx context.Context, req *accountpb.AddRoleRequest) (*a
 	}
 
 	return &accountpb.UpdateAccountResponse{Ok: true}, nil
+}
+
+func (s *Server) GetRoles(ctx context.Context, req *accountpb.GetRolesRequest) (*accountpb.GetRolesResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Errorf(codes.Unauthenticated, "missing metadata")
+	}
+
+	authHeader, ok := md["authorization"]
+	if !ok || len(authHeader) == 0 {
+		return nil, status.Errorf(codes.Unauthenticated, "missing authorization header")
+	}
+
+	tokenString := strings.TrimPrefix(authHeader[0], "Bearer ")
+	claims := &Claims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return jwtKey, nil
+	})
+	if err != nil || !token.Valid {
+		return nil, status.Errorf(codes.Unauthenticated, "invalid token")
+	}
+
+	// If no ID is provided, return the roles of the requester
+	if req.Id == "" {
+		return &accountpb.GetRolesResponse{Roles: claims.Roles}, nil
+	}
+
+	// Check if the requester has the admin role
+	if !contains(claims.Roles, "admin") {
+		return nil, status.Errorf(codes.PermissionDenied, "admin role required")
+	}
+
+	// Fetch the roles of the user with the provided ID
+	collection := db.MongoClient.Database("accountDB").Collection("accounts")
+	var account accountpb.Account
+	err = collection.FindOne(ctx, bson.M{"id": req.Id}).Decode(&account)
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		return nil, errors.New("account not found")
+	} else if err != nil {
+		return nil, err
+	}
+
+	return &accountpb.GetRolesResponse{Roles: account.Roles}, nil
 }
 
 func contains(slice []string, item string) bool {
