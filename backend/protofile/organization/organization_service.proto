@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package protofile.organization;
+
+option go_package = "protofile/organization";
+
+service OrganizationService {
+  rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse);
+  rpc GetOrganization (GetOrganizationRequest) returns (GetOrganizationResponse);
+  rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse);
+  rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse);
+}
+
+message CreateOrganizationRequest {
+  string name = 1;
+  string description = 2;
+}
+
+message CreateOrganizationResponse {
+  bool ok = 1;
+}
+
+message GetOrganizationRequest {
+  string id = 1;
+}
+
+message GetOrganizationResponse {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message UpdateOrganizationRequest {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message UpdateOrganizationResponse {
+  bool ok = 1;
+}
+
+message DeleteOrganizationRequest {
+  string id = 1;
+}
+
+message DeleteOrganizationResponse {
+  bool ok = 1;
+}
