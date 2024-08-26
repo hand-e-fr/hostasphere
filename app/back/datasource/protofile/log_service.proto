@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package protofile.log;
+package protofile;
 
 option go_package = "protofile/log";
 

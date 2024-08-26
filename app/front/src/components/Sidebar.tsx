@@ -71,7 +71,7 @@ const Sidebar = () => {
                             <SpaIcon className="mr-2" />
                         </div>
                     )}
-                    <div className="divider before:bg-white after:bg-white mt-3"></div>
+                    <div className="divider"></div>
                     <ul className="list-none">
                         {sidebarItems
                             .filter(({requiresAuth}) => !requiresAuth || (requiresAuth && isAuth))
@@ -93,6 +93,23 @@ const Sidebar = () => {
                             </li>
                         ))}
                     </ul>
+                </div>
+                <div>
+                    <div>
+                        <button
+                            className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em]
+                                ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}
+                            onClick={() => {
+                            localStorage.removeItem("token");
+                            router.push("/login");
+                        }}>
+                            Disconnect
+                        </button>
+                    </div>
+                    <div className="divider"></div>
+                    <div className="text-center mt-4">
+                        <p className="text-xs text-gray-500">Hostasphere © 2021</p>
+                    </div>
                 </div>
             </aside>
         </div>

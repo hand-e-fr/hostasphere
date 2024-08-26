@@ -19,3 +19,8 @@ proto:
 clean:
 	rm -f bin/server
 	find . -name "*.pb.go" -delete
+
+fclean: clean
+	rm -f bin/server
+
+.PHONY: all build proto clean

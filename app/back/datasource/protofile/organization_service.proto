@@ -1,14 +1,22 @@
 syntax = "proto3";
+import "protofile/account_service.proto";
 
-package protofile.organization;
+package protofile;
 
-option go_package = "protofile/organization";
+option go_package = "./protofile";
 
 service OrganizationService {
   rpc CreateOrganization (CreateOrganizationRequest) returns (CreateOrganizationResponse);
   rpc GetOrganization (GetOrganizationRequest) returns (GetOrganizationResponse);
   rpc UpdateOrganization (UpdateOrganizationRequest) returns (UpdateOrganizationResponse);
-  rpc DeleteOrganization (DeleteOrganizationRequest) returns (DeleteOrganizationResponse);
+}
+
+message Organization {
+  string name = 2;
+  string description = 3;
+  repeated Account accounts = 4;
+  string user_admin_id = 5;
+  int64 created_at = 6;
 }
 
 message CreateOrganizationRequest {
@@ -37,13 +45,5 @@ message UpdateOrganizationRequest {
 }
 
 message UpdateOrganizationResponse {
-  bool ok = 1;
-}
-
-message DeleteOrganizationRequest {
-  string id = 1;
-}
-
-message DeleteOrganizationResponse {
   bool ok = 1;
 }
