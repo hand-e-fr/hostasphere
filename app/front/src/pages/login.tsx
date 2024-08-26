@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react';
 import {useRouter} from 'next/router';
-import {UserContext, UserContextType} from "@/context/UserContext";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -9,31 +8,6 @@ const Login = () => {
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-
-        try {
-            const res = await fetch('/api/account/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.error);
-            }
-
-            const data = await res.json();
-            localStorage.setItem('token', data.token);
-            await router.push('/').then(
-                () => window.location.reload(),
-            );
-        } catch (err: any) {
-            setError(err.message);
-        }
     };
 
     const goRegisterPage = () => {

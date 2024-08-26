@@ -9,31 +9,6 @@ const Register = () => {
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
-
-        try {
-            const res = await fetch('/api/account/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, email, password, roles: [], organizations: [] }),
-            });
-
-            if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.error);
-            }
-
-            const data = await res.json();
-            localStorage.setItem('token', data.token);
-            await router.push('/').then(
-                () => window.location.reload(),
-            );
-        } catch (err: any) {
-            setError(err.message);
-        }
     };
 
     return (

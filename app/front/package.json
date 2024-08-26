@@ -1,45 +1,30 @@
 {
-  "name": "hosta_portal",
+  "name": "front",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "proto:compile": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/protobuf --grpc_out=./src/protobuf --plugin=protoc-gen-grpc=`which grpc_tools_node_protoc_plugin` -I src/protobuf/protofile src/protobuf/protofile/*.proto"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.0",
+    "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@grpc/grpc-js": "^1.11.1",
-    "@grpc/proto-loader": "^0.7.13",
-    "@headlessui/react": "^2.1.2",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
-    "express": "^4.19.2",
-    "framer-motion": "^11.3.28",
-    "google-protobuf": "^3.21.4",
-    "grpc-tools": "^1.12.4",
-    "grpc-web": "^1.5.0",
-    "headlessui": "^0.0.0",
-    "next": "14.2.5",
-    "next-compose": "^0.0.2",
-    "next-compose-plugins": "^2.2.1",
-    "next-transpile-modules": "^10.0.1",
-    "protobufjs": "^7.3.2",
+    "axios": "^1.7.5",
+    "next": "14.2.6",
     "react": "^18",
-    "react-dom": "^18",
-    "react-icons": "^5.3.0",
-    "ts-proto": "^2.0.2"
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "daisyui": "^4.12.10",
-    "node-addon-api": "^8.1.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

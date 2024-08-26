@@ -9,7 +9,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import SpaIcon from '@mui/icons-material/Spa';
 import Person2Icon from '@mui/icons-material/Person2';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import {UserContext, UserContextType} from "@/context/UserContext";
 
 interface SidebarItem {
     name: string;
@@ -49,17 +48,16 @@ const sidebarItems: SidebarItem[] = [
 const Sidebar = () => {
     const router = useRouter();
     const {isCollapsed, toggleSidebarcollapse} = useContext<SidebarContextType>(SidebarContext);
-    const { isAuth, haveRoles } = useContext<UserContextType>(UserContext);
 
     return (
         <div className="relative">
             <button
-                className="bg-base-200 absolute right-0 top-20 border-none w-6 h-6 border border-gray-300 rounded-full flex justify-center items-center cursor-pointer transform translate-x-1/2 text-xl"
+                className="absolute right-0 top-20 border-none w-6 h-6 border border-gray-300 rounded-full flex justify-center items-center cursor-pointer transform translate-x-1/2 text-xl"
                 onClick={toggleSidebarcollapse}>
                 {isCollapsed ? <ArrowCircleRightIcon/> : <ArrowCircleLeftIcon/>}
             </button>
             <aside
-                className={`transition-all duration-400 ease-in-out overflow-hidden ${isCollapsed ? "w-20" : "w-64"} min-h-screen bg-base-100 p-4 flex flex-col justify-between`}>
+                className={`min-h-screen bg-base-100 p-4 flex flex-col justify-between transition-all duration-400 ease-in-out overflow-hidden ${isCollapsed ? "w-20" : "w-64"}`}>
                 <div className="flex flex-col w-full">
                     {!isCollapsed ? (
                         <p className="text-xl font-semibold flex items-center">
@@ -74,8 +72,8 @@ const Sidebar = () => {
                     <div className="divider"></div>
                     <ul className="list-none">
                         {sidebarItems
-                            .filter(({requiresAuth}) => !requiresAuth || (requiresAuth && isAuth))
-                            .filter(({requiresRoles}) => !requiresRoles || haveRoles(requiresRoles))
+                            // .filter(({requiresAuth}) => !requiresAuth || (requiresAuth && isAuth))
+                            // .filter(({requiresRoles}) => !requiresRoles || haveRoles(requiresRoles))
                             .map(({name, href, icon: Icon}) => (
                             <li key={name} className="mb-4">
                                 <Link
@@ -95,20 +93,9 @@ const Sidebar = () => {
                     </ul>
                 </div>
                 <div>
-                    <div>
-                        <button
-                            className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em]
-                                ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}
-                            onClick={() => {
-                            localStorage.removeItem("token");
-                            router.push("/login");
-                        }}>
-                            Disconnect
-                        </button>
-                    </div>
                     <div className="divider"></div>
                     <div className="text-center mt-4">
-                        <p className="text-xs text-gray-500">Hostasphere © 2021</p>
+                        <p className="text-xs text-gray-500">Hostasphere © 2024</p>
                     </div>
                 </div>
             </aside>
