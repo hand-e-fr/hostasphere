@@ -1,12 +1,26 @@
 package main
 
 import (
+	"log"
+	"os"
+
+	"back/internal/handlers"
+	"back/internal/middleware"
 	"github.com/gin-gonic/gin"
-	"myapp/internal/handlers"
-	"myapp/internal/middleware"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
 	r := gin.Default()
 
 	// Public routes
@@ -20,5 +34,5 @@ func main() {
 		protected.GET("/profile", handlers.Profile)
 	}
 
-	r.Run(":8080")
+	r.Run(":" + port)
 }
