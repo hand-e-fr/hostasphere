@@ -6,6 +6,7 @@ import (
 
 	"back/internal/handlers"
 	"back/internal/middleware"
+	"back/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -15,6 +16,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
+
+	utils.ConnectDB()
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -26,12 +29,16 @@ func main() {
 	// Public routes
 	r.POST("/register", handlers.Register)
 	r.POST("/login", handlers.Login)
+	r.GET("/license/validate/:secretID", handlers.ValidateLicense)
 
 	// Protected routes
-	protected := r.Group("/user")
+	protected := r.Group("/license")
 	protected.Use(middleware.AuthMiddleware())
 	{
-		protected.GET("/profile", handlers.Profile)
+		protected.POST("/register", handlers.RegisterLicense)
+		protected.PUT("/renew/:id", handlers.RenewLicense)
+		protected.DELETE("/delete/:id", handlers.DeleteLicense)
+		protected.GET("/:id", handlers.GetLicenseInfo)
 	}
 
 	r.Run(":" + port)
