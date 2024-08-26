@@ -2,11 +2,15 @@ package routes
 
 import (
 	"app/internal/controllers"
+	"app/internal/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+
+	// Apply the license validation middleware to all routes
+	r.Use(middleware.LicenseValidationMiddleware())
 
 	api := r.Group("/api")
 	{
