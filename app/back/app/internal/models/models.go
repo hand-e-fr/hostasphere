@@ -14,10 +14,11 @@ type App struct {
 }
 
 type User struct {
-	ID       primitive.ObjectID `bson:"_id,omitempty"`
-	Email    string             `bson:"email"`
-	FullName string             `bson:"full_name"`
-	LastName string             `bson:"last_name"`
-	Password string             `bson:"password"`
-	IsAdmin  bool               `bson:"is_admin"`
+	ID                  primitive.ObjectID `bson:"_id,omitempty"`
+	Email               string             `bson:"email"`
+	FullName            string             `bson:"full_name"`
+	LastName            string             `bson:"last_name"`
+	Password            string             `bson:"password"`
+	IsAdmin             bool               `bson:"is_admin"`
+	NeedsPasswordChange bool               `bson:"needs_password_change"`
 }
