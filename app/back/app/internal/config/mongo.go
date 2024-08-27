@@ -31,5 +31,5 @@ func ConnectDB() {
 }
 
 func GetCollection(collectionName string) *mongo.Collection {
-	return MongoClient.Database("myapp").Collection(collectionName)
+	return MongoClient.Database(os.Getenv("MONGO_DB")).Collection(collectionName)
 }

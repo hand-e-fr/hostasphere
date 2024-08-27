@@ -2,28 +2,41 @@ package routes
 
 import (
 	"app/internal/controllers"
-	"app/internal/middleware"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	// Apply the license validation middleware to all routes
-	r.Use(middleware.LicenseValidationMiddleware())
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"}            // Allow specific origin
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}     // Allow specific methods
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept"} // Allow specific headers
+
+	r.Use(cors.New(config))
+
+	//r.Use(middleware.LicenseValidationMiddleware())
 
 	api := r.Group("/api")
 	{
-		api.POST("/login", controllers.Login)
 		api.POST("/register/app", controllers.RegisterApp)
+		api.GET("/app", controllers.GetApp)
+		api.PUT("/app", controllers.UpdateApp)
+
+		api.POST("/login", controllers.Login)
 		api.POST("/register/user", controllers.RegisterUser)
+
 		api.PUT("/user/change-password", controllers.ChangePassword)
-		api.GET("/app/:id", controllers.GetApp)
-		api.PUT("/app/:id", controllers.UpdateApp)
 		api.PUT("/user/:id", controllers.UpdateUser)
 		api.DELETE("/user/:id", controllers.DeleteUser)
 		api.PUT("/app/:id/license", controllers.UpdateLicense)
 	}
+
+	r.GET("/api/app/isInitialized", controllers.IsAppInitialized)
+	r.GET("/api/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{"message": "pong"})
+	})
 
 	return r
 }

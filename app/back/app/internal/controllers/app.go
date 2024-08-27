@@ -1,26 +1,56 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
 	"app/internal/config"
 	"app/internal/models"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func RegisterApp(c *gin.Context) {
-	var app models.App
-	if err := c.ShouldBindJSON(&app); err != nil {
+	var appRequest models.RegisterAppRequest
+	if err := c.ShouldBindJSON(&appRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	// check if app is already registered
 	collection := config.GetCollection("apps")
-	_, err := collection.InsertOne(c, app)
+	count, err := collection.CountDocuments(c, bson.M{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check if app is already registered"})
+		return
+	}
+	if count > 0 {
+		err = collection.Drop(c)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to drop existing app"})
+			return
+		}
+	}
+
+	var app = models.App{
+		Name: appRequest.Name,
+		License: models.License{
+			ID:       appRequest.License.ID,
+			SecretID: appRequest.License.SecretID,
+		},
+	}
+
+	collection = config.GetCollection("apps")
+	_, err = collection.InsertOne(c, app)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register app"})
+		return
+	}
+
+	// Register the admin user
+	err = SaveUser(appRequest.AdminUser, false, true)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -28,16 +58,9 @@ func RegisterApp(c *gin.Context) {
 }
 
 func GetApp(c *gin.Context) {
-	appID := c.Param("id")
-	objID, err := primitive.ObjectIDFromHex(appID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
-		return
-	}
-
 	var app models.App
 	collection := config.GetCollection("apps")
-	err = collection.FindOne(c, bson.M{"_id": objID}).Decode(&app)
+	err := collection.FindOne(c, bson.M{}).Decode(&app) // Assuming there's only one app
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "App not found"})
 		return
@@ -46,22 +69,30 @@ func GetApp(c *gin.Context) {
 	c.JSON(http.StatusOK, app)
 }
 
-func UpdateApp(c *gin.Context) {
-	appID := c.Param("id")
-	objID, err := primitive.ObjectIDFromHex(appID)
+func IsAppInitialized(c *gin.Context) {
+	fmt.Println("IsAppInitialized")
+	collection := config.GetCollection("apps")
+	fmt.Println(collection)
+	count, err := collection.CountDocuments(c, bson.M{})
+	fmt.Println(count)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check if app is initialized"})
 		return
 	}
 
+	c.JSON(http.StatusOK, gin.H{"initialized": count > 0})
+}
+
+func UpdateApp(c *gin.Context) {
 	var app models.App
-	if err := c.ShouldBindJSON(&app); err != nil {
+	err := c.ShouldBindJSON(&app)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	collection := config.GetCollection("apps")
-	_, err = collection.UpdateOne(c, bson.M{"_id": objID}, bson.M{"$set": app})
+	_, err = collection.UpdateOne(c, bson.M{}, bson.M{"$set": app})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update app"})
 		return

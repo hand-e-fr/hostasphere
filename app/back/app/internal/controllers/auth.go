@@ -1,8 +1,11 @@
 package controllers
 
 import (
+	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
+	"time"
 
 	"app/internal/config"
 	"app/internal/models"
@@ -11,25 +14,78 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func RegisterUser(c *gin.Context) {
+func isCorrectInputs(input models.RegisterUserRequest) error {
+	if len(input.Email) == 0 || len(input.Email) > 100 {
+		return errors.New("invalid email, must be between 1 and 100 characters")
+	}
+	if len(input.FirstName) == 0 || len(input.FirstName) > 50 {
+		return errors.New("invalid first name, must be between 1 and 50 characters")
+	}
+	if len(input.LastName) == 0 || len(input.LastName) > 50 {
+		return errors.New("invalid last name, must be between 1 and 50 characters")
+	}
+	if len(input.Password) < 8 || len(input.Password) > 50 {
+		return errors.New("invalid password, must be between 8 and 50 characters")
+	}
+	if !utils.IsEmailValid(input.Email) {
+		return errors.New("invalid email, must be a valid email address")
+	}
+	if !utils.IsPasswordStrong(input.Password) {
+		return errors.New("invalid password, must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character")
+	}
+	return nil
+}
+
+func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAdmin bool) error {
+	err := isCorrectInputs(request)
+	if err != nil {
+		return err
+	}
+
+	collection := config.GetCollection("users")
 	var user models.User
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+	err = collection.FindOne(context.Background(), bson.M{"email": request.Email}).Decode(&user)
+	if err == nil {
+		return models.ErrUserExists
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		return err
+	}
+
+	user = models.User{
+		Email:               request.Email,
+		FirstName:           request.FirstName,
+		LastName:            request.LastName,
+		Password:            string(hashedPassword),
+		IsAdmin:             isAdmin,
+		NeedsPasswordChange: needsPasswordChange,
+		CreatedAt:           time.Now().UnixMilli(),
+	}
+
+	_, err = collection.InsertOne(context.Background(), user)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func RegisterUser(c *gin.Context) {
+	var input models.RegisterUserRequest
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	user.Password = string(hashedPassword)
-	user.NeedsPasswordChange = true // Set to true for first login
 
-	collection := config.GetCollection("users")
-	_, err = collection.InsertOne(c, user)
+	if err := SaveUser(input, false, false); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := SaveUser(input, true, false)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register user"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
