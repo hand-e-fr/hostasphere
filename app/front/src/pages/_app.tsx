@@ -10,10 +10,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     const { fetchIsAppInitialized } = useAppController();
     const  [isAppInitialized, setIsAppInitialized] = React.useState(false);
     const [updateEffect, setUpdateEffect] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
 
     useEffect(() => {
         fetchIsAppInitialized().then((result) => {
             setIsAppInitialized(result);
+            setLoading(false);
         });
     }, [updateEffect]);
 
@@ -21,22 +23,31 @@ function MyApp({ Component, pageProps }: AppProps) {
         setUpdateEffect(prev => !prev);
     };
 
+    if (loading) {
+        return (
+            <div className="flex h-screen bg-base-200">
+                <main className={`flex-1 p-[2em]`}>
+                    <div className="flex items-center justify-center h-full">
+                        <span className="loading loading-ring loading-lg"></span>
+                    </div>
+                </main>
+            </div>
+        );
+    } else if (!isAppInitialized) {
+        return (
+            <div className="flex h-screen bg-base-200">
+                <main className={`flex-1 p-[2em]`}>
+                    <Installation onInstalled={triggerUpdate}/>
+                </main>
+            </div>
+        );
+    }
     return (
-        <>
-            {isAppInitialized ? (
-                <SidebarProvider>
-                    <RootLayout>
-                        <Component {...pageProps} />
-                    </RootLayout>
-                </SidebarProvider>
-            ) : (
-                <div className="flex h-screen bg-base-200">
-                    <main className={`flex-1 p-[2em]`}>
-                        <Installation onInstalled={triggerUpdate}/>
-                    </main>
-                </div>
-            )}
-        </>
+        <SidebarProvider>
+            <RootLayout>
+                <Component {...pageProps} />
+            </RootLayout>
+        </SidebarProvider>
     );
 }
 

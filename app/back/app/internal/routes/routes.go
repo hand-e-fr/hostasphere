@@ -10,9 +10,9 @@ func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"}            // Allow specific origin
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}     // Allow specific methods
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept"} // Allow specific headers
+	config.AllowOrigins = []string{"http://localhost:3000"}                             // Allow specific origin
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}                      // Allow specific methods
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"} // Allow specific headers
 
 	r.Use(cors.New(config))
 
@@ -25,11 +25,13 @@ func SetupRouter() *gin.Engine {
 		api.PUT("/app", controllers.UpdateApp)
 
 		api.POST("/login", controllers.Login)
+		api.GET("/login/test", controllers.CheckToken)
 		api.POST("/register/user", controllers.RegisterUser)
 
 		api.PUT("/user/change-password", controllers.ChangePassword)
 		api.PUT("/user/:id", controllers.UpdateUser)
 		api.DELETE("/user/:id", controllers.DeleteUser)
+		api.GET("/user", controllers.GetUser)
 		api.PUT("/app/:id/license", controllers.UpdateLicense)
 	}
 

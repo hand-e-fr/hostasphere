@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"app/internal/utils"
 	"net/http"
 
 	"app/internal/config"
@@ -25,13 +26,13 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	if user.Password != "" {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if len(user.Password) > 0 {
+		hashedPassword, err := bcrypt.GenerateFromPassword(user.Password, bcrypt.DefaultCost)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
 			return
 		}
-		user.Password = string(hashedPassword)
+		user.Password = hashedPassword
 	}
 
 	collection := config.GetCollection("users")
@@ -95,4 +96,31 @@ func ChangePassword(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
+}
+
+func GetUser(c *gin.Context) {
+	claims, err := utils.GetTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	email := claims.Email
+
+	var user models.User
+	collection := config.GetCollection("users")
+	err = collection.FindOne(c, bson.M{"email": email}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"id":        user.ID.Hex(),
+		"email":     user.Email,
+		"firstName": user.FirstName,
+		"lastName":  user.LastName,
+		"isAdmin":   user.IsAdmin,
+		"createdAt": user.CreatedAt,
+	})
 }

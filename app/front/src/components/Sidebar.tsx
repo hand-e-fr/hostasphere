@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import {useRouter} from "next/router";
 import {SidebarContext, SidebarContextType} from "@/context/SidebarContext";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
@@ -9,13 +9,16 @@ import HomeIcon from '@mui/icons-material/Home';
 import SpaIcon from '@mui/icons-material/Spa';
 import Person2Icon from '@mui/icons-material/Person2';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import LoginIcon from '@mui/icons-material/Login';
+import {useAuthController} from "@/hooks/useAuthController";
 
 interface SidebarItem {
     name: string;
     href: string;
     icon: React.ComponentType;
     requiresAuth?: boolean;
-    requiresRoles?: string[];
+    requireNonAuth?: boolean;
+    requireAdmin?: boolean;
 }
 
 const sidebarItems: SidebarItem[] = [
@@ -25,21 +28,27 @@ const sidebarItems: SidebarItem[] = [
         icon: HomeIcon,
     },
     {
+        name: "Login",
+        href: "/auth/login",
+        icon: LoginIcon,
+        requireNonAuth: true,
+    },
+    {
         name: "Functions",
         href: "/register",
-        icon: DataArrayIcon,
         requiresAuth: true,
+        icon: DataArrayIcon,
     },
     {
         name: "Accounts",
-        href: "/accounts",
+        href: "/account",
         icon: PeopleAltIcon,
         requiresAuth: true,
-        requiresRoles: ["admin"],
+        requireAdmin: false,
     },
     {
         name: "My Account",
-        href: "/accounts/me",
+        href: "/account/me",
         icon: Person2Icon,
         requiresAuth: true,
     }
@@ -48,6 +57,16 @@ const sidebarItems: SidebarItem[] = [
 const Sidebar = () => {
     const router = useRouter();
     const {isCollapsed, toggleSidebarcollapse} = useContext<SidebarContextType>(SidebarContext);
+    const [isAuth, setIsAuth] = React.useState(true);
+    const { checkToken } = useAuthController();
+
+    // reload on route change
+    useEffect(() => {
+        checkToken().then((response) => {
+            setIsAuth(response.ok);
+            console.log(response);
+        });
+    }, [router.asPath]);
 
     return (
         <div className="relative">
@@ -72,8 +91,8 @@ const Sidebar = () => {
                     <div className="divider"></div>
                     <ul className="list-none">
                         {sidebarItems
-                            // .filter(({requiresAuth}) => !requiresAuth || (requiresAuth && isAuth))
-                            // .filter(({requiresRoles}) => !requiresRoles || haveRoles(requiresRoles))
+                            .filter(({requiresAuth}) => !requiresAuth || isAuth)
+                            .filter(({requireNonAuth}) => !requireNonAuth || !isAuth)
                             .map(({name, href, icon: Icon}) => (
                             <li key={name} className="mb-4">
                                 <Link

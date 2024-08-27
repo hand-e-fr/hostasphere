@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"time"
@@ -49,7 +50,7 @@ func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAd
 		return models.ErrUserExists
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
 	}
@@ -58,7 +59,7 @@ func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAd
 		Email:               request.Email,
 		FirstName:           request.FirstName,
 		LastName:            request.LastName,
-		Password:            string(hashedPassword),
+		Password:            hashedPassword,
 		IsAdmin:             isAdmin,
 		NeedsPasswordChange: needsPasswordChange,
 		CreatedAt:           time.Now().UnixMilli(),
@@ -93,7 +94,7 @@ func RegisterUser(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	var input models.User
+	var input models.LoginRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -104,10 +105,11 @@ func Login(c *gin.Context) {
 	err := collection.FindOne(c, bson.M{"email": input.Email}).Decode(&user)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
+		fmt.Println(err)
 		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))
+	err = bcrypt.CompareHashAndPassword(user.Password, []byte(input.Password))
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
@@ -125,4 +127,14 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+func CheckToken(c *gin.Context) {
+	claims, err := utils.GetTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"ok": false, "error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"ok": true, "email": claims.Email})
 }

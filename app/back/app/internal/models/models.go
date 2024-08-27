@@ -21,7 +21,7 @@ type User struct {
 	Email               string             `bson:"email"`
 	FirstName           string             `bson:"first_name"`
 	LastName            string             `bson:"last_name"`
-	Password            string             `bson:"password"`
+	Password            []byte             `bson:"password"`
 	IsAdmin             bool               `bson:"is_admin"`
 	NeedsPasswordChange bool               `bson:"needs_password_change"`
 	CreatedAt           int64              `bson:"created_at"`
@@ -38,6 +38,11 @@ type RegisterAppRequest struct {
 	Name      string              `json:"name"`
 	License   License             `json:"license"`
 	AdminUser RegisterUserRequest `json:"admin_user"`
+}
+
+type LoginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 var ErrUserExists = errors.New("user already exists")
