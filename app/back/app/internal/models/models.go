@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -17,14 +18,14 @@ type App struct {
 }
 
 type User struct {
-	ID                  primitive.ObjectID `bson:"_id,omitempty"`
-	Email               string             `bson:"email"`
-	FirstName           string             `bson:"first_name"`
-	LastName            string             `bson:"last_name"`
-	Password            []byte             `bson:"password"`
-	IsAdmin             bool               `bson:"is_admin"`
-	NeedsPasswordChange bool               `bson:"needs_password_change"`
-	CreatedAt           int64              `bson:"created_at"`
+	ID                  primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Email               string             `bson:"email" json:"email"`
+	FirstName           string             `bson:"first_name" json:"first_name"`
+	LastName            string             `bson:"last_name" json:"last_name"`
+	Password            []byte             `bson:"password" json:"-"`
+	IsAdmin             bool               `bson:"is_admin" json:"is_admin"`
+	NeedsPasswordChange bool               `bson:"needs_password_change" json:"needs_password_change"`
+	CreatedAt           int64              `bson:"created_at" json:"created_at"`
 }
 
 type RegisterUserRequest struct {
@@ -43,6 +44,12 @@ type RegisterAppRequest struct {
 type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type Claims struct {
+	Email   string `json:"email"`
+	IsAdmin bool   `json:"is_admin"`
+	jwt.StandardClaims
 }
 
 var ErrUserExists = errors.New("user already exists")

@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"app/internal/config"
@@ -70,11 +69,8 @@ func GetApp(c *gin.Context) {
 }
 
 func IsAppInitialized(c *gin.Context) {
-	fmt.Println("IsAppInitialized")
 	collection := config.GetCollection("apps")
-	fmt.Println(collection)
 	count, err := collection.CountDocuments(c, bson.M{})
-	fmt.Println(count)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check if app is initialized"})
 		return

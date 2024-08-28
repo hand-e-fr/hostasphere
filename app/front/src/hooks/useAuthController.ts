@@ -24,7 +24,7 @@ export const useAuthController = () => {
         }
     };
 
-    const checkToken = async (): Promise<{ ok: boolean, email?: string, error?: string }> => {
+    const checkToken = async (): Promise<{ ok: boolean, email?: string, is_admin?: boolean, error?: string }> => {
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
@@ -34,7 +34,7 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.get<{ ok: boolean, email?: string, error?: string }>(url + '/api/login/test', {
+            const response = await axios.get<{ ok: boolean, email?: string, is_admin?: boolean, error?: string }>(url + '/api/login/test', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

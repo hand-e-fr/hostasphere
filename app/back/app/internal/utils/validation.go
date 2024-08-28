@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"app/internal/models"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"regexp"
@@ -42,7 +43,7 @@ func IsPasswordStrong(password string) bool {
 	return hasMinLen && hasUpper && hasLower && hasNumber && hasSpecial
 }
 
-func GetTokenValue(c *gin.Context) (*Claims, error) {
+func GetTokenValue(c *gin.Context) (*models.Claims, error) {
 	tokenString := c.GetHeader("Authorization")
 	if len(tokenString) < 8 {
 		return nil, errors.New("invalid token")

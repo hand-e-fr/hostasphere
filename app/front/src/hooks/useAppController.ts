@@ -52,7 +52,6 @@ export const useAppController = () => {
         setLoading(true);
         setError(null);
         try {
-            console.log(appData);
             await axios.request({
                 url: url + `/api/register/app`,
                 method: 'POST',

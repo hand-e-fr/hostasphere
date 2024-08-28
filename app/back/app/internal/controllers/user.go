@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"app/internal/utils"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
+	"strconv"
 
 	"app/internal/config"
 	"app/internal/models"
@@ -123,4 +125,101 @@ func GetUser(c *gin.Context) {
 		"isAdmin":   user.IsAdmin,
 		"createdAt": user.CreatedAt,
 	})
+}
+
+func GetUserByID(c *gin.Context) {
+	claims, err := utils.GetTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !claims.IsAdmin {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	userID := c.Param("id")
+	objID, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var user models.User
+	collection := config.GetCollection("users")
+	err = collection.FindOne(c, bson.M{"_id": objID}).Decode(&user)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"id":        user.ID.Hex(),
+		"email":     user.Email,
+		"firstName": user.FirstName,
+		"lastName":  user.LastName,
+		"isAdmin":   user.IsAdmin,
+		"createdAt": user.CreatedAt,
+	})
+}
+
+func GetUsers(c *gin.Context) {
+	claims, err := utils.GetTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !claims.IsAdmin {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	page, err := strconv.Atoi(c.DefaultQuery("page", "0"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page"})
+		return
+	}
+	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit"})
+		return
+	}
+
+	if page < 0 {
+		page = 0
+	}
+
+	if limit < 0 {
+		limit = 10
+	}
+
+	if limit > 100 {
+		limit = 100
+	}
+
+	limit64 := int64(limit)
+	skip := int64(page) * limit64
+
+	var users []models.User
+	collection := config.GetCollection("users")
+
+	cursor, err := collection.Find(c, bson.M{}, &options.FindOptions{
+		Limit: &limit64,
+		Skip:  &skip,
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get users"})
+		return
+	}
+
+	defer cursor.Close(c)
+	for cursor.Next(c) {
+		var user models.User
+		cursor.Decode(&user)
+		users = append(users, user)
+	}
+
+	c.JSON(http.StatusOK, gin.H{"users": users, "total": len(users)})
 }

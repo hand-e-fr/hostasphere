@@ -32,6 +32,8 @@ func SetupRouter() *gin.Engine {
 		api.PUT("/user/:id", controllers.UpdateUser)
 		api.DELETE("/user/:id", controllers.DeleteUser)
 		api.GET("/user", controllers.GetUser)
+		api.GET("/user/:id", controllers.GetUserByID)
+		api.GET("/users", controllers.GetUsers)
 		api.PUT("/app/:id/license", controllers.UpdateLicense)
 	}
 

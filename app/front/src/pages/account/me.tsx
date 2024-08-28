@@ -10,8 +10,6 @@ const Account = () => {
 
     React.useEffect(() => {
         getUser().then((user) => {
-            if (!user) {
-            }
             setUser(user);
         });
     }, []);

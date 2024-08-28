@@ -3,7 +3,6 @@ package controllers
 import (
 	"context"
 	"errors"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
 	"time"
@@ -73,19 +72,24 @@ func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAd
 }
 
 func RegisterUser(c *gin.Context) {
+	claims, err := utils.GetTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	if !claims.IsAdmin {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
 	var input models.RegisterUserRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if err := SaveUser(input, false, false); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	err := SaveUser(input, true, false)
-	if err != nil {
+	if err := SaveUser(input, true, false); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -105,7 +109,6 @@ func Login(c *gin.Context) {
 	err := collection.FindOne(c, bson.M{"email": input.Email}).Decode(&user)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
-		fmt.Println(err)
 		return
 	}
 
@@ -120,7 +123,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.Email)
+	token, err := utils.GenerateJWT(user.Email, user.IsAdmin)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
@@ -136,5 +139,5 @@ func CheckToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"ok": true, "email": claims.Email})
+	c.JSON(http.StatusOK, gin.H{"ok": true, "email": claims.Email, "is_admin": claims.IsAdmin})
 }

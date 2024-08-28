@@ -41,10 +41,10 @@ const sidebarItems: SidebarItem[] = [
     },
     {
         name: "Accounts",
-        href: "/account",
+        href: "/account/s",
         icon: PeopleAltIcon,
         requiresAuth: true,
-        requireAdmin: false,
+        requireAdmin: true,
     },
     {
         name: "My Account",
@@ -57,14 +57,15 @@ const sidebarItems: SidebarItem[] = [
 const Sidebar = () => {
     const router = useRouter();
     const {isCollapsed, toggleSidebarcollapse} = useContext<SidebarContextType>(SidebarContext);
-    const [isAuth, setIsAuth] = React.useState(true);
+    const [isAuth, setIsAuth] = React.useState(false);
+    const [isAdmin, setAdmin] = React.useState(false);
     const { checkToken } = useAuthController();
 
     // reload on route change
     useEffect(() => {
         checkToken().then((response) => {
-            setIsAuth(response.ok);
-            console.log(response);
+            setIsAuth(response.ok || false);
+            setAdmin(response.is_admin || false);
         });
     }, [router.asPath]);
 
@@ -93,6 +94,7 @@ const Sidebar = () => {
                         {sidebarItems
                             .filter(({requiresAuth}) => !requiresAuth || isAuth)
                             .filter(({requireNonAuth}) => !requireNonAuth || !isAuth)
+                            .filter(({requireAdmin}) => !requireAdmin || (isAuth && isAdmin))
                             .map(({name, href, icon: Icon}) => (
                             <li key={name} className="mb-4">
                                 <Link

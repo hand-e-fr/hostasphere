@@ -1,23 +1,21 @@
 package utils
 
 import (
+	"app/internal/models"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("your_jwt_secret")
+var jwtKey = []byte(os.Getenv("JWT_SECRET"))
 
-type Claims struct {
-	Email string `json:"email"`
-	jwt.StandardClaims
-}
-
-func GenerateJWT(email string) (string, error) {
+func GenerateJWT(email string, isAdmin bool) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
-	claims := &Claims{
-		Email: email,
+	claims := &models.Claims{
+		Email:   email,
+		IsAdmin: isAdmin,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -27,8 +25,8 @@ func GenerateJWT(email string) (string, error) {
 	return token.SignedString(jwtKey)
 }
 
-func ValidateJWT(tokenString string) (*Claims, error) {
-	claims := &Claims{}
+func ValidateJWT(tokenString string) (*models.Claims, error) {
+	claims := &models.Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})

@@ -4,11 +4,16 @@ import { useState } from 'react';
 interface User {
     id: string;
     email: string;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     password?: string;
-    isAdmin: boolean;
-    createdAt: number;
+    is_admin: boolean;
+    created_at: number;
+}
+
+interface Users {
+    users: User[];
+    total: number;
 }
 
 export const useUserController = () => {
@@ -68,8 +73,40 @@ export const useUserController = () => {
         }
     }
 
-    return { updateUser, deleteUser, getUser, loading, error };
+    const getUsers = async (page: number, limit: number): Promise<Users | null> => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError('No token found');
+            return null;
+        }
+
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axios.request({
+                method: 'GET',
+                url: url + '/api/users',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                params: {
+                    page: page,
+                    limit: limit
+                }
+            });
+            return response.data as Users;
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'An error occurred');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    return { updateUser, deleteUser, getUser, getUsers, loading, error };
 };
 
 export default useUserController;
 export type { User };
+export type { Users };
