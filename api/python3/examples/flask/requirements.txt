@@ -1,0 +1,2 @@
+hostasphere-profiler==0.0.2
+Flask
