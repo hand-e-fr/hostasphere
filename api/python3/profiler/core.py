@@ -1,7 +1,7 @@
 import time
 import requests
 from .utils import get_function_name, get_memory_usage
-from .config import ENDPOINT_URL
+from .config import ENDPOINT_URL, LICENSE_ID, LICENSE_SECRET
 from .logger import log_info
 
 def probe():
@@ -18,6 +18,8 @@ def probe():
                 'timestamp': time.time(),
             }
 
+            # print all configuration
+            log_info(f"ENDPOINT_URL: {ENDPOINT_URL} LICENSE_ID: {LICENSE_ID} LICENSE_SECRET: {LICENSE_SECRET}")
             log_info(f"Sending data for {data['function_name']}: {data}")
             # requests.post(ENDPOINT_URL, json=data)
 
