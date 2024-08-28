@@ -11,9 +11,9 @@ import (
 
 var jwtKey = []byte(os.Getenv("JWT_SECRET"))
 
-func GenerateJWT(email string, isAdmin bool) (string, error) {
-	expirationTime := time.Now().Add(24 * time.Hour)
+func GenerateJWT(id string, email string, isAdmin bool, expirationTime time.Time) (string, error) {
 	claims := &models.Claims{
+		Id:      id,
 		Email:   email,
 		IsAdmin: isAdmin,
 		StandardClaims: jwt.StandardClaims{

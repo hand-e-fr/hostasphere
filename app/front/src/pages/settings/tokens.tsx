@@ -4,7 +4,53 @@ import Link from "next/link";
 import {useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 
-const Accounts = () => {
+interface Token {
+    id: string;
+    name: string;
+    value: string;
+    last_refreshed: number;
+    last_used: number;
+    permissions: string[];
+}
+
+// list of tokens
+const tokens: Token[] = [
+    {
+        id: '1',
+        name: 'John Doe',
+        value: 'shs_sqsdqsdqsqsdqds',
+        last_refreshed: Date.now(),
+        last_used: Date.now(),
+        permissions: ['read', 'write'],
+    },
+    {
+        id: '2',
+        name: 'Mike Brown',
+        value: 'shs_sqsdqsdqsqsdqds',
+        last_refreshed: Date.now(),
+        last_used: Date.now(),
+        permissions: ['read'],
+    },
+    {
+        id: '3',
+        name: 'Alice Johnson',
+        value: 'shs_sqsdqsdqsqs*5dqds',
+        last_refreshed: Date.now(),
+        last_used: Date.now(),
+        permissions: ['read', 'write'],
+    },
+    {
+        id: '4',
+        name: 'Helen Smith',
+        value: 'shs_sqsdqsdqsqsdqds',
+        last_refreshed: Date.now(),
+        last_used: Date.now(),
+        permissions: ['read'],
+    }
+];
+
+
+const Tokens = () => {
     const { checkToken } = useAuthController();
     const [authLoading, setAuthLoading] = React.useState(true);
     const { getUsers, loading, error } = useUserController();
@@ -42,22 +88,23 @@ const Accounts = () => {
         <div className="bg-base-100 shadow-lg rounded-lg p-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
             <div className="overflow-x-auto">
                 <div>
-                    <h1 className="text-2xl font-bold">Accounts</h1>
+                    <h1 className="text-2xl font-bold">Access Tokens</h1>
                 </div>
                 <table className="table table-zebra">
                     <thead>
                     <tr>
                         <th></th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Admin</th>
-                        <th>Created At</th>
+                        <th>Value</th>
+                        <th>Last Refreshed Date</th>
+                        <th>Last Used Date</th>
+                        <th>Permissions</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    {users && users.users ? users.users.map((user: User) => (
-                        <tr key={user.id}>
+                    {tokens && tokens.map((token: Token) => (
+                        <tr key={token.id}>
                             <th className="w-0">
                                 <label>
                                     <input type="radio" className="radio" onChange={(e) => {
@@ -70,39 +117,42 @@ const Accounts = () => {
                                 </label>
                             </th>
                             <td>
-                                <p className="font-bold">{user.first_name} {user.last_name}</p>
+                                {token.name}
                             </td>
                             <td>
-                                {user.email}
+                                {token.value}
                             </td>
                             <td>
-                                {user.is_admin ? 'Yes' : 'No'}
+                                {new Date(token.last_refreshed).toLocaleDateString()}
                             </td>
                             <td>
-                                {new Date(user.created_at).toLocaleDateString()}
+                                {new Date(token.last_used).toLocaleDateString()}
+                            </td>
+                            <td>
+                                {token.permissions.join(', ')}
                             </td>
                             <th className="w-0">
-                                <Link href={`/account/${user.id}`}>
+                                <Link href={`/account/${token.id}`}>
                                     <button className="btn btn-info btn-sm">details</button>
                                 </Link>
                             </th>
                         </tr>
-                    )) : null}
+                    ))}
                     </tbody>
                 </table>
             </div>
             <div className="flex justify-between items-center mt-4">
                 <div className="join">
-                <button className="join-item btn" onClick={() => handlePage(page - 1)}>«</button>
+                    <button className="join-item btn" onClick={() => handlePage(page - 1)}>«</button>
                     <button className="join-item btn">{page + 1}</button>
                     <button className="join-item btn" onClick={() => handlePage(page + 1)}>»</button>
                 </div>
                 <div className="flex gap-2">
-                    <button className="btn btn-secondary">Register new Account</button>
+                    <button className="btn btn-secondary">Register new Token</button>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Accounts;
+export default Tokens;

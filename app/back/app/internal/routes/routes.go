@@ -25,6 +25,7 @@ func SetupRouter() *gin.Engine {
 		api.PUT("/app", controllers.UpdateApp)
 
 		api.POST("/login", controllers.Login)
+		api.POST("/login/first-connect", controllers.FirstConnection)
 		api.GET("/login/test", controllers.CheckToken)
 		api.POST("/register/user", controllers.RegisterUser)
 

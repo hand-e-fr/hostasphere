@@ -5,6 +5,7 @@ import RootLayout from "@/components/Layout";
 import {SidebarProvider} from "@/context/SidebarContext";
 import {useAppController} from "@/hooks/useAppController";
 import Installation from "@/components/installation/Installation";
+import Loading from "@/components/Loading";
 
 function MyApp({ Component, pageProps }: AppProps) {
     const { fetchIsAppInitialized } = useAppController();
@@ -24,15 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
 
     if (loading) {
-        return (
-            <div className="flex h-screen bg-base-200">
-                <main className={`flex-1 p-[2em]`}>
-                    <div className="flex items-center justify-center h-full">
-                        <span className="loading loading-ring loading-lg"></span>
-                    </div>
-                </main>
-            </div>
-        );
+        return <Loading/>;
     } else if (!isAppInitialized) {
         return (
             <div className="flex h-screen bg-base-200">

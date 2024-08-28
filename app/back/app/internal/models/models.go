@@ -47,9 +47,14 @@ type LoginRequest struct {
 }
 
 type Claims struct {
+	Id      string `json:"id"`
 	Email   string `json:"email"`
 	IsAdmin bool   `json:"is_admin"`
 	jwt.StandardClaims
+}
+
+type FirstConnectionRequest struct {
+	NewPassword string `json:"new_password"`
 }
 
 var ErrUserExists = errors.New("user already exists")

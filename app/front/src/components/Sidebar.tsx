@@ -11,6 +11,8 @@ import Person2Icon from '@mui/icons-material/Person2';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LoginIcon from '@mui/icons-material/Login';
 import {useAuthController} from "@/hooks/useAuthController";
+import LogoutIcon from '@mui/icons-material/Logout';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 
 interface SidebarItem {
     name: string;
@@ -51,6 +53,12 @@ const sidebarItems: SidebarItem[] = [
         href: "/account/me",
         icon: Person2Icon,
         requiresAuth: true,
+    },
+    {
+        name: "Tokens",
+        href: "/settings/tokens",
+        icon: VpnKeyIcon,
+        requiresAuth: true,
     }
 ];
 
@@ -61,13 +69,17 @@ const Sidebar = () => {
     const [isAdmin, setAdmin] = React.useState(false);
     const { checkToken } = useAuthController();
 
-    // reload on route change
     useEffect(() => {
         checkToken().then((response) => {
             setIsAuth(response.ok || false);
             setAdmin(response.is_admin || false);
         });
     }, [router.asPath]);
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        router.push("/auth/login").then();
+    }
 
     return (
         <div className="relative">
@@ -114,6 +126,20 @@ const Sidebar = () => {
                     </ul>
                 </div>
                 <div>
+                    {isAuth && (
+                        <div className="mb-4">
+                            <button
+                                className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em] hover:bg-error w-full
+                                ${isCollapsed ? "justify-center" : "justify-start pl-4"}`} onClick={handleLogout}>
+                                <div className="flex justify-center items-center">
+                                        <span className="mt-1">
+                                            <LogoutIcon/>
+                                        </span>
+                                    {!isCollapsed && <span className="mt-2 ml-2">Lougout</span>}
+                                </div>
+                            </button>
+                        </div>
+                    )}
                     <div className="divider"></div>
                     <div className="text-center mt-4">
                         <p className="text-xs text-gray-500">Hostasphere © 2024</p>

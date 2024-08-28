@@ -97,6 +97,53 @@ func RegisterUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
 }
 
+func FirstConnection(c *gin.Context) {
+	var input models.FirstConnectionRequest
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	claims, err := utils.GetFirstConnectionTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	if len(input.NewPassword) < 8 || len(input.NewPassword) > 50 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid password, must be between 8 and 50 characters"})
+		return
+	}
+
+	if !utils.IsPasswordStrong(input.NewPassword) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid password, must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character"})
+		return
+	}
+
+	newPassword, err := bcrypt.GenerateFromPassword([]byte(input.NewPassword), bcrypt.DefaultCost)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not hash password"})
+		return
+	}
+	collection := config.GetCollection("users")
+	_, err = collection.UpdateOne(context.Background(), bson.M{"email": claims.Email}, bson.M{"$set": bson.M{
+		"password":              newPassword,
+		"needs_password_change": false,
+	}})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not update user"})
+		return
+	}
+
+	token, err := utils.GenerateJWT(claims.Id, claims.Email, claims.IsAdmin, time.Now().Add(5*time.Minute))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": token, "needs_password_change": false})
+}
+
 func Login(c *gin.Context) {
 	var input models.LoginRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
@@ -119,17 +166,23 @@ func Login(c *gin.Context) {
 	}
 
 	if user.NeedsPasswordChange {
-		c.JSON(http.StatusOK, gin.H{"message": "Password change required"})
+		token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"token": token, "needs_password_change": true})
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.Email, user.IsAdmin)
+	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"token": token, "needs_password_change": false})
 }
 
 func CheckToken(c *gin.Context) {

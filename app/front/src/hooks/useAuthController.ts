@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 interface LoginResponse {
     token: string;
+    needs_password_change: boolean;
 }
 
 export const useAuthController = () => {
@@ -15,6 +16,32 @@ export const useAuthController = () => {
         setError(null);
         try {
             const response = await axios.post<LoginResponse>(url + '/api/login', { email, password });
+            return response.data;
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'An error occurred');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const firstConnect = async (new_password: string): Promise<LoginResponse | null> => {
+        setLoading(true);
+        setError(null);
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError('Need to login first');
+            return null;
+        }
+
+        try {
+            const response = await axios.post<LoginResponse>(url + '/api/login/first-connect', { new_password },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+                );
             return response.data;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -48,5 +75,5 @@ export const useAuthController = () => {
         }
     }
 
-    return { login, checkToken, loading, error };
+    return { login, checkToken, loading, firstConnect, error };
 };

@@ -19,9 +19,11 @@ const Login = () => {
                     login(formData.get('email') as string, formData.get('password') as string).then((response) => {
                         if (response) {
                             localStorage.setItem('token', response.token);
-                            router.push('/').then(() => {
-                                window.location.reload();
-                            });
+                            if (response.needs_password_change) {
+                                router.push('/auth/login/first-connection').then();
+                                return;
+                            }
+                            router.push('/').then();
                         }
                     });
                 }}>
