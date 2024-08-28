@@ -19,7 +19,7 @@ def probe():
             }
 
             log_info(f"Sending data for {data['function_name']}: {data}")
-            requests.post(ENDPOINT_URL, json=data)
+            # requests.post(ENDPOINT_URL, json=data)
 
             return result
         return wrapper

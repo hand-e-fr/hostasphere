@@ -2,7 +2,7 @@ TOKEN_FILE = token.secret
 
 .PHONY: all build upload clean
 
-all: build upload clean
+all: clean build upload clean
 
 build:
 	python setup.py sdist bdist_wheel
