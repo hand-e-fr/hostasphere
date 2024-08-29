@@ -26,6 +26,7 @@ class Profiler:
                             cpu_usage=data['cpu_usage'],
                             func_params=[profiler_output_pb2.FuncParams(
                                 args=[data['parameters']['args']],
+                                types=[data['parameters']['args_type']],
                                 kwargs=[data['parameters']['kwargs']]
                             )],
                         )
@@ -34,8 +35,7 @@ class Profiler:
                 raise Exception(
                     f"Error sending profiler output: {response.message}")
         except grpc.RpcError as e:
-            log_info(f"gRPC error: {e}")
-            raise Exception("Failed to send profiler output due to gRPC error")
+            raise Exception(f"Failed to send profiler output due to gRPC error \n```error\n{e}\n```")
 
 
     def probe(self):
@@ -47,10 +47,12 @@ class Profiler:
 
                 try:
                     args_json: str = json.dumps(args)
+                    args_type_json: str = json.dumps([type(arg).__name__ for arg in args])
                     kwargs_json: str = json.dumps(kwargs)
                 except TypeError as e:
                     log_info(f"Error serializing arguments: {e}")
                     args_json: str = str(args)
+                    args_type_json: str = str([type(arg).__name__ for arg in args])
                     kwargs_json: str = str(kwargs)
 
                 data = {
@@ -60,7 +62,7 @@ class Profiler:
                     'execution_time': end_time - start_time,
                     'memory_usage': get_memory_usage(),
                     'cpu_usage': 0,
-                    'parameters': {'args': args_json, 'kwargs': kwargs_json},
+                    'parameters': {'args': args_json, 'args_type': args_type_json, 'kwargs': kwargs_json},
                     'timestamp': time.time(),
                 }
 

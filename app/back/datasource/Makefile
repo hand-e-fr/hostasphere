@@ -2,7 +2,7 @@ GO=go
 
 PROTOC=protoc
 
-PROTO_DIR=protofile
+PROTO_DIR=proto
 
 OUT_DIR=.
 

@@ -9,9 +9,9 @@ service Profiler {
 }
 
 message FuncParams {
-    repeated string args = 1;
-    repeated string types = 2;
-    repeated string kwargs = 3;
+  repeated string args = 1;
+  repeated string types = 2;
+  repeated string kwargs = 3;
 }
 
 message ProfilerOutput {

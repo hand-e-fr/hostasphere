@@ -10,17 +10,14 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"net"
-	"openHostaLogs/internal/account"
-	"openHostaLogs/internal/account/github"
 	"openHostaLogs/internal/config"
 	"openHostaLogs/internal/db"
-	log2 "openHostaLogs/internal/log"
-	accountpb "openHostaLogs/protofile/account"
-	logpb "openHostaLogs/protofile/log"
+	"openHostaLogs/internal/profiler"
+	"openHostaLogs/proto"
 )
 
 func main() {
-	config.Load() // Load environment variables
+	config.Load()
 
 	db.InitMongoDB()
 	db.InitRedis()
@@ -31,9 +28,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	logpb.RegisterLogServiceServer(s, &log2.Server{})
-	accountpb.RegisterAccountServiceServer(s, &account.Server{})
-	accountpb.RegisterGithubAccountServiceServer(s, &github.Server{})
+	proto.RegisterProfilerServer(s, &profiler.Server{})
 	fmt.Println("gRPC server is running on port 50051")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
