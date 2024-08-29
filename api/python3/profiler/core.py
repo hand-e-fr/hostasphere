@@ -11,21 +11,28 @@ class Profiler:
         self._address = address
         self._token = token
 
+
     def sendProfilerOutput(self, data):
-        with grpc.insecure_channel(self._address) as channel:
-            stub = profiler_output_pb2_grpc.ProfilerStub(channel)
-            response = stub.SendProfilerOutput(profiler_output_pb2.ProfilerOutputRequest(
-                token=self._token,
-                profiler_output=profiler_output_pb2.ProfilerOutput(
-                    function_name=data['function_name'],
-                    start_time=data['start_time'],
-                    end_time=data['end_time'],
-                    memory_usage=data['memory_usage'],
-                    cpu_usage=data['cpu_usage'],
-                    # parameters=data['parameters'],
-                )
-            ))
-        print(f"Result: {response.ok}")
+        try:
+            with grpc.insecure_channel(self._address) as channel:
+                stub = profiler_output_pb2_grpc.ProfilerStub(channel)
+                response = stub.SendProfilerOutput(profiler_output_pb2.ProfilerOutputRequest(
+                    token=self._token,
+                    profiler_output=profiler_output_pb2.ProfilerOutput(
+                        function_name=data['function_name'],
+                        start_time=data['start_time'],
+                        end_time=data['end_time'],
+                        memory_usage=data['memory_usage'],
+                        cpu_usage=data['cpu_usage'],
+                        # parameters=data['parameters'],
+                    )
+                ))
+            if not response.ok:
+                raise Exception(f"Error sending profiler output: {response.message}")
+        except grpc.RpcError as e:
+            log_info(f"gRPC error: {e}")
+            raise Exception("Failed to send profiler output due to gRPC error")
+
 
     def probe(self):
         def decorator(func):
