@@ -1,10 +1,16 @@
-from profiler import probe
+from profiler.core import Profiler
 from flask import Flask
 
 app = Flask(__name__)
 
+profiler = Profiler(
+    endpoint_url='http://localhost:5000',
+    license_id='1234',
+    license_secret='567'
+)
+
 @app.route('/')
-@probe()
+@profiler.probe()
 def hello_world():
     for i in range(100000):
         # calculate sum of first 1000 numbers

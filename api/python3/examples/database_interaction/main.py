@@ -1,7 +1,13 @@
-from profiler import probe
+from profiler.core import Profiler
 import sqlite3
 
-@probe()
+profiler = Profiler(
+    endpoint_url='http://localhost:5000',
+    license_id='1234',
+    license_secret='567'
+)
+
+@profiler.probe()
 def query_database():
     conn = sqlite3.connect(':memory:')
     cursor = conn.cursor()

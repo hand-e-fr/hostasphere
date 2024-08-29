@@ -1,1 +1,1 @@
-from .core import probe
+from .core import Profiler

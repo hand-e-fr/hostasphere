@@ -1,11 +1,17 @@
-from profiler import probe
+from profiler.core import Profiler
+
+profiler = Profiler(
+    endpoint_url='http://localhost:5000',
+    license_id='1234',
+    license_secret='567'
+)
 
 class CustomClass:
-    @probe()
+    @profiler.probe()
     def method_one(self):
         return "Method One Executed"
 
-    @probe()
+    @profiler.probe()
     def method_two(self, value):
         return f"Method Two Executed with {value}"
 
