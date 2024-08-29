@@ -3,9 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 
 profiler = Profiler(
-    endpoint_url='http://localhost:5000',
-    license_id='1234',
-    license_secret='567'
+    address='localhost:50051',
+    token='shs_qsdsq8d79qdsq65d4q6d84sqd68qsd64qsd48q68sf'
 )
 
 @profiler.probe()
