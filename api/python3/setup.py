@@ -2,11 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="hostasphere_profiler",
-    version="0.0.7",
+    version="0.0.8",
     packages=find_packages(),
     install_requires=[
         "requests",
-        "psutil"
+        "psutil",
+        "grpcio",
+        "grpcio-tools"
     ],
     author="William Jolivet",
     description="Hostasphere Profiler API",

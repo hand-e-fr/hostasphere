@@ -10,7 +10,7 @@ Les données collectées sont envoyées sur votre interface de monitoring Hostas
 ### Installation
 Installez les dépendances requises avec pip :
 ```schell
-pip install hostasphere-profiler==0.0.7
+pip install hostasphere-profiler==0.0.8
 ```
 
 ### Utilisation
