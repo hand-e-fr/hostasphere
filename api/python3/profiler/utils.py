@@ -2,6 +2,7 @@ from . import profiler_output_pb2 as profiler_output
 import inspect
 import os
 import psutil
+import hashlib
 
 def get_function_name(func):
     return func.__name__
@@ -26,3 +27,12 @@ def get_memory_usage():
 def get_cpu_usage():
     process = psutil.Process(os.getpid())
     return process.cpu_percent()
+
+def hash_function(func):
+    try:
+        source_code = inspect.getsource(func)
+    except TypeError:
+        raise ValueError("The provided argument is not a function.")
+
+    source_hash = hashlib.sha256(source_code.encode('utf-8')).hexdigest()
+    return source_hash

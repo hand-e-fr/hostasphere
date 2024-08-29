@@ -3,19 +3,18 @@
 ## Hostasphere - Profiler API
 
 ### Description
-L'API de Profilage permet de mesurer le temps d'exécution, l'utilisation de la 
-mémoire, et d'autres métriques autours d'OpenHosta pour les fonctions Python. 
-Les données collectées sont envoyées sur votre interface de monitoring Hostasphere.
+The Profiling API allows you to measure execution time, memory usage, 
+and other metrics related to OpenHosta for Python functions. 
+The collected data is sent to your Hostasphere monitoring interface.
 
 ### Installation
-Installez les dépendances requises avec pip :
+Install the required dependencies with pip :
 ```schell
-pip install hostasphere-profiler==0.0.8
+pip install hostasphere-profiler==0.1
 ```
 
-### Utilisation
-#### Utilisation de base
-Pour profiler une fonction, utilisez le décorateur `@profiler.probe()` :
+### Usage
+To profile a function, use the decorator `@profiler.probe()`:
 
 ```python
 from profiler.core import Profiler
@@ -26,7 +25,8 @@ profiler = Profiler(
 )
 
 @profiler.probe()
-def ma_fonction():
-    # Logique de la fonction
+def my_func():
+    # Function logic
     pass
 ```
+You can find many examples in the [examples](https://github.com/hand-e-fr/hostasphere/tree/main/api/python3/examples) folder.

@@ -1,8 +1,10 @@
 import time
+
 import grpc
 
-from . import profiler_output_pb2_grpc as profiler_output_grpc, profiler_output_pb2 as profiler_output
-from .utils import get_function_name, get_memory_usage, get_cpu_usage, get_func_params
+from . import profiler_output_pb2_grpc as profiler_output_grpc
+from .utils import *
+
 
 class Profiler:
     def __init__(self, address, token):
@@ -32,8 +34,10 @@ class Profiler:
                 profiler_data = profiler_output.ProfilerOutputRequest(
                     profiler_output=profiler_output.ProfilerOutput(
                         function_name=get_function_name(func),
+                        function_id=hash_function(func),
                         start_time=start_time,
                         end_time=end_time,
+                        execution_time=(end_time * 1000) - (start_time * 1000), # in milliseconds
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(args, func)
