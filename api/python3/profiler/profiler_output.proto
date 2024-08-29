@@ -6,13 +6,18 @@ service Profiler {
     rpc SendProfilerOutput (ProfilerOutputRequest) returns (Response);
 }
 
+message FuncParams {
+    repeated string args = 1;
+    repeated string kwargs = 2;
+}
+
 message ProfilerOutput {
     string function_name = 1;
     float start_time = 2;
     float end_time = 3;
     float memory_usage = 4;
     float cpu_usage = 5;
-//    repeated bytes parameters = 6;
+    repeated FuncParams func_params = 6;
 }
 
 message ProfilerOutputRequest {
