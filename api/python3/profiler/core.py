@@ -35,6 +35,7 @@ class Profiler:
                     profiler_output=profiler_output.ProfilerOutput(
                         function_name=get_function_name(func),
                         function_id=hash_function(func),
+                        function_caller=get_caller(),
                         start_time=start_time,
                         end_time=end_time,
                         execution_time=(end_time * 1000) - (start_time * 1000), # in milliseconds

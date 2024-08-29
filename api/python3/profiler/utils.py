@@ -36,3 +36,10 @@ def hash_function(func):
 
     source_hash = hashlib.sha256(source_code.encode('utf-8')).hexdigest()
     return source_hash
+
+def get_caller():
+    if len(inspect.stack()) < 3:
+        return "N/A"
+    caller_frame = inspect.stack()[2]
+    caller_function = caller_frame.function
+    return caller_function

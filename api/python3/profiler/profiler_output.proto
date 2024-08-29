@@ -17,12 +17,13 @@ message FuncParams {
 message ProfilerOutput {
   string function_name = 1;
   string function_id = 2;
-  float start_time = 3;
-  float end_time = 4;
-  float execution_time = 5; // in milliseconds
-  float memory_usage = 6;
-  float cpu_usage = 7;
-  repeated FuncParams func_params = 8;
+  string function_caller = 3;
+  float start_time = 4;
+  float end_time = 5;
+  float execution_time = 6; // in milliseconds
+  float memory_usage = 7;
+  float cpu_usage = 8;
+  repeated FuncParams func_params = 9;
 }
 
 message ProfilerOutputRequest {
