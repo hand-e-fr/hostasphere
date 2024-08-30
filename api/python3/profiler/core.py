@@ -31,6 +31,11 @@ class Profiler:
                 result = func(*args, **kwargs)
                 end_time = time.time()
 
+                returned_value = profiler_output.ReturnedValue(
+                    value=str(result),
+                    type=type(result).__name__
+                )
+
                 profiler_data = profiler_output.ProfilerOutputRequest(
                     profiler_output=profiler_output.ProfilerOutput(
                         function_name=get_function_name(func),
@@ -41,7 +46,8 @@ class Profiler:
                         execution_time=(end_time * 1000) - (start_time * 1000), # in milliseconds
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
-                        func_params=get_func_params(args, func)
+                        func_params=get_func_params(args, func),
+                        returned_value=returned_value
                     )
                 )
                 self.sendProfilerOutput(profiler_data)

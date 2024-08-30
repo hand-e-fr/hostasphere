@@ -1,4 +1,4 @@
-package config
+package db
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 
 var MongoClient *mongo.Client
 
-func ConnectDB() {
+func InitMongoDB() {
 	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_URI")))
 	if err != nil {
 		log.Fatal(err)

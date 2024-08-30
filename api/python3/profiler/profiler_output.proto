@@ -14,6 +14,11 @@ message FuncParams {
   string type = 3;
 }
 
+message ReturnedValue {
+  string value = 1;
+  string type = 2;
+}
+
 message ProfilerOutput {
   string function_name = 1;
   string function_id = 2;
@@ -24,6 +29,7 @@ message ProfilerOutput {
   float memory_usage = 7;
   float cpu_usage = 8;
   repeated FuncParams func_params = 9;
+  ReturnedValue returned_value = 10;
 }
 
 message ProfilerOutputRequest {

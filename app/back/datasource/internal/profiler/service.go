@@ -3,6 +3,7 @@ package profiler
 import (
 	"context"
 	"fmt"
+	config "openHostaLogs/internal/db"
 	"openHostaLogs/proto"
 )
 
@@ -10,47 +11,10 @@ type Server struct {
 	proto.UnimplementedProfilerServer
 }
 
-/*
-syntax = "proto3";
-
-package profiler_output;
-
-option go_package = "./proto";
-
-service Profiler {
-  rpc SendProfilerOutput (ProfilerOutputRequest) returns (Response);
-}
-
-message FuncParams {
-  repeated string args = 1;
-  repeated string kwargs = 2;
-}
-
-message ProfilerOutput {
-  string function_name = 1;
-  float start_time = 2;
-  float end_time = 3;
-  float memory_usage = 4;
-  float cpu_usage = 5;
-  repeated FuncParams func_params = 6;
-}
-
-message ProfilerOutputRequest {
-  string token = 1;
-  ProfilerOutput profiler_output = 3;
-}
-
-message Response {
-  bool ok = 1;
-  string message = 2;
-}
-
-*/
-
 func (s *Server) SendProfilerOutput(ctx context.Context, in *proto.ProfilerOutputRequest) (*proto.Response, error) {
-	fmt.Printf("Received profiler output from %s :\n {FunctionName: %s,\n StartTime: %f,\n EndTime: %f,\n MemoryUsage: %f,\n CpuUsage: %f,\n FuncParams:",
+	fmt.Printf("Received profiler output from %s (%s) :\n StartTime: %f\n EndTime: %f\n MemoryUsage: %f\n CpuUsage: %f\n FuncParams:\n",
 		in.ProfilerOutput.GetFunctionName(),
-		in.ProfilerOutput.GetFunctionName(),
+		in.ProfilerOutput.GetFunctionId(),
 		in.ProfilerOutput.GetStartTime(),
 		in.ProfilerOutput.GetEndTime(),
 		in.ProfilerOutput.GetMemoryUsage(),
@@ -58,9 +22,17 @@ func (s *Server) SendProfilerOutput(ctx context.Context, in *proto.ProfilerOutpu
 	)
 
 	for _, param := range in.ProfilerOutput.GetFuncParams() {
-		fmt.Printf("\n Args: %v,\n Types: %v,\n Kwargs: %v", param.GetArgs(), param.Types, param.GetKwargs())
+		fmt.Printf("  %v: %v (%v)\n", param.GetArgName(), param.GetArg(), param.GetType())
 	}
-	fmt.Println("}")
 
+	fmt.Println("Execution time: ", in.ProfilerOutput.GetExecutionTime(), "milliseconds")
+	fmt.Println("Called by: ", in.ProfilerOutput.GetFunctionCaller())
+
+	// save to mongoDB
+	collection := config.GetCollection("profiler")
+	_, err := collection.InsertOne(context.Background(), in.ProfilerOutput)
+	if err != nil {
+		return &proto.Response{Ok: false, Message: "Failed to save profiler output"}, err
+	}
 	return &proto.Response{Ok: true, Message: "Profiler output received"}, nil
 }
