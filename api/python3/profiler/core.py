@@ -1,9 +1,9 @@
 import time
 import grpc
+import threading
 
 from . import profiler_output_pb2_grpc as profiler_output_grpc
 from .utils import *
-
 
 class Profiler:
     def __init__(self, address, token):
@@ -23,6 +23,9 @@ class Profiler:
         except grpc.RpcError as e:
             raise Exception("Impossible to send profiler output check address, or check if hostaspere is running")
 
+    def sendProfilerOutputAsync(self, profiler_data: profiler_output.ProfilerOutput):
+        thread = threading.Thread(target=self.sendProfilerOutput, args=(profiler_data,))
+        thread.start()
 
     def probe(self):
         def decorator(func):
@@ -52,7 +55,7 @@ class Profiler:
                         returned_value=returned_value
                     )
                 )
-                self.sendProfilerOutput(profiler_data)
+                self.sendProfilerOutputAsync(profiler_data)
                 return result
             return wrapper
         return decorator
