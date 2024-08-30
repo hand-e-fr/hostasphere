@@ -1,156 +1,143 @@
-import React from 'react';
-import useUserController, {Users, User} from "@/hooks/useUserController";
+import React, { useState } from 'react';
 import Link from "next/link";
-import {useAuthController} from "@/hooks/useAuthController";
+import { CheckTokenResponse, useAuthController } from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
-
-interface Token {
-    id: string;
-    name: string;
-    value: string;
-    last_refreshed: number;
-    last_used: number;
-    permissions: string[];
-}
-
-// list of tokens
-const tokens: Token[] = [
-    {
-        id: '1',
-        name: 'John Doe',
-        value: 'shs_sqsdqsdqsqsdqds',
-        last_refreshed: Date.now(),
-        last_used: Date.now(),
-        permissions: ['read', 'write'],
-    },
-    {
-        id: '2',
-        name: 'Mike Brown',
-        value: 'shs_sqsdqsdqsqsdqds',
-        last_refreshed: Date.now(),
-        last_used: Date.now(),
-        permissions: ['read'],
-    },
-    {
-        id: '3',
-        name: 'Alice Johnson',
-        value: 'shs_sqsdqsdqsqs*5dqds',
-        last_refreshed: Date.now(),
-        last_used: Date.now(),
-        permissions: ['read', 'write'],
-    },
-    {
-        id: '4',
-        name: 'Helen Smith',
-        value: 'shs_sqsdqsdqsqsdqds',
-        last_refreshed: Date.now(),
-        last_used: Date.now(),
-        permissions: ['read'],
-    }
-];
-
+import { Token, useTokenController } from "@/hooks/useTokenController";
+import RegisterTokenModal from '@/components/token/RegisterTokenModal';
+import ConfirmDeleteModal from '@/components/token/ConfirmDeleteModal';
 
 const Tokens = () => {
     const { checkToken } = useAuthController();
-    const [authLoading, setAuthLoading] = React.useState(true);
-    const { getUsers, loading, error } = useUserController();
-    const [users, setUsers] = React.useState<Users | null>(null);
-    const [page, setPage] = React.useState(0);
-    const limit = 8;
+    const { getTokens, deleteToken, error, loading, tokens } = useTokenController();
+    const [authLoading, setAuthLoading] = useState(true);
+    const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [tokenToDelete, setTokenToDelete] = useState<string | null>(null);
 
     React.useEffect(() => {
+        getTokens();
         checkToken().then((response) => {
-            if (response.ok && response.is_admin) {
+            setTokenInfo(response);
+            if (response.ok) {
                 setAuthLoading(false);
             }
         });
     }, []);
 
-    React.useEffect(() => {
-        getUsers(page, limit).then((users) => {
-            setUsers(users);
-        });
-    }, [page]);
+    const handleDeleteClick = (tokenId: string) => {
+        setTokenToDelete(tokenId);
+        setIsConfirmOpen(true);
+    };
 
-    if (authLoading) return <Loading/>;
-
-    const handlePage = (page: number) => {
-        if (page < 0) {
-            page = 0;
+    const handleConfirmDelete = () => {
+        if (tokenToDelete) {
+            deleteToken(tokenToDelete).then(() => {
+                getTokens(); // Refresh tokens after deletion
+                setIsConfirmOpen(false);
+            });
         }
-        getUsers(page, limit).then((users) => {
-            setUsers(users);
-            setPage(page);
-        });
-    }
+    };
+
+    if (authLoading || loading) return <Loading />;
 
     return (
-        <div className="bg-base-100 shadow-lg rounded-lg p-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
-            <div className="overflow-x-auto">
+        <div className="bg-base-100 shadow-lg rounded-lg p-6">
+            <div>
                 <div>
                     <h1 className="text-2xl font-bold">Access Tokens</h1>
                 </div>
-                <table className="table table-zebra">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Value</th>
-                        <th>Last Refreshed Date</th>
-                        <th>Last Used Date</th>
-                        <th>Permissions</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {tokens && tokens.map((token: Token) => (
-                        <tr key={token.id}>
-                            <th className="w-0">
-                                <label>
-                                    <input type="radio" className="radio" onChange={(e) => {
-                                        const radios = document.querySelectorAll('.radio');
-                                        radios.forEach((radio) => {
-                                            (radio as HTMLInputElement).checked = false;
-                                        });
-                                        (e.target as HTMLInputElement).checked = true;
-                                    }}/>
-                                </label>
-                            </th>
-                            <td>
-                                {token.name}
-                            </td>
-                            <td>
-                                {token.value}
-                            </td>
-                            <td>
-                                {new Date(token.last_refreshed).toLocaleDateString()}
-                            </td>
-                            <td>
-                                {new Date(token.last_used).toLocaleDateString()}
-                            </td>
-                            <td>
-                                {token.permissions.join(', ')}
-                            </td>
-                            <th className="w-0">
-                                <Link href={`/account/${token.id}`}>
-                                    <button className="btn btn-info btn-sm">details</button>
-                                </Link>
-                            </th>
+                <div className="overflow-x-auto">
+                    <table className="table table-zebra mt-4 mb-4">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Create Date</th>
+                            <th>Last Used Date</th>
+                            <th>Owner</th>
+                            <th></th>
                         </tr>
-                    ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {tokens && tokens.map((token: Token) => (
+                            <tr key={token.id}>
+                                <th className="w-0">
+                                    <label>
+                                        <input type="radio" className="radio" onChange={(e) => {
+                                            const radios = document.querySelectorAll('.radio');
+                                            radios.forEach((radio) => {
+                                                (radio as HTMLInputElement).checked = false;
+                                            });
+                                            (e.target as HTMLInputElement).checked = true;
+                                        }} />
+                                    </label>
+                                </th>
+                                <td>
+                                    {token.name}
+                                </td>
+                                <td>
+                                    {token.value}
+                                </td>
+                                <td>
+                                    {token.created_at === 0 ? 'Never' : new Date(token.created_at).toLocaleDateString()}
+                                </td>
+                                <td>
+                                    {token.last_used === 0 ? 'Never' : new Date(token.last_used).toLocaleDateString()}
+                                </td>
+                                <td>
+                                    {token.owner}
+                                </td>
+                                {tokenInfo && (tokenInfo.is_admin || token.owner === tokenInfo.email) ? (
+                                    <>
+                                        <th className="w-0">
+                                            <Link href={`/settings/tokens/manage/${token.id}`}>
+                                                <button className="btn btn-info btn-sm">usage</button>
+                                            </Link>
+                                        </th>
+                                        <th className="w-0">
+                                            <button className="btn btn-error btn-sm" onClick={() => handleDeleteClick(token.id)}>delete</button>
+                                        </th>
+                                    </>
+                                ) : (
+                                    <>
+                                        <th className="w-0">
+                                            <button className="btn btn-info btn-sm" disabled>usage</button>
+                                        </th>
+                                        <th className="w-0">
+                                            <button className="btn btn-error btn-sm" disabled>delete</button>
+                                        </th>
+                                    </>
+                                )}
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div className="flex justify-between items-center mt-4">
-                <div className="join">
-                    <button className="join-item btn" onClick={() => handlePage(page - 1)}>«</button>
-                    <button className="join-item btn">{page + 1}</button>
-                    <button className="join-item btn" onClick={() => handlePage(page + 1)}>»</button>
-                </div>
                 <div className="flex gap-2">
-                    <button className="btn btn-secondary">Register new Token</button>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        Register new Token
+                    </button>
                 </div>
             </div>
+            <RegisterTokenModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    getTokens();
+                    setIsModalOpen(false);
+                }}
+            />
+            <ConfirmDeleteModal
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={handleConfirmDelete}
+            />
         </div>
     );
 };

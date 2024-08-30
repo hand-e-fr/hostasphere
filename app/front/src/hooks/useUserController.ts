@@ -4,11 +4,11 @@ import { useState } from 'react';
 interface User {
     id: string;
     email: string;
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     password?: string;
-    is_admin: boolean;
-    created_at: number;
+    isAdmin: boolean;
+    createdAt: number;
 }
 
 interface Users {

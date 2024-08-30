@@ -97,14 +97,18 @@ func RegisterUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User registered successfully"})
 }
 
+type firstConnectionRequest struct {
+	NewPassword string `json:"new_password"`
+}
+
 func FirstConnection(c *gin.Context) {
-	var input models.FirstConnectionRequest
+	var input firstConnectionRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	claims, err := utils.GetFirstConnectionTokenValue(c)
+	claims, err := utils.GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -144,8 +148,13 @@ func FirstConnection(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"token": token, "needs_password_change": false})
 }
 
+type loginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func Login(c *gin.Context) {
-	var input models.LoginRequest
+	var input loginRequest
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -176,7 +185,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute))
+	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return

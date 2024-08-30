@@ -35,7 +35,7 @@ const Login = () => {
                         <label htmlFor="password" className="block text-sm font-medium">Password</label>
                         <input type="password" name="password" required className="input input-bordered w-full mt-1"/>
                     </div>
-                    <button type="submit" className="mt-3 btn btn-primary w-full">Login</button>
+                    <button type="submit" className="mt-3 btn btn-secondary w-full">Login</button>
                 </form>
             </div>
         </div>

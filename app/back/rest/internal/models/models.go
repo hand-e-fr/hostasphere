@@ -41,11 +41,6 @@ type RegisterAppRequest struct {
 	AdminUser RegisterUserRequest `json:"admin_user"`
 }
 
-type LoginRequest struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 type Claims struct {
 	Id      string `json:"id"`
 	Email   string `json:"email"`
@@ -53,8 +48,14 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-type FirstConnectionRequest struct {
-	NewPassword string `json:"new_password"`
+type Token struct {
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name           string             `bson:"name" json:"name"`
+	Value          []byte             `bson:"value" json:"-"`
+	DisplayedValue string             `bson:"displayed_value" json:"value"`
+	CreatedAt      int64              `bson:"created_at" json:"created_at"`
+	LastUsed       int64              `bson:"last_used" json:"last_used"`
+	Owner          string             `bson:"owner" json:"owner"`
 }
 
 var ErrUserExists = errors.New("user already exists")

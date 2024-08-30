@@ -92,13 +92,13 @@ const Accounts = () => {
                 </table>
             </div>
             <div className="flex justify-between items-center mt-4">
-                <div className="join">
-                <button className="join-item btn" onClick={() => handlePage(page - 1)}>«</button>
-                    <button className="join-item btn">{page + 1}</button>
-                    <button className="join-item btn" onClick={() => handlePage(page + 1)}>»</button>
-                </div>
                 <div className="flex gap-2">
                     <button className="btn btn-secondary">Register new Account</button>
+                </div>
+                <div className="join">
+                    <button className="join-item btn" onClick={() => handlePage(page - 1)}>«</button>
+                    <button className="join-item btn">{page + 1}</button>
+                    <button className="join-item btn" onClick={() => handlePage(page + 1)}>»</button>
                 </div>
             </div>
         </div>

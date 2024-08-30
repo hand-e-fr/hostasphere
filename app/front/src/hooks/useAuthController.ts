@@ -6,6 +6,13 @@ interface LoginResponse {
     needs_password_change: boolean;
 }
 
+interface CheckTokenResponse {
+    ok: boolean;
+    email?: string;
+    is_admin?: boolean;
+    error?: string;
+}
+
 export const useAuthController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -51,7 +58,7 @@ export const useAuthController = () => {
         }
     };
 
-    const checkToken = async (): Promise<{ ok: boolean, email?: string, is_admin?: boolean, error?: string }> => {
+    const checkToken = async (): Promise<CheckTokenResponse> => {
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
@@ -61,12 +68,12 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.get<{ ok: boolean, email?: string, is_admin?: boolean, error?: string }>(url + '/api/login/test', {
+            const response = await axios.get<CheckTokenResponse>(url + '/api/login/test', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            return response.data;
+            return response.data as CheckTokenResponse;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
             return { ok: false, error: err.response?.data?.error || 'An error occurred' };
@@ -77,3 +84,5 @@ export const useAuthController = () => {
 
     return { login, checkToken, loading, firstConnect, error };
 };
+
+export type { CheckTokenResponse };

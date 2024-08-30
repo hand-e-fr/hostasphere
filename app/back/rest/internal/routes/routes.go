@@ -36,9 +36,15 @@ func SetupRouter() *gin.Engine {
 		api.GET("/user/:id", controllers.GetUserByID)
 		api.GET("/users", controllers.GetUsers)
 		api.PUT("/app/:id/license", controllers.UpdateLicense)
+
+		api.POST("/token", controllers.CreateToken)
+		api.GET("/tokens", controllers.GetTokens)
+		api.GET("/token/:token", controllers.ExistsToken)
+		api.DELETE("/token/:token", controllers.DeleteToken)
 	}
 
 	r.GET("/api/app/isInitialized", controllers.IsAppInitialized)
+
 	r.GET("/api/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{"message": "pong"})
 	})

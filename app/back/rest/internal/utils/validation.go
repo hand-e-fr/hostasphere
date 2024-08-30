@@ -57,18 +57,3 @@ func GetTokenValue(c *gin.Context) (*models.Claims, error) {
 
 	return claims, nil
 }
-
-func GetFirstConnectionTokenValue(c *gin.Context) (*models.Claims, error) {
-	tokenString := c.GetHeader("Authorization")
-	if len(tokenString) < 8 {
-		return nil, errors.New("invalid token")
-	}
-	tokenString = tokenString[7:]
-
-	claims, err := ValidateJWT(tokenString)
-	if err != nil {
-		return nil, errors.New("invalid token")
-	}
-
-	return claims, nil
-}

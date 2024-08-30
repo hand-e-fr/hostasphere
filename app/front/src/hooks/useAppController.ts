@@ -77,6 +77,7 @@ export const useAppController = () => {
                     isInit = response.data.initialized;
                 }
             );
+            setError(null);
             return isInit.valueOf();
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');

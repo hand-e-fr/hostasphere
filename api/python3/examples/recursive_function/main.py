@@ -1,3 +1,5 @@
+import asyncio
+
 from profiler.core import Profiler
 
 profiler = Profiler(
@@ -12,4 +14,4 @@ def fibonacci(n):
     return fibonacci(n-1) + fibonacci(n-2)
 
 if __name__ == "__main__":
-    fibonacci(2)
+    fibonacci(4)

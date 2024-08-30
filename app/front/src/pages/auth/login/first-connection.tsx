@@ -43,7 +43,7 @@ const FirstConnection = () => {
                         }}/>
                         <p className="link-error" id="error"></p>
                     </div>
-                    <button type="submit" className="mt-3 btn btn-primary w-full">Save</button>
+                    <button type="submit" className="mt-3 btn btn-secondary w-full">Save</button>
                 </form>
             </div>
         </div>
