@@ -1,9 +1,9 @@
 import time
 import grpc
 import asyncio
+import copy
 from . import profiler_output_pb2_grpc as profiler_output_grpc
 from .utils import *
-
 
 class Profiler:
     def __init__(self, address, token):
@@ -36,7 +36,7 @@ class Profiler:
 
     async def _execute_and_profile(self, func, *args, **kwargs):
         start_time = time.time()
-        copied_args = args
+        copied_args = copy.deepcopy(args)
         result = await func(*args, **kwargs) if asyncio.iscoroutinefunction(func) else func(*args, **kwargs)
         end_time = time.time()
 
