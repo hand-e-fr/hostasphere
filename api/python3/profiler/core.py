@@ -2,14 +2,18 @@ import time
 import grpc
 import threading
 
-from . import profiler_output_pb2_grpc as profiler_output_grpc
+from . import profiler_output_pb2_grpc as profiler_output_grpc, token_pb2
 from .utils import *
+from .token import token_exists
 
 class Profiler:
     def __init__(self, address, token):
         self._address = address
         self._token = token
-        self._token_id = "66d1beef53cb6f370f775bf6" # todo: retrieve token id from the server
+        token_res: token_pb2.ExistsTokenResponse = token_exists(self._token, self._address)
+        if not token_res.exists:
+            raise Exception("Invalid token")
+        self._token_id = token_res.id
 
     def sendProfilerOutput(self, profiler_data: profiler_output.ProfilerOutput):
         try:

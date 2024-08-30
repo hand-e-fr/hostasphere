@@ -4,7 +4,6 @@ import (
 	"app/internal/config"
 	"app/internal/models"
 	"app/internal/utils"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -123,8 +122,6 @@ func DeleteToken(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid token ID"})
 		return
 	}
-
-	fmt.Println(oid)
 
 	var token models.Token
 	if err := config.GetCollection("tokens").FindOne(c, bson.M{"_id": oid}).Decode(&token); err != nil {
