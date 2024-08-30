@@ -36,6 +36,7 @@ class Profiler:
 
     async def _execute_and_profile(self, func, *args, **kwargs):
         start_time = time.time()
+        copied_args = args
         result = await func(*args, **kwargs) if asyncio.iscoroutinefunction(func) else func(*args, **kwargs)
         end_time = time.time()
 
@@ -54,7 +55,7 @@ class Profiler:
                 execution_time=(end_time - start_time) * 1000,  # in milliseconds
                 memory_usage=get_memory_usage(),
                 cpu_usage=get_cpu_usage(),
-                func_params=get_func_params(args, func),
+                func_params=get_func_params(copied_args, func),
                 returned_value=returned_value
             )
         )
