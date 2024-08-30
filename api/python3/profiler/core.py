@@ -10,6 +10,7 @@ class Profiler:
         self._address = address
         self._token = token
         # todo: validate address and token
+        self._token_id = None # todo: retrieve token id from the server
 
     async def send_profiler_output(self, profiler_data: profiler_output.ProfilerOutput):
         try:
@@ -36,7 +37,7 @@ class Profiler:
 
     async def _execute_and_profile(self, func, *args, **kwargs):
         start_time = time.time()
-        copied_args = copy.deepcopy(args)
+        copied_args = deep_copy_args(args)
         result = await func(*args, **kwargs) if asyncio.iscoroutinefunction(func) else func(*args, **kwargs)
         end_time = time.time()
 

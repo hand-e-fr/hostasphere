@@ -1,3 +1,5 @@
+import copy
+
 from . import profiler_output_pb2 as profiler_output
 import inspect
 import os
@@ -27,6 +29,15 @@ def get_memory_usage():
 def get_cpu_usage():
     process = psutil.Process(os.getpid())
     return process.cpu_percent()
+
+def deep_copy_args(args):
+    result = []
+    for arg in args:
+        try:
+            result.append(copy.deepcopy(arg))
+        except Exception:
+            result.append(copy.copy(arg))
+    return result
 
 def hash_function(func):
     try:

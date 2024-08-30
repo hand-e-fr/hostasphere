@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 profiler = Profiler(
     address='localhost:50051',
-    token='shs_qsdsq8d79qdsq65d4q6d84sqd68qsd64qsd48q68sf'
+    token='hsp_0d6d562910026e3ba0b511dd2c99a47d374f810055003c149eb5fbcdad693319'
 )
 
 @app.route('/')
