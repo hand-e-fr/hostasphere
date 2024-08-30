@@ -23,13 +23,14 @@ message ProfilerOutput {
   string function_name = 1;
   string function_id = 2;
   string function_caller = 3;
-  double start_time = 4;
-  double end_time = 5;
-  double execution_time = 6; // in milliseconds
-  double memory_usage = 7;
-  double cpu_usage = 8;
-  repeated FuncParams func_params = 9;
-  ReturnedValue returned_value = 10;
+  string token_id = 4;
+  double start_time = 5;
+  double end_time = 6;
+  double execution_time = 7; // in milliseconds
+  double memory_usage = 8;
+  double cpu_usage = 9;
+  repeated FuncParams func_params = 10;
+  ReturnedValue returned_value = 11;
 }
 
 message ProfilerOutputRequest {

@@ -51,6 +51,7 @@ class Profiler:
                 function_name=get_function_name(func),
                 function_id=hash_function(func),
                 function_caller=get_caller(),
+                token_id=self._token_id,
                 start_time=start_time,
                 end_time=end_time,
                 execution_time=(end_time - start_time) * 1000,  # in milliseconds
