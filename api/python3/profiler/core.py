@@ -31,7 +31,7 @@ class Profiler:
         thread = threading.Thread(target=self.sendProfilerOutput, args=(profiler_data,))
         thread.start()
 
-    def probe(self):
+    def track(self):
         def decorator(func):
             def wrapper(*args, **kwargs):
                 copied_args = deep_copy_args(args)

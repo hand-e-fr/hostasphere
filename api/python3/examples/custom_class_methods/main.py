@@ -6,11 +6,11 @@ profiler = Profiler(
 )
 
 class CustomClass:
-    @profiler.probe()
+    @profiler.track()
     def method_one(self):
         return "Method One Executed"
 
-    @profiler.probe()
+    @profiler.track()
     def method_two(self, value):
         return f"Method Two Executed with {value}"
 

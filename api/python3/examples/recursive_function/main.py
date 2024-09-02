@@ -7,7 +7,7 @@ profiler = Profiler(
     token='hsp_a8503d8e080835557917c0da33228a461a22aab822a7a09a994d181ac8450474'
 )
 
-@profiler.probe()
+@profiler.track()
 def fibonacci(n):
     if n <= 1:
         return n

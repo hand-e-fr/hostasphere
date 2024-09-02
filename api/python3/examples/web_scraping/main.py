@@ -7,7 +7,7 @@ profiler = Profiler(
     token='hsp_0d6d562910026e3ba0b511dd2c99a47d374f810055003c149eb5fbcdad693319'
 )
 
-@profiler.probe()
+@profiler.track()
 def scrape_website(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')

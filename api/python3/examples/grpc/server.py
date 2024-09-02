@@ -10,7 +10,7 @@ profiler = Profiler(
 )
 
 class CalculatorServicer(calculator_pb2_grpc.CalculatorServicer):
-    @profiler.probe()
+    @profiler.track()
     def Add(self, request, context):
         result = request.num1 + request.num2
         print(f"Received request: {request.num1} + {request.num2} = {result}")

@@ -5,7 +5,7 @@ profiler = Profiler(
     token='hsp_2561346f824a05f7b6ce3b8180e608ca2bb8ca7874658181daaacb851daeef82'
 )
 
-@profiler.probe()
+@profiler.track()
 def read_large_file(file_path):
     with open(file_path, 'r') as file:
         return file.readlines()

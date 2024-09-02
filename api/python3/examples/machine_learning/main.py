@@ -8,7 +8,7 @@ profiler = Profiler(
     token='hsp_0d6d562910026e3ba0b511dd2c99a47d374f810055003c149eb5fbcdad693319'
 )
 
-@profiler.probe()
+@profiler.track()
 def train_model():
     iris = load_iris()
     X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2)

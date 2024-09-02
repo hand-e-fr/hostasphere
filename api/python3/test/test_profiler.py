@@ -7,7 +7,7 @@ profiler = Profiler(
 )
 
 class TestProfiler(unittest.TestCase):
-    @profiler.probe()
+    @profiler.track()
     def sample_function(self, start, end):
         return sum(range(start, end))
 

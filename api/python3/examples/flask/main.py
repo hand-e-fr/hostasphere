@@ -9,7 +9,7 @@ profiler = Profiler(
 )
 
 @app.route('/')
-@profiler.probe()
+@profiler.track()
 def hello_world():
     for i in range(100000):
         # calculate sum of first 1000 numbers
