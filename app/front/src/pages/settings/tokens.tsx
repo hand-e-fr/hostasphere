@@ -51,7 +51,6 @@ const Tokens = () => {
                     <table className="table table-zebra mt-4 mb-4">
                         <thead>
                         <tr>
-                            <th></th>
                             <th>Name</th>
                             <th>Value</th>
                             <th>Create Date</th>
@@ -63,17 +62,6 @@ const Tokens = () => {
                         <tbody>
                         {tokens && tokens.map((token: Token) => (
                             <tr key={token.id}>
-                                <th className="w-0">
-                                    <label>
-                                        <input type="radio" className="radio" onChange={(e) => {
-                                            const radios = document.querySelectorAll('.radio');
-                                            radios.forEach((radio) => {
-                                                (radio as HTMLInputElement).checked = false;
-                                            });
-                                            (e.target as HTMLInputElement).checked = true;
-                                        }} />
-                                    </label>
-                                </th>
                                 <td>
                                     {token.name}
                                 </td>

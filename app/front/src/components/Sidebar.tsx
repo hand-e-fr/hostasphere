@@ -43,14 +43,14 @@ const sidebarItems: SidebarItem[] = [
     },
     {
         name: "Accounts",
-        href: "/account/s",
+        href: "/accounts",
         icon: PeopleAltIcon,
         requiresAuth: true,
         requireAdmin: true,
     },
     {
         name: "My Account",
-        href: "/account/me",
+        href: "/accounts/me",
         icon: Person2Icon,
         requiresAuth: true,
     },
@@ -135,7 +135,7 @@ const Sidebar = () => {
                                         <span className="mt-1">
                                             <LogoutIcon/>
                                         </span>
-                                    {!isCollapsed && <span className="mt-2 ml-2">Lougout</span>}
+                                    {!isCollapsed && <span className="mt-2 ml-2">Logout</span>}
                                 </div>
                             </button>
                         </div>

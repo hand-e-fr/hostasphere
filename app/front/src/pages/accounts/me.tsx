@@ -33,16 +33,16 @@ const Account = () => {
                         <strong>Id:</strong> {user.id}
                     </p>
                     <p className="mb-4">
-                        <strong>First Name:</strong> {user.firstName}
+                        <strong>First Name:</strong> {user.first_name}
                     </p>
                     <p className="mb-4">
-                        <strong>Last Name:</strong> {user.lastName}
+                        <strong>Last Name:</strong> {user.last_name}
                     </p>
                     <p className="mb-4">
-                        <strong>Admin:</strong> {user.isAdmin ? 'Yes' : 'No'}
+                        <strong>Admin:</strong> {user.is_admin ? 'Yes' : 'No'}
                     </p>
                     <p className="mb-4">
-                        <strong>Created At:</strong> {new Date(user.createdAt).toLocaleString()}
+                        <strong>Created At:</strong> {new Date(user.created_at).toLocaleString()}
                     </p>
                 </div>
             )}

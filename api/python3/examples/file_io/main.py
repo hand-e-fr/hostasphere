@@ -2,7 +2,7 @@ from profiler.core import Profiler
 
 profiler = Profiler(
     address='localhost:50051',
-    token='hsp_0d6d562910026e3ba0b511dd2c99a47d374f810055003c149eb5fbcdad693319'
+    token='hsp_2561346f824a05f7b6ce3b8180e608ca2bb8ca7874658181daaacb851daeef82'
 )
 
 @profiler.probe()

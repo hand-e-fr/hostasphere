@@ -118,12 +118,12 @@ func GetUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id":        user.ID.Hex(),
-		"email":     user.Email,
-		"firstName": user.FirstName,
-		"lastName":  user.LastName,
-		"isAdmin":   user.IsAdmin,
-		"createdAt": user.CreatedAt,
+		"id":         user.ID.Hex(),
+		"email":      user.Email,
+		"first_name": user.FirstName,
+		"last_name":  user.LastName,
+		"is_admin":   user.IsAdmin,
+		"created_at": user.CreatedAt,
 	})
 }
 
@@ -155,12 +155,12 @@ func GetUserByID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id":        user.ID.Hex(),
-		"email":     user.Email,
-		"firstName": user.FirstName,
-		"lastName":  user.LastName,
-		"isAdmin":   user.IsAdmin,
-		"createdAt": user.CreatedAt,
+		"id":         user.ID.Hex(),
+		"email":      user.Email,
+		"first_name": user.FirstName,
+		"last_name":  user.LastName,
+		"is_admin":   user.IsAdmin,
+		"created_at": user.CreatedAt,
 	})
 }
 

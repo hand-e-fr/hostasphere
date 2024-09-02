@@ -22,7 +22,7 @@ export const useAuthController = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.post<LoginResponse>(url + '/api/login', { email, password });
+            const response = await axios.post<LoginResponse>(`${url}/api/login`, { email, password });
             return response.data;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -42,7 +42,7 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.post<LoginResponse>(url + '/api/login/first-connect', { new_password },
+            const response = await axios.post<LoginResponse>(`${url}/api/login/first-connect`, { new_password },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.get<CheckTokenResponse>(url + '/api/login/test', {
+            const response = await axios.get<CheckTokenResponse>(`${url}/api/login/test`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

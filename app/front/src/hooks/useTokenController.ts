@@ -46,7 +46,7 @@ export const useTokenController = () => {
         }
 
         try {
-            const response = await axios.post<TokenResponse>(url + '/api/token', data, {
+            const response = await axios.post<TokenResponse>(`${url}/api/token`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -72,7 +72,7 @@ export const useTokenController = () => {
         }
 
         try {
-            const response = await axios.get<TokensResponse>(url + '/api/tokens',
+            const response = await axios.get<TokensResponse>(`${url}/api/tokens`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

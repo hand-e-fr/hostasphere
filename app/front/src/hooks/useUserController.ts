@@ -4,16 +4,24 @@ import { useState } from 'react';
 interface User {
     id: string;
     email: string;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     password?: string;
-    isAdmin: boolean;
-    createdAt: number;
+    is_admin: boolean;
+    created_at: number;
+    needs_password_change: boolean;
 }
 
 interface Users {
     users: User[];
     total: number;
+}
+
+interface CreateUserRequest {
+    email: string;
+    firstName: string;
+    lastName: string;
+    password: string;
 }
 
 export const useUserController = () => {
@@ -25,7 +33,11 @@ export const useUserController = () => {
         setLoading(true);
         setError(null);
         try {
-            await axios.put(`/api/user/${id}`, userData);
+            await axios.put(`${url}/api/user/${id}`, userData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             return true;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -39,7 +51,11 @@ export const useUserController = () => {
         setLoading(true);
         setError(null);
         try {
-            await axios.delete(`/api/user/${id}`);
+            await axios.delete(`${url}/api/user/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
             return true;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -59,7 +75,7 @@ export const useUserController = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get<User>(url + '/api/user', {
+            const response = await axios.get<User>(`${url}/api/user`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -73,6 +89,30 @@ export const useUserController = () => {
         }
     }
 
+    const getUserById = async (id: string): Promise<User | null> => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError('No token found');
+            return null;
+        }
+
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await axios.get<User>(`${url}/api/user/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            return response.data;
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'An error occurred');
+            return null;
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const getUsers = async (page: number, limit: number): Promise<Users | null> => {
         const token = localStorage.getItem('token');
         if (!token) {
@@ -85,7 +125,7 @@ export const useUserController = () => {
         try {
             const response = await axios.request({
                 method: 'GET',
-                url: url + '/api/users',
+                url: `${url}/api/users`,
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
@@ -104,9 +144,35 @@ export const useUserController = () => {
         }
     }
 
-    return { updateUser, deleteUser, getUser, getUsers, loading, error };
+    const createUser = async (userData: CreateUserRequest): Promise<boolean> => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError('No token found');
+            return false;
+        }
+
+        setLoading(true);
+        setError(null);
+        try {
+            await axios.post(`${url}/api/register/user`, userData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            return true;
+        } catch (err: any) {
+            setError(err.response?.data?.error || 'An error occurred');
+            return false;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { updateUser, deleteUser, getUser, getUserById, getUsers, createUser, loading, error };
 };
 
 export default useUserController;
 export type { User };
 export type { Users };
+export type { CreateUserRequest };
