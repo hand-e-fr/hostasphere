@@ -71,14 +71,11 @@ const RegisterTokenModal: React.FC<RegisterTokenModalProps> = ({ isOpen, onClose
                 <h2 className="text-xl font-bold mb-4">Register New Token</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-200">Token Name</label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            required
-                        />
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium">Token Name</label>
+                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required
+                                   className="input input-bordered w-full mt-1"/>
+                        </div>
                     </div>
                     {error && <p className="text-red-500 text-sm">{error}</p>}
                     <div className="flex justify-end">
@@ -87,7 +84,7 @@ const RegisterTokenModal: React.FC<RegisterTokenModalProps> = ({ isOpen, onClose
                             onClick={close}
                             className="btn btn-neutral mr-2"
                         >
-                            Cancel
+                        Cancel
                         </button>
                         <button
                             type="submit"

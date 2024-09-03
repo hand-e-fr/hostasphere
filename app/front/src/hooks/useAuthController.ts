@@ -38,6 +38,7 @@ export const useAuthController = () => {
         const token = localStorage.getItem('token');
         if (!token) {
             setError('Need to login first');
+            setLoading(false);
             return null;
         }
 
@@ -64,6 +65,7 @@ export const useAuthController = () => {
         const token = localStorage.getItem('token');
         if (!token) {
             setError('No token found');
+            setLoading(false);
             return { ok: false, error: 'No token found' };
         }
 

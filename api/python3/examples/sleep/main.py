@@ -4,7 +4,7 @@ from profiler.core import Profiler
 
 profiler = Profiler(
     address='localhost:50051',
-    token='hsp_a743609784aa3568b2f4f34f91330d8fc81316abd9361f3f603fed2650c5a16a'
+    token='hsp_514ff0e682f285e2320fc7e6e161557344f154e73ac4bb4d122f959c938e6e6b'
 )
 
 @profiler.track()
@@ -13,4 +13,4 @@ def wait(n):
     print("Done")
 
 if __name__ == "__main__":
-    wait(2)
+    wait(0)

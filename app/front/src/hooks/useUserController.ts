@@ -66,9 +66,11 @@ export const useUserController = () => {
     };
 
     const getUser = async (): Promise<User | null> => {
+        setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
             setError('No token found');
+            setLoading(false);
             return null;
         }
 
@@ -90,9 +92,11 @@ export const useUserController = () => {
     }
 
     const getUserById = async (id: string): Promise<User | null> => {
+        setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
             setError('No token found');
+            setLoading(false);
             return null;
         }
 
@@ -114,9 +118,11 @@ export const useUserController = () => {
     };
 
     const getUsers = async (page: number, limit: number): Promise<Users | null> => {
+        setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
             setError('No token found');
+            setLoading(false);
             return null;
         }
 
@@ -145,9 +151,11 @@ export const useUserController = () => {
     }
 
     const createUser = async (userData: CreateUserRequest): Promise<boolean> => {
+        setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
             setError('No token found');
+            setLoading(false);
             return false;
         }
 

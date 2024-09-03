@@ -3,7 +3,7 @@ from profiler.core import Profiler
 
 profiler = Profiler(
     address='localhost:50051',
-    token='hsp_b3d7fe24e295269046b36cf504dfe60c1e7d4723d4821ddc3b30d1a5d057c28b'
+    token='hsp_3082429f0d874f685c28ba3d0be0f35ad9fb8324203a7941080c2879df13ece8'
 )
 
 class TestProfiler(unittest.TestCase):

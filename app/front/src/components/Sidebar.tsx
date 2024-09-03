@@ -36,8 +36,8 @@ const sidebarItems: SidebarItem[] = [
         requireNonAuth: true,
     },
     {
-        name: "Functions",
-        href: "/register",
+        name: "Dashboard",
+        href: "/dashboard",
         requiresAuth: true,
         icon: DataArrayIcon,
     },

@@ -12,6 +12,9 @@ upload:
 
 clean:
 	rm -rf dist build *.egg-info
+
+fclean: clean
+	rm -rf .tox .pytest_cache .coverage
 	rm -f profiler/profiler_output_pb2.py profiler/profiler_output_pb2_grpc.py
 	rm -f profiler/token_pb2.py profiler/token_pb2_grpc.py
 

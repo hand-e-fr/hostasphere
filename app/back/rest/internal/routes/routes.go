@@ -41,6 +41,8 @@ func SetupRouter() *gin.Engine {
 		api.GET("/tokens", controllers.GetTokens)
 		api.GET("/token/:token", controllers.ExistsToken)
 		api.DELETE("/token/:token", controllers.DeleteToken)
+
+		api.GET("/profiler", controllers.FetchProfilerData)
 	}
 
 	r.GET("/api/app/isInitialized", controllers.IsAppInitialized)

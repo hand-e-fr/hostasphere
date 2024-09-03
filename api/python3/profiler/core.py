@@ -37,6 +37,7 @@ class Profiler:
                 copied_args = deep_copy_args(args)
                 start_time = time.time()
                 result = func(*args, **kwargs)
+                print(type(result))
                 end_time = time.time()
 
                 returned_value = profiler_output.ReturnedValue(

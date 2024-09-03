@@ -8,13 +8,13 @@ interface RegisterAccountModalProps {
 
 const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onClose, onRegister }) => {
     const [email, setEmail] = useState('');
-    const [first_name, setFirstName] = useState('');
-    const [last_name, setLastName] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onRegister({ email, first_name, last_name, password });
+        onRegister({ email, firstName, lastName, password });
     };
 
     // if user clicks outside of modal, close it
@@ -38,7 +38,7 @@ const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onC
                         <div className="card grid h-20 flex-grow place-items-center">
                             <div className="mb-4">
                                 <label htmlFor="adminFirstName" className="block text-sm font-medium">First Name</label>
-                                <input type="text" value={first_name} onChange={(e) => setFirstName(e.target.value)}
+                                <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}
                                        required
                                        className="input input-bordered w-full mt-1"/>
                             </div>
@@ -47,7 +47,7 @@ const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onC
                         <div className="card grid h-20 flex-grow place-items-center">
                             <div className="mb-4">
                                 <label htmlFor="adminLastName" className="block text-sm font-medium">Last Name</label>
-                                <input type="text" value={last_name} onChange={(e) => setLastName(e.target.value)}
+                                <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}
                                        required
                                        className="input input-bordered w-full mt-1"/>
                             </div>
