@@ -1,9 +1,35 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import useProfilerData from "@/hooks/useProfilerController";
-import {ApexOptions} from "apexcharts";
+import { ApexOptions } from "apexcharts";
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+interface FuncParam {
+    arg: string;
+    argname: string;
+    type: string;
+}
+
+interface ReturnedValue {
+    type: string;
+    value: string;
+}
+
+interface ProfilerData {
+    _id: string;
+    cpuusage: number;
+    endtime: number;
+    executiontime: number;
+    funcparams: FuncParam[];
+    functioncaller: string;
+    functionid: string;
+    functionname: string;
+    memoryusage: number;
+    returnedvalue: ReturnedValue;
+    starttime: number;
+    tokenid: string;
+}
 
 interface ExecutionTimeChartProps {
     tokenId: string;
@@ -25,21 +51,22 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             };
         }
         acc[item.functionid].data.push({
-            x: new Date(item.starttime * 1000).toLocaleString(),
+            x: item.starttime * 1000, // Use raw timestamp
             y: (item.executiontime * 1000 || 0),
+            details: item // Store the entire item for more details on hover
         });
         return acc;
-    }, {} as Record<string, { name: string; data: { x: string; y: number }[] }>);
+    }, {} as Record<string, { name: string; data: { x: number; y: number; details: ProfilerData }[] }>);
 
     const series = Object.values(groupedData);
 
     const options: ApexOptions = {
         chart: {
-            type: 'line',
+            type: 'scatter',
             height: 350,
         },
         xaxis: {
-            type: 'category',
+            type: 'datetime', // Use datetime for raw timestamp
             title: {
                 text: 'Execution Start Time',
                 style: {
@@ -48,7 +75,7 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             },
             labels: {
                 style: {
-                    colors: '#fff', // Set x-axis labels color to white
+                    colors: '#fff',
                 },
             },
         },
@@ -76,8 +103,19 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             theme: 'dark',
             shared: false,
             y: {
-                formatter: function (val) {
-                    return (val / 1000000).toFixed(0)
+                formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+                    const details = w.config.series[seriesIndex].data[dataPointIndex].details;
+                    return `
+                            <p><strong>Execution Time:</strong> ${(val / 100000).toFixed(0)} s</p>
+                            <p><strong>Function ID:</strong> ${details.functionid}</p>
+                            <p><strong>Function Name:</strong> ${details.functionname}</p>
+                            <p><strong>Start Time:</strong> ${new Date(details.starttime * 1000).toLocaleString()}</p>
+                            <p><strong>CPU Usage:</strong> ${details.cpuusage.toFixed(2)}%</p>
+                            <p><strong>Memory Usage:</strong> ${details.memoryusage.toFixed(2)} MB</p>
+                            <p><strong>Function Caller:</strong> ${details.functioncaller}</p>
+                            <p><strong>Returned Value:</strong> ${details.returnedvalue.type} - ${details.returnedvalue.value}</p>
+                            <p><strong>Function Params:</strong> ${details.funcparams.map((param: FuncParam) => `${param.argname}: ${param.arg} (${param.type})`).join(', ')}</p>
+                    `;
                 }
             }
         },
@@ -86,11 +124,14 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
                 colors: '#fff',
             },
         },
+        markers: {
+            size: 8
+        },
     };
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="line" height={350} />
+            <ReactApexChart options={options} series={series} type="scatter" height={350} />
         </div>
     );
 };
