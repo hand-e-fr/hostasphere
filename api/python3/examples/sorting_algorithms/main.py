@@ -1,3 +1,5 @@
+from time import sleep
+
 from profiler.core import Profiler
 
 profiler = Profiler(
@@ -13,6 +15,7 @@ def quicksort(arr):
     left = [x for x in arr if x < pivot]
     middle = [x for x in arr if x == pivot]
     right = [x for x in arr if x > pivot]
+    sleep(0.1)
     return quicksort(left) + middle + quicksort(right)
 
 if __name__ == "__main__":

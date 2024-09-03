@@ -1,8 +1,8 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import useProfilerData from "@/hooks/useProfilerController";
+import {ApexOptions} from "apexcharts";
 
-// Dynamically import the ApexCharts component to prevent SSR issues
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 interface ExecutionTimeChartProps {
@@ -17,7 +17,6 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
     if (error) return <p>Error: {error}</p>;
     if (!data) return <p>No data available</p>;
 
-    // Group data by functionId
     const groupedData = data.reduce((acc, item) => {
         if (!acc[item.functionid]) {
             acc[item.functionid] = {
@@ -26,16 +25,15 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             };
         }
         acc[item.functionid].data.push({
-            x: new Date(item.starttime * 1000).toLocaleString(), // Convert Unix timestamp to human-readable format
-            y: item.executiontime * 1000, // Convert seconds to milliseconds
+            x: new Date(item.starttime * 1000).toLocaleString(),
+            y: (item.executiontime * 1000 || 0),
         });
         return acc;
     }, {} as Record<string, { name: string; data: { x: string; y: number }[] }>);
 
-    // Convert grouped data into series format
     const series = Object.values(groupedData);
 
-    const options = {
+    const options: ApexOptions = {
         chart: {
             type: 'line',
             height: 350,
@@ -45,7 +43,7 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             title: {
                 text: 'Execution Start Time',
                 style: {
-                    color: '#fff', // Set x-axis title color to white
+                    color: '#fff',
                 },
             },
             labels: {
@@ -58,12 +56,12 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             title: {
                 text: 'Execution Time (s)',
                 style: {
-                    color: '#fff', // Set y-axis title color to white
+                    color: '#fff',
                 },
             },
             labels: {
                 style: {
-                    colors: '#fff', // Set y-axis labels color to white
+                    colors: '#fff',
                 },
             },
         },
@@ -71,15 +69,21 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             text: 'Execution Time Over Start Time',
             align: 'center',
             style: {
-                color: '#fff', // Set chart title color to white
+                color: '#fff',
             },
         },
         tooltip: {
-            theme: 'dark', // Use dark theme for tooltips
+            theme: 'dark',
+            shared: false,
+            y: {
+                formatter: function (val) {
+                    return (val / 1000000).toFixed(0)
+                }
+            }
         },
         legend: {
             labels: {
-                colors: '#fff', // Set legend text color to white
+                colors: '#fff',
             },
         },
     };
