@@ -16,6 +16,7 @@ import (
 	"openHostaLogs/internal/session"
 	"openHostaLogs/internal/token"
 	"openHostaLogs/proto"
+	"os"
 )
 
 func main() {
@@ -23,6 +24,9 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
+
+	fmt.Println("Starting server...")
+	fmt.Println(os.Getenv("MONGO_URI"))
 
 	db.InitMongoDB()
 

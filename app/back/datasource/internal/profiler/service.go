@@ -2,6 +2,7 @@ package profiler
 
 import (
 	"context"
+	"fmt"
 	config "openHostaLogs/internal/db"
 	"openHostaLogs/internal/token"
 	"openHostaLogs/proto"
@@ -12,6 +13,7 @@ type Server struct {
 }
 
 func (s *Server) SendProfilerOutput(ctx context.Context, in *proto.ProfilerOutputRequest) (*proto.Response, error) {
+	fmt.Println("Received profiler output")
 	if !(token.ValidToken(in.GetProfilerOutput().GetTokenId())) {
 		return &proto.Response{Ok: false, Message: "Invalid token"}, nil
 	}

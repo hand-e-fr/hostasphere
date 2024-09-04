@@ -13,7 +13,7 @@ from . import session_pb2_grpc, session_pb2
 
 class Session:
     def __init__(self, address: str, token: str, token_id: str,
-                 refresh_interval: float = 0.1, session_tag: str = None):
+                 refresh_interval: float = 0.1, session_tag: str = ''):
         self._address = address
         self._token = token
         self._refresh_interval = refresh_interval
