@@ -5,8 +5,8 @@ type InstallationProps = {
     onInstalled: () => void;
 };
 
-const Installation: React.FC<InstallationProps> = ({ onInstalled }) => {
-    const { registerApp, error } = useAppController();
+const Installation: React.FC<InstallationProps> = ({onInstalled}) => {
+    const {registerApp, error} = useAppController();
 
     const handleInstall = () => {
         onInstalled();
@@ -55,8 +55,10 @@ const Installation: React.FC<InstallationProps> = ({ onInstalled }) => {
                             <input type="text" name="licenseId" required className="input input-bordered w-full mt-1"/>
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="licenseSecretId" className="block text-sm font-medium">License Secret ID</label>
-                            <input type="text" name="licenseSecretId" required className="input input-bordered w-full mt-1"/>
+                            <label htmlFor="licenseSecretId" className="block text-sm font-medium">License Secret
+                                ID</label>
+                            <input type="text" name="licenseSecretId" required
+                                   className="input input-bordered w-full mt-1"/>
                         </div>
                     </div>
                     <div>

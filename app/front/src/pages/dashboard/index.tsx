@@ -5,8 +5,8 @@ import Loading from "@/components/Loading";
 import Link from "next/link";
 
 const Dashboard: React.FC = () => {
-    const { checkToken } = useAuthController();
-    const { getTokens, deleteToken, error, loading, tokens } = useTokenController();
+    const {checkToken} = useAuthController();
+    const {getTokens, deleteToken, error, loading, tokens} = useTokenController();
     const [authLoading, setAuthLoading] = useState(true);
     const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
 
@@ -20,7 +20,7 @@ const Dashboard: React.FC = () => {
         });
     }, []);
 
-    if (authLoading || loading) return <Loading />;
+    if (authLoading || loading) return <Loading/>;
 
     return (
         <>

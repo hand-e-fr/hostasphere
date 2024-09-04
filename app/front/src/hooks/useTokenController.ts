@@ -120,7 +120,7 @@ export const useTokenController = () => {
             });
             setTokens(tokens.filter(token => token.id !== tokenId));
             setLoading(false);
-        } catch (err : any) {
+        } catch (err: any) {
             setLoading(false);
             setError(err.response?.data?.error || 'An error occurred');
         }
@@ -137,4 +137,4 @@ export const useTokenController = () => {
     };
 };
 
-export type { Token, TokenResponse, TokensResponse, ExistsTokenResponse, CreateTokenRequest };
+export type {Token, TokenResponse, TokensResponse, ExistsTokenResponse, CreateTokenRequest};

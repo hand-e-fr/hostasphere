@@ -77,8 +77,8 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
         fetchData();
     }, [tokenId, sortFields]);
 
-    return { data, loading, error };
+    return {data, loading, error};
 };
 
 export default useProfilerData;
-export type { ProfilerData, FuncParam, ReturnedValue, UseProfilerDataResult };
+export type {ProfilerData, FuncParam, ReturnedValue, UseProfilerDataResult};

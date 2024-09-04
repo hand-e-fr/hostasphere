@@ -177,10 +177,10 @@ export const useUserController = () => {
         }
     };
 
-    return { updateUser, deleteUser, getUser, getUserById, getUsers, createUser, loading, error };
+    return {updateUser, deleteUser, getUser, getUserById, getUsers, createUser, loading, error};
 };
 
 export default useUserController;
-export type { User };
-export type { Users };
-export type { CreateUserRequest };
+export type {User};
+export type {Users};
+export type {CreateUserRequest};

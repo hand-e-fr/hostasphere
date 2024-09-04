@@ -7,14 +7,14 @@ interface RegisterTokenModalProps {
     onClose: () => void;
 }
 
-const RegisterTokenModal: React.FC<RegisterTokenModalProps> = ({ isOpen, onClose }) => {
+const RegisterTokenModal: React.FC<RegisterTokenModalProps> = ({isOpen, onClose}) => {
     const [name, setName] = useState('');
     const [response, setResponse] = useState<TokenResponse | null>(null);
-    const { createToken, loading, error } = useTokenController();
+    const {createToken, loading, error} = useTokenController();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await createToken({ name });
+        const response = await createToken({name});
         if (response) {
             setResponse(response);
         }
@@ -84,7 +84,7 @@ const RegisterTokenModal: React.FC<RegisterTokenModalProps> = ({ isOpen, onClose
                             onClick={close}
                             className="btn btn-neutral mr-2"
                         >
-                        Cancel
+                            Cancel
                         </button>
                         <button
                             type="submit"

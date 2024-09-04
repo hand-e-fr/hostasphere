@@ -6,7 +6,7 @@ interface ConfirmDeleteModalProps {
     onConfirm: () => void;
 }
 
-const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({isOpen, onClose, onConfirm}) => {
     if (!isOpen) return null;
 
     return (

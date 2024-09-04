@@ -3,7 +3,7 @@ import {useRouter} from "next/router";
 import {User, useUserController} from "@/hooks/useUserController";
 
 const Account = () => {
-    const { getUser, loading, error } = useUserController();
+    const {getUser, loading, error} = useUserController();
     const [user, setUser] = React.useState<User | null>(null);
     const router = useRouter();
 

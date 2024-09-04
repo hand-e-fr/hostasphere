@@ -6,9 +6,9 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ExecutionTimeAreaChart from "@/components/dashboard/ExecutionTimeAreaChart";
 
 const Function: React.FC = () => {
-    const { checkToken } = useAuthController();
+    const {checkToken} = useAuthController();
     const router = useRouter();
-    const { tokenId } = router.query;
+    const {tokenId} = router.query;
     const [authLoading, setAuthLoading] = useState(true);
     const [loading, setLoading] = useState(true);
     const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
@@ -28,7 +28,7 @@ const Function: React.FC = () => {
         });
     }, []);
 
-    if (authLoading || loading) return <Loading />;
+    if (authLoading || loading) return <Loading/>;
 
     return (
         <div>

@@ -7,8 +7,8 @@ import RegisterTokenModal from '@/components/token/RegisterTokenModal';
 import ConfirmDeleteModal from '@/components/token/ConfirmDeleteModal';
 
 const Tokens = () => {
-    const { checkToken } = useAuthController();
-    const { getTokens, deleteToken, error, loading, tokens } = useTokenController();
+    const {checkToken} = useAuthController();
+    const {getTokens, deleteToken, error, loading, tokens} = useTokenController();
     const [authLoading, setAuthLoading] = useState(true);
     const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +39,7 @@ const Tokens = () => {
         }
     };
 
-    if (authLoading || loading) return <Loading />;
+    if (authLoading || loading) return <Loading/>;
 
     return (
         <>
@@ -85,7 +85,9 @@ const Tokens = () => {
                                             </Link>
                                         </th>
                                         <th className="w-0">
-                                            <button className="btn btn-error btn-sm" onClick={() => handleDeleteClick(token.id)}>delete</button>
+                                            <button className="btn btn-error btn-sm"
+                                                    onClick={() => handleDeleteClick(token.id)}>delete
+                                            </button>
                                         </th>
                                     </>
                                 ) : (

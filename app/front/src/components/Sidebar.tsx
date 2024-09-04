@@ -67,7 +67,7 @@ const Sidebar = () => {
     const {isCollapsed, toggleSidebarcollapse} = useContext<SidebarContextType>(SidebarContext);
     const [isAuth, setIsAuth] = React.useState(false);
     const [isAdmin, setAdmin] = React.useState(false);
-    const { checkToken } = useAuthController();
+    const {checkToken} = useAuthController();
 
     useEffect(() => {
         checkToken().then((response) => {
@@ -98,7 +98,7 @@ const Sidebar = () => {
                         </p>
                     ) : (
                         <div className="text-xl font-semibold flex items-center justify-center">
-                            <SpaIcon className="mr-2" />
+                            <SpaIcon className="mr-2"/>
                         </div>
                     )}
                     <div className="divider"></div>
@@ -108,21 +108,21 @@ const Sidebar = () => {
                             .filter(({requireNonAuth}) => !requireNonAuth || !isAuth)
                             .filter(({requireAdmin}) => !requireAdmin || (isAuth && isAdmin))
                             .map(({name, href, icon: Icon}) => (
-                            <li key={name} className="mb-4">
-                                <Link
-                                    href={href}
-                                    className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em] ${
-                                        router.pathname === href ? "bg-secondary" : ""
-                                    } ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}>
-                                    <div className="flex justify-center items-center">
+                                <li key={name} className="mb-4">
+                                    <Link
+                                        href={href}
+                                        className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em] ${
+                                            router.pathname === href ? "bg-secondary" : ""
+                                        } ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}>
+                                        <div className="flex justify-center items-center">
                                         <span className="mt-1">
                                             <Icon/>
                                         </span>
-                                        {!isCollapsed && <span className="mt-2 ml-2">{name}</span>}
-                                    </div>
-                                </Link>
-                            </li>
-                        ))}
+                                            {!isCollapsed && <span className="mt-2 ml-2">{name}</span>}
+                                        </div>
+                                    </Link>
+                                </li>
+                            ))}
                     </ul>
                 </div>
                 <div>

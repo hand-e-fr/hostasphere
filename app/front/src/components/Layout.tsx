@@ -17,7 +17,7 @@ const contextClass = {
     dark: "bg-white-600 font-gray-300",
 };
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({children}) => {
     const router = useRouter();
     const {setSidebarCollapsed} = useContext<SidebarContextType>(SidebarContext);
 
@@ -34,8 +34,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     return (
         <>
             <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false}
-                closeOnClick={false} rtl={false} pauseOnFocusLoss={false} draggable={false} pauseOnHover={false}
-                theme="dark" transition={Bounce}
+                            closeOnClick={false} rtl={false} pauseOnFocusLoss={false} draggable={false}
+                            pauseOnHover={false}
+                            theme="dark" transition={Bounce}
             />
             <div className="flex h-screen bg-base-200">
                 <Sidebar/>

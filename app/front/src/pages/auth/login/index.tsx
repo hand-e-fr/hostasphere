@@ -3,7 +3,7 @@ import {useAuthController} from "@/hooks/useAuthController";
 import {useRouter} from "next/router";
 
 const Login = () => {
-    const { login, error } = useAuthController();
+    const {login, error} = useAuthController();
     const router = useRouter();
 
     return (

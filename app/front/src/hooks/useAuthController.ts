@@ -22,7 +22,7 @@ export const useAuthController = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.post<LoginResponse>(`${url}/api/login`, { email, password });
+            const response = await axios.post<LoginResponse>(`${url}/api/login`, {email, password});
             return response.data;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -43,13 +43,13 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.post<LoginResponse>(`${url}/api/login/first-connect`, { new_password },
+            const response = await axios.post<LoginResponse>(`${url}/api/login/first-connect`, {new_password},
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 }
-                );
+            );
             return response.data;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -66,7 +66,7 @@ export const useAuthController = () => {
         if (!token) {
             setError('No token found');
             setLoading(false);
-            return { ok: false, error: 'No token found' };
+            return {ok: false, error: 'No token found'};
         }
 
         try {
@@ -78,13 +78,13 @@ export const useAuthController = () => {
             return response.data as CheckTokenResponse;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
-            return { ok: false, error: err.response?.data?.error || 'An error occurred' };
+            return {ok: false, error: err.response?.data?.error || 'An error occurred'};
         } finally {
             setLoading(false);
         }
     }
 
-    return { login, checkToken, loading, firstConnect, error };
+    return {login, checkToken, loading, firstConnect, error};
 };
 
-export type { CheckTokenResponse };
+export type {CheckTokenResponse};

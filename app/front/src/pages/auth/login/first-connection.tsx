@@ -3,7 +3,7 @@ import {useAuthController} from "@/hooks/useAuthController";
 import {useRouter} from "next/router";
 
 const FirstConnection = () => {
-    const { firstConnect, error } = useAuthController();
+    const {firstConnect, error} = useAuthController();
     const router = useRouter();
 
     return (
@@ -28,8 +28,10 @@ const FirstConnection = () => {
                         <input type="password" name="password" required className="input input-bordered w-full mt-1"/>
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="password-confirm" className="block text-sm font-medium">Password confirmation</label>
-                        <input type="password" name="password-confirm" required className="input input-bordered w-full mt-1" onChange={(e) => {
+                        <label htmlFor="password-confirm" className="block text-sm font-medium">Password
+                            confirmation</label>
+                        <input type="password" name="password-confirm" required
+                               className="input input-bordered w-full mt-1" onChange={(e) => {
                             const passwordInput = document.querySelector('input[name="password"]') as HTMLInputElement;
                             const error = document.getElementById('error') as HTMLParagraphElement;
                             const submitButton = document.querySelector('button[type="submit"]') as HTMLButtonElement;

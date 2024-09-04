@@ -7,8 +7,8 @@ import Link from "next/link";
 
 const AccountDetails = () => {
     const router = useRouter();
-    const { accountId } = router.query;
-    const { getUserById, updateUser, deleteUser, loading, error } = useUserController();
+    const {accountId} = router.query;
+    const {getUserById, updateUser, deleteUser, loading, error} = useUserController();
     const [user, setUser] = useState<User | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -46,7 +46,7 @@ const AccountDetails = () => {
         }
     };
 
-    if (loading || !user) return <Loading />;
+    if (loading || !user) return <Loading/>;
 
     if (error) return <div>Error: {error}</div>;
 

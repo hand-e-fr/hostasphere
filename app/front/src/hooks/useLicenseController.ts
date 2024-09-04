@@ -24,5 +24,5 @@ export const useLicenseController = () => {
         }
     };
 
-    return { updateLicense, loading, error };
+    return {updateLicense, loading, error};
 };

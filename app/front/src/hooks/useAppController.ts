@@ -57,10 +57,10 @@ export const useAppController = () => {
                 method: 'POST',
                 data: appData,
             });
-            return { ok: true, error: null };
+            return {ok: true, error: null};
         } catch (err: any) {
             setError(err.response?.data?.message || err.response?.data?.error || 'An error occurred');
-            return { ok: false, error: err.response?.data?.message || 'An error occurred' };
+            return {ok: false, error: err.response?.data?.message || 'An error occurred'};
         } finally {
             setLoading(false);
         }
@@ -87,5 +87,5 @@ export const useAppController = () => {
         }
     }
 
-    return { getApp, updateApp, registerApp, fetchIsAppInitialized, loading, error };
+    return {getApp, updateApp, registerApp, fetchIsAppInitialized, loading, error};
 };

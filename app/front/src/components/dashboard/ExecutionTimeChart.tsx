@@ -3,15 +3,15 @@ import dynamic from 'next/dynamic';
 import useProfilerData, {FuncParam, ProfilerData} from "@/hooks/useProfilerController";
 import {ApexOptions} from "apexcharts";
 
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
 interface ExecutionTimeChartProps {
     tokenId: string;
     sortFields?: string[];
 }
 
-const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFields = [] }) => {
-    const { data, loading, error } = useProfilerData(tokenId, sortFields);
+const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({tokenId, sortFields = []}) => {
+    const {data, loading, error} = useProfilerData(tokenId, sortFields);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -58,7 +58,7 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             theme: 'dark',
             shared: false,
             y: {
-                formatter: function (val, { seriesIndex, dataPointIndex, w }) {
+                formatter: function (val, {seriesIndex, dataPointIndex, w}) {
                     const details = w.config.series[seriesIndex].data[dataPointIndex].details;
                     return `
                         <div>
@@ -83,7 +83,7 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="scatter" height={350} />
+            <ReactApexChart options={options} series={series} type="scatter" height={350}/>
         </div>
     );
 };

@@ -6,7 +6,7 @@ interface ErrorProps {
     statusCode: number;
 }
 
-const Error = ({ statusCode }: ErrorProps) => {
+const Error = ({statusCode}: ErrorProps) => {
     const router = useRouter();
 
     const goBackHome = () => {
@@ -24,9 +24,9 @@ const Error = ({ statusCode }: ErrorProps) => {
     );
 };
 
-Error.getInitialProps = ({ res, err }: NextPageContext) => {
+Error.getInitialProps = ({res, err}: NextPageContext) => {
     const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
-    return { statusCode };
+    return {statusCode};
 };
 
 export default Error;

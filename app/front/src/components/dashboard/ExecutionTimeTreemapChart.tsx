@@ -3,15 +3,15 @@ import dynamic from 'next/dynamic';
 import useProfilerData from "@/hooks/useProfilerController";
 import {ApexOptions} from "apexcharts";
 
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
 interface ExecutionTimeTreemapChartProps {
     tokenId: string;
     sortFields?: string[];
 }
 
-const ExecutionTimeTreemapChart: React.FC<ExecutionTimeTreemapChartProps> = ({ tokenId, sortFields = [] }) => {
-    const { data, loading, error } = useProfilerData(tokenId, sortFields);
+const ExecutionTimeTreemapChart: React.FC<ExecutionTimeTreemapChartProps> = ({tokenId, sortFields = []}) => {
+    const {data, loading, error} = useProfilerData(tokenId, sortFields);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -37,7 +37,7 @@ const ExecutionTimeTreemapChart: React.FC<ExecutionTimeTreemapChartProps> = ({ t
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="treemap" height={350} />
+            <ReactApexChart options={options} series={series} type="treemap" height={350}/>
         </div>
     );
 };

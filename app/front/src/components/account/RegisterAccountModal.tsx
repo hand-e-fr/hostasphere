@@ -7,7 +7,7 @@ interface RegisterAccountModalProps {
     onRegister: (userData: CreateUserRequest) => void;
 }
 
-const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onClose, onRegister }) => {
+const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({isOpen, onClose, onRegister}) => {
     const [email, setEmail] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -15,7 +15,7 @@ const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onC
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onRegister({ email: email, first_name: firstName, last_name: lastName, password: password });
+        onRegister({email: email, first_name: firstName, last_name: lastName, password: password});
     };
 
     // if user clicks outside of modal, close it
@@ -26,7 +26,8 @@ const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onC
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" id="modal" onClick={handleOutsideClick}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" id="modal"
+             onClick={handleOutsideClick}>
             <div className="bg-base-100 rounded-lg shadow-lg p-6 w-96">
                 <h2 className="font-bold text-lg">Register New Account</h2>
                 <form onSubmit={handleSubmit}>

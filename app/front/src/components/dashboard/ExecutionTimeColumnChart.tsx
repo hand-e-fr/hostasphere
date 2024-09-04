@@ -3,15 +3,15 @@ import dynamic from 'next/dynamic';
 import useProfilerData from "@/hooks/useProfilerController";
 import {ApexOptions} from "apexcharts";
 
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
 interface ExecutionTimeColumnChartProps {
     tokenId: string;
     sortFields?: string[];
 }
 
-const ExecutionTimeColumnChart: React.FC<ExecutionTimeColumnChartProps> = ({ tokenId, sortFields = [] }) => {
-    const { data, loading, error } = useProfilerData(tokenId, sortFields);
+const ExecutionTimeColumnChart: React.FC<ExecutionTimeColumnChartProps> = ({tokenId, sortFields = []}) => {
+    const {data, loading, error} = useProfilerData(tokenId, sortFields);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -48,7 +48,7 @@ const ExecutionTimeColumnChart: React.FC<ExecutionTimeColumnChartProps> = ({ tok
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="bar" height={350} />
+            <ReactApexChart options={options} series={series} type="bar" height={350}/>
         </div>
     );
 };

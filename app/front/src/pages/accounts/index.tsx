@@ -6,8 +6,8 @@ import Loading from "@/components/Loading";
 import RegisterAccountModal from '@/components/account/RegisterAccountModal';
 
 const Accounts = () => {
-    const { checkToken } = useAuthController();
-    const { getUsers, createUser, loading, error } = useUserController();
+    const {checkToken} = useAuthController();
+    const {getUsers, createUser, loading, error} = useUserController();
     const [authLoading, setAuthLoading] = useState(true);
     const [users, setUsers] = useState<Users | null>(null);
     const [page, setPage] = useState(0);
@@ -41,7 +41,7 @@ const Accounts = () => {
         });
     };
 
-    if (authLoading) return <Loading />;
+    if (authLoading) return <Loading/>;
 
     const handlePage = (page: number) => {
         if (page < 0) {
@@ -96,7 +96,8 @@ const Accounts = () => {
             </div>
             <div className="flex justify-between items-center mt-4">
                 <div className="flex gap-2">
-                    <button className="btn btn-secondary" onClick={() => setIsModalOpen(true)}>Register new Account</button>
+                    <button className="btn btn-secondary" onClick={() => setIsModalOpen(true)}>Register new Account
+                    </button>
                 </div>
                 <div className="join">
                     <button className="join-item btn" onClick={() => handlePage(page - 1)}>«</button>

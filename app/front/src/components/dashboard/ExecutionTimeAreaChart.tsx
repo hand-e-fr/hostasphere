@@ -5,15 +5,15 @@ import dynamic from 'next/dynamic';
 import useProfilerData, {FuncParam} from "@/hooks/useProfilerController";
 import {ApexOptions} from "apexcharts";
 
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
 interface ExecutionTimeAreaChartProps {
     tokenId: string;
     sortFields?: string[];
 }
 
-const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({ tokenId, sortFields = [] }) => {
-    const { data, loading, error } = useProfilerData(tokenId, sortFields);
+const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({tokenId, sortFields = []}) => {
+    const {data, loading, error} = useProfilerData(tokenId, sortFields);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -22,7 +22,7 @@ const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({ tokenId
     // Group data by function name and detect version changes
     const groupedData = data.reduce((acc, item) => {
         if (!acc[item.functionname]) {
-            acc[item.functionname] = { data: [], lastFunctionId: null };
+            acc[item.functionname] = {data: [], lastFunctionId: null};
         }
         const functionData = acc[item.functionname];
 
@@ -43,7 +43,10 @@ const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({ tokenId
             });
         }
         return acc;
-    }, {} as Record<string, { data: { x: number; y: number; versionChange: boolean; params: FuncParam[] }[]; lastFunctionId: string | null }>);
+    }, {} as Record<string, {
+        data: { x: number; y: number; versionChange: boolean; params: FuncParam[] }[];
+        lastFunctionId: string | null
+    }>);
 
     const series = Object.keys(groupedData).map(functionName => ({
         name: functionName,
@@ -105,7 +108,7 @@ const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({ tokenId
                 format: 'dd MMM yyyy HH:mm:ss'
             },
             y: {
-                formatter: (val, { seriesIndex, dataPointIndex, w }) => {
+                formatter: (val, {seriesIndex, dataPointIndex, w}) => {
                     const pointData = w.config.series[seriesIndex].data[dataPointIndex];
                     const params = pointData.params.map((param: FuncParam) => `${param.argname}: ${param.arg} (${param.type})`).join(', ');
                     return `
@@ -126,7 +129,7 @@ const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({ tokenId
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="area" height={500} />
+            <ReactApexChart options={options} series={series} type="area" height={500}/>
         </div>
     );
 };
