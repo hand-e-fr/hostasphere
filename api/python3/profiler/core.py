@@ -12,22 +12,18 @@ from .utils import *
 
 
 class Profiler:
-    def __init__(self, address: str, token: str,
-                 refresh_interval: float = 0.1):
+    def __init__(self, address: str, token: str, refresh_interval: float = 0.1, session_tag: str = None):
         self.refresh_interval = refresh_interval
         self._address = address
         self._token = token
-        token_res: token_pb2.ExistsTokenResponse = token_exists(self._token,
-                                                                self._address)
+        token_res: token_pb2.ExistsTokenResponse = token_exists(self._token, self._address)
         if not token_res.exists:
             raise Exception("Invalid token")
         self._token_id = token_res.id
-        self._session = Session(self._address, self._token, self._token_id,
-                                self.refresh_interval)
+        self._session = Session(self._address, self._token, self._token_id, self.refresh_interval)
         atexit.register(self._session.end_session)
 
-    def sendProfilerOutput(self,
-                           profiler_data: profiler_output.ProfilerOutput):
+    def sendProfilerOutput(self, profiler_data: profiler_output.ProfilerOutput):
         try:
             with grpc.insecure_channel(self._address) as channel:
                 stub = profiler_output_grpc.ProfilerStub(channel)
@@ -37,13 +33,10 @@ class Profiler:
                 raise Exception(
                     f"Error sending profiler output: {response.message}")
         except grpc.RpcError as e:
-            raise Exception(
-                "Impossible to send profiler output check address, or check if hostaspere is running")
+            raise Exception("Impossible to send profiler output check address, or check if hostaspere is running")
 
-    def sendProfilerOutputAsync(self,
-                                profiler_data: profiler_output.ProfilerOutput):
-        thread = threading.Thread(target=self.sendProfilerOutput,
-                                  args=(profiler_data,))
+    def sendProfilerOutputAsync(self, profiler_data: profiler_output.ProfilerOutput):
+        thread = threading.Thread(target=self.sendProfilerOutput, args=(profiler_data,))
         thread.start()
 
     def track(self):
