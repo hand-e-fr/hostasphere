@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import useUserController, {Users, User, CreateUserRequest} from "@/hooks/useUserController";
+import React, {useEffect, useState} from 'react';
+import useUserController, {CreateUserRequest, User, Users} from "@/hooks/useUserController";
 import Link from "next/link";
-import { useAuthController } from "@/hooks/useAuthController";
+import {useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 import RegisterAccountModal from '@/components/account/RegisterAccountModal';
 

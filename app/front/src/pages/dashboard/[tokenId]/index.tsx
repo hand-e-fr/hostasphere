@@ -1,15 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
-import {router} from "next/client";
-import ExecutionTimeChart from "@/components/dashboard/ExecutionTimeChart";
 import {useRouter} from "next/router";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import ExecutionTimeColumnChart from "@/components/dashboard/ExecutionTimeColumnChart";
-import ExecutionTimeRadarChart from "@/components/dashboard/ExecutionTimeRadarChart";
-import ExecutionTimeTreemapChart from "@/components/dashboard/ExecutionTimeTreemapChart";
-import CPUUsageColumnChart from "@/components/dashboard/CPUUsageColumnChart";
-import MemoryUsageRadarChart from "@/components/dashboard/MemoryUsageRadarChart";
 import ExecutionTimeAreaChart from "@/components/dashboard/ExecutionTimeAreaChart";
 
 const Function: React.FC = () => {

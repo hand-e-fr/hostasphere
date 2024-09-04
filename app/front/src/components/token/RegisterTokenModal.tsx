@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {TokenResponse, useTokenController} from '@/hooks/useTokenController';
-import {Bounce, toast} from "react-toastify";
+import {toast} from "react-toastify";
 
 interface RegisterTokenModalProps {
     isOpen: boolean;

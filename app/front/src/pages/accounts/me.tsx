@@ -1,5 +1,4 @@
 import React from 'react';
-import {useAuthController} from "@/hooks/useAuthController";
 import {useRouter} from "next/router";
 import {User, useUserController} from "@/hooks/useUserController";
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { User } from '@/hooks/useUserController';
+import React, {useEffect, useState} from 'react';
+import {User} from '@/hooks/useUserController';
 
 interface UpdateAccountModalProps {
     isOpen: boolean;

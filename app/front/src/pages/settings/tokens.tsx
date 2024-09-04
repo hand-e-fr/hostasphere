@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Link from "next/link";
-import { CheckTokenResponse, useAuthController } from "@/hooks/useAuthController";
+import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
-import { Token, useTokenController } from "@/hooks/useTokenController";
+import {Token, useTokenController} from "@/hooks/useTokenController";
 import RegisterTokenModal from '@/components/token/RegisterTokenModal';
 import ConfirmDeleteModal from '@/components/token/ConfirmDeleteModal';
 

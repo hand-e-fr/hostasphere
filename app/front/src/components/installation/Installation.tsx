@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppController } from "@/hooks/useAppController";
+import {useAppController} from "@/hooks/useAppController";
 
 type InstallationProps = {
     onInstalled: () => void;
