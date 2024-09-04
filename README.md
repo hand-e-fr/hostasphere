@@ -38,10 +38,10 @@ docker pull ghcr.io/hand-e-fr/hostasphere/front:latest
 docker run -d --name rest -p 8080:8080 --network my_network --restart unless-stopped ghcr.io/hand-e-fr/hostasphere/rest:latest
 ```
 ```bash
-docker run -d --name datasource -p 50051:50051 -e MONGO_URI=MONGO_URI=mongodb://mongodb:27017 --network my_network --restart unless-stopped ghcr.io/hand-e-fr/hostasphere/datasource:latest
+docker run -d --name datasource -p 50051:50051 -e MONGO_URI=mongodb://mongodb:27017 --network my_network --restart unless-stopped ghcr.io/hand-e-fr/hostasphere/datasource:latest
 ```
 ```bash
-docker run -d --name front -p 3000:3000 -e MONGO_URI=MONGO_URI=mongodb://mongodb:27017 --network my_network --restart unless-stopped ghcr.io/hand-e-fr/hostasphere/front:latest
+docker run -d --name front -p 3000:3000 -e MONGO_URI=mongodb://mongodb:27017 --network my_network --restart unless-stopped ghcr.io/hand-e-fr/hostasphere/front:latest
 ```
 You can now access the front at `http://localhost:3000` and the rest at `http://localhost:8080`.
 The datasource is not accessible from the browser, it is used by client api to pull data.

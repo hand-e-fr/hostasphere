@@ -1,3 +1,3 @@
-docker rm -f hostasphere.client.datasource
-docker build -t hostasphere/client/datasource:latest .
-docker run -d --name hostasphere.client.datasource -p 50051:50051 --network my_network hostasphere/client/datasource
+docker rm -f datasource
+docker build -t ghcr.io/hand-e-fr/hostasphere/datasource:latest .
+docker run -d --name datasource -p 50051:50051 -e MONGO_URI=mongodb://mongodb:27017 --network my_network --restart unless-stopped ghcr.io/hand-e-fr/hostasphere/datasource:latest
