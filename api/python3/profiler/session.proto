@@ -24,12 +24,17 @@ message Session {
     repeated UsageAtTime disk_usage = 8;
     repeated UsageAtTime network_usage = 9;
     string token_id = 10;
-    int64 pid = 11; //todo
-    string hostname = 12; //todo
-    string os = 13; //todo
-    string os_version = 14; //todo
-    string kernel_version = 15; //todo
-    string architecture = 16; //todo
+    int64 pid = 11;
+    string hostname = 12;
+    string os = 13;
+    string os_version = 14;
+    string kernel_version = 15;
+    string architecture = 16;
+    string python_version = 17;
+    string processor = 18;
+    int32 cpu_count = 19;
+    double boot_time = 20;
+    string current_user = 21;
 }
 
 message SaveSessionRequest {

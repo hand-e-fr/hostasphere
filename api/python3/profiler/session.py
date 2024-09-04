@@ -1,3 +1,5 @@
+import os
+import platform
 import threading
 import time
 import uuid
@@ -20,11 +22,25 @@ class Session:
         self.metrics.session_uuid = str(uuid.uuid4())
         self.metrics.session_tag = session_tag
         self.metrics.token_id = token_id
+        self.collect_system_info()
+
         self._stop_event = threading.Event()  # Event to signal the thread to stop
 
-        # Create a separate thread to save metrics
         self.save_thread = threading.Thread(target=self.save_metrics, daemon=True)
         self.save_thread.start()
+
+    def collect_system_info(self):
+        self.metrics.pid = os.getpid()
+        self.metrics.hostname = platform.node()
+        self.metrics.os = platform.system()
+        self.metrics.os_version = platform.version()
+        self.metrics.kernel_version = platform.release()
+        self.metrics.architecture = platform.machine()
+        self.metrics.python_version = platform.python_version()
+        self.metrics.processor = platform.processor()
+        self.metrics.cpu_count = os.cpu_count()
+        self.metrics.boot_time = psutil.boot_time()
+        self.metrics.current_user = os.getlogin()
 
     def record_usage(self):
         current_time = time.time()
