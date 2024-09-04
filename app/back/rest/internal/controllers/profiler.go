@@ -24,6 +24,8 @@ func FetchProfilerData(c *gin.Context) {
 
 	tokenID := c.Query("tokenid")
 	sortFields := c.Query("sort")
+	name := c.Query("name")
+	id := c.Query("id")
 
 	if tokenID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
@@ -34,6 +36,14 @@ func FetchProfilerData(c *gin.Context) {
 	ctx := c.Request.Context()
 
 	filter := bson.M{"tokenid": tokenID}
+
+	if name != "" {
+		filter["name"] = name
+	}
+
+	if id != "" {
+		filter["id"] = id
+	}
 
 	findOptions := options.Find()
 	if sortFields != "" {

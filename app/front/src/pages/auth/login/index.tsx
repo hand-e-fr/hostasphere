@@ -8,7 +8,7 @@ const Login = () => {
 
     return (
         <div className="flex flex-col items-center justify-center">
-            <div className="w-full max-w-md bg-base-100 shadow-lg rounded-lg p-6">
+            <div className="w-full max-w-md m-[2em]">
                 <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
                 <p className="mb-4 text-center">Enter your credentials to log in</p>
                 {error && <p className="text-red-500 mb-4">{error}</p>}

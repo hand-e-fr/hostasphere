@@ -1,9 +1,10 @@
 import React, {useCallback, useState} from 'react';
+import {CreateUserRequest} from "@/hooks/useUserController";
 
 interface RegisterAccountModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onRegister: (userData: { email: string; firstName: string; lastName: string; password: string }) => void;
+    onRegister: (userData: CreateUserRequest) => void;
 }
 
 const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onClose, onRegister }) => {
@@ -14,7 +15,7 @@ const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onC
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onRegister({ email, firstName, lastName, password });
+        onRegister({ email: email, first_name: firstName, last_name: lastName, password: password });
     };
 
     // if user clicks outside of modal, close it
@@ -22,7 +23,7 @@ const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({ isOpen, onC
         if (e.target === e.currentTarget) onClose();
     };
 
-    if (!isOpen) return null; // Ensure modal is not rendered if not open
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" id="modal" onClick={handleOutsideClick}>

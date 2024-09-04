@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package token;
+
+option go_package = "./proto";
+
+service SessionService {
+    rpc SaveSession (SaveSessionRequest) returns (SaveSessionResponse);
+}
+
+message UsageAtTime {
+    double time = 1;
+    double memory_usage = 2;
+}
+
+message Session {
+    string session_uuid = 1;
+    double start_time = 2;
+    double end_time = 3;
+    double execution_time = 4; // in milliseconds
+    repeated UsageAtTime memory_usage = 5;
+    repeated UsageAtTime cpu_usage = 6;
+    repeated UsageAtTime disk_usage = 7;
+    repeated UsageAtTime network_usage = 8;
+    string token_id = 9;
+}
+
+message SaveSessionRequest {
+    string token = 1;
+    Session session = 2;
+}
+
+message SaveSessionResponse {
+    bool ok = 1;
+    string message = 2;
+}

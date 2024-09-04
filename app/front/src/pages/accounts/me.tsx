@@ -15,7 +15,7 @@ const Account = () => {
     }, []);
 
     return (
-        <div className="w-full max-w-md bg-base-100 shadow-lg rounded-lg p-6">
+        <div className="w-full max-w-md">
             <h1 className="text-2xl font-bold mb-4 text-center">
                 My Account
             </h1>

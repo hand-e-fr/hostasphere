@@ -1,19 +1,24 @@
+import functools
 import time
 import grpc
 import threading
+import atexit
 
 from . import profiler_output_pb2_grpc as profiler_output_grpc, token_pb2
+from .session import Session
 from .utils import *
 from .token import token_exists
 
 class Profiler:
-    def __init__(self, address, token):
+    def __init__(self, address: str, token: str):
         self._address = address
         self._token = token
         token_res: token_pb2.ExistsTokenResponse = token_exists(self._token, self._address)
         if not token_res.exists:
             raise Exception("Invalid token")
         self._token_id = token_res.id
+        self._session = Session(self._address, self._token, self._token_id)
+        atexit.register(self._session.end_session)
 
     def sendProfilerOutput(self, profiler_data: profiler_output.ProfilerOutput):
         try:
@@ -33,11 +38,11 @@ class Profiler:
 
     def track(self):
         def decorator(func):
+            @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 copied_args = deep_copy_args(args)
                 start_time = time.time()
                 result = func(*args, **kwargs)
-                print(type(result))
                 end_time = time.time()
 
                 returned_value = profiler_output.ReturnedValue(

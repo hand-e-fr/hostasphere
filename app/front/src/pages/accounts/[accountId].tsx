@@ -51,7 +51,7 @@ const AccountDetails = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="bg-base-100 shadow-lg rounded-lg p-6">
+        <>
             <h1 className="text-2xl font-bold">Account Details</h1>
             <div className="breadcrumbs text-sm">
                 <ul>
@@ -75,7 +75,7 @@ const AccountDetails = () => {
                 onClose={() => setIsModalOpen(false)}
                 onUpdate={handleUpdate}
             />
-        </div>
+        </>
     );
 };
 

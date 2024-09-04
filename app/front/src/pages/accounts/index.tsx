@@ -36,7 +36,7 @@ const Accounts = () => {
                 });
                 setIsModalOpen(false);
             } else {
-                alert('Failed to register user');
+                alert(`Failed to register user: ${error}`);
             }
         });
     };
@@ -54,7 +54,7 @@ const Accounts = () => {
     };
 
     return (
-        <div className="bg-base-100 shadow-lg rounded-lg p-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
+        <>
             <div className="overflow-x-auto">
                 <div>
                     <h1 className="text-2xl font-bold">Accounts</h1>
@@ -109,7 +109,7 @@ const Accounts = () => {
                 onClose={() => setIsModalOpen(false)}
                 onRegister={handleRegister}
             />
-        </div>
+        </>
     );
 };
 

@@ -1,35 +1,9 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import useProfilerData from "@/hooks/useProfilerController";
+import useProfilerData, {FuncParam, ProfilerData} from "@/hooks/useProfilerController";
 import { ApexOptions } from "apexcharts";
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-interface FuncParam {
-    arg: string;
-    argname: string;
-    type: string;
-}
-
-interface ReturnedValue {
-    type: string;
-    value: string;
-}
-
-interface ProfilerData {
-    _id: string;
-    cpuusage: number;
-    endtime: number;
-    executiontime: number;
-    funcparams: FuncParam[];
-    functioncaller: string;
-    functionid: string;
-    functionname: string;
-    memoryusage: number;
-    returnedvalue: ReturnedValue;
-    starttime: number;
-    tokenid: string;
-}
 
 interface ExecutionTimeChartProps {
     tokenId: string;
@@ -69,35 +43,16 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
             type: 'datetime', // Use datetime for raw timestamp
             title: {
                 text: 'Execution Start Time',
-                style: {
-                    color: '#fff',
-                },
-            },
-            labels: {
-                style: {
-                    colors: '#fff',
-                },
             },
         },
         yaxis: {
             title: {
                 text: 'Execution Time (s)',
-                style: {
-                    color: '#fff',
-                },
-            },
-            labels: {
-                style: {
-                    colors: '#fff',
-                },
             },
         },
         title: {
             text: 'Execution Time Over Start Time',
             align: 'center',
-            style: {
-                color: '#fff',
-            },
         },
         tooltip: {
             theme: 'dark',
@@ -106,6 +61,7 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
                 formatter: function (val, { seriesIndex, dataPointIndex, w }) {
                     const details = w.config.series[seriesIndex].data[dataPointIndex].details;
                     return `
+                        <div>
                             <p><strong>Execution Time:</strong> ${(val / 100000).toFixed(0)} s</p>
                             <p><strong>Function ID:</strong> ${details.functionid}</p>
                             <p><strong>Function Name:</strong> ${details.functionname}</p>
@@ -115,14 +71,10 @@ const ExecutionTimeChart: React.FC<ExecutionTimeChartProps> = ({ tokenId, sortFi
                             <p><strong>Function Caller:</strong> ${details.functioncaller}</p>
                             <p><strong>Returned Value:</strong> ${details.returnedvalue.type} - ${details.returnedvalue.value}</p>
                             <p><strong>Function Params:</strong> ${details.funcparams.map((param: FuncParam) => `${param.argname}: ${param.arg} (${param.type})`).join(', ')}</p>
+                        </div>
                     `;
                 }
             }
-        },
-        legend: {
-            labels: {
-                colors: '#fff',
-            },
         },
         markers: {
             size: 8

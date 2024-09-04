@@ -17,9 +17,11 @@ fclean: clean
 	rm -rf .tox .pytest_cache .coverage
 	rm -f profiler/profiler_output_pb2.py profiler/profiler_output_pb2_grpc.py
 	rm -f profiler/token_pb2.py profiler/token_pb2_grpc.py
+	rm -f profiler/session_pb2.py profiler/session_pb2_grpc.py
 
 generate_grpc:
 	python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. ./profiler/profiler_output.proto
 	python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. ./profiler/token.proto
+	python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. ./profiler/session.proto
 
 .PHONY: all build upload clean generate_grpc

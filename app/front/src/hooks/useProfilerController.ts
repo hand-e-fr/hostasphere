@@ -81,3 +81,4 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
 };
 
 export default useProfilerData;
+export type { ProfilerData, FuncParam, ReturnedValue, UseProfilerDataResult };

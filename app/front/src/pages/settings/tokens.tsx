@@ -42,7 +42,7 @@ const Tokens = () => {
     if (authLoading || loading) return <Loading />;
 
     return (
-        <div className="bg-base-100 shadow-lg rounded-lg p-6">
+        <>
             <div>
                 <div>
                     <h1 className="text-2xl font-bold">Access Tokens</h1>
@@ -126,7 +126,7 @@ const Tokens = () => {
                 onClose={() => setIsConfirmOpen(false)}
                 onConfirm={handleConfirmDelete}
             />
-        </div>
+        </>
     );
 };
 

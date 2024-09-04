@@ -13,6 +13,7 @@ import (
 	"openHostaLogs/internal/config"
 	"openHostaLogs/internal/db"
 	"openHostaLogs/internal/profiler"
+	"openHostaLogs/internal/session"
 	"openHostaLogs/internal/token"
 	"openHostaLogs/proto"
 )
@@ -31,6 +32,7 @@ func main() {
 	s := grpc.NewServer()
 	proto.RegisterProfilerServer(s, &profiler.Server{})
 	proto.RegisterTokenServiceServer(s, &token.Server{})
+	proto.RegisterSessionServiceServer(s, &session.Server{})
 	fmt.Println("gRPC server is running on port 50051")
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)

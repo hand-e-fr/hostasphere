@@ -23,7 +23,7 @@ const Dashboard: React.FC = () => {
     if (authLoading || loading) return <Loading />;
 
     return (
-        <div className="bg-base-100 shadow-lg rounded-lg p-6">
+        <>
             <div className="mb-4">
                 <h1 className="text-2xl font-bold">Programs</h1>
             </div>
@@ -39,7 +39,7 @@ const Dashboard: React.FC = () => {
                     </div>
                 ))}
             </div>
-        </div>
+        </>
     );
 };
 

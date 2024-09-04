@@ -40,8 +40,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex h-screen bg-base-200">
                 <Sidebar/>
                 <main
-                    className={`flex-1 p-[2em] overflow-y-auto max-h-[calc(100vh-4rem)]`}>
-                    {children}
+                    className={`flex-1 p-[2em] overflow-y-auto max-h-[calc(100vh-2rem)]`}>
+                    <div className="bg-base-100 shadow-lg rounded-lg p-6">
+                        {children}
+                    </div>
                 </main>
             </div>
         </>

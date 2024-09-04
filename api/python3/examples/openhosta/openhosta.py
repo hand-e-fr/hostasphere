@@ -6,9 +6,7 @@ profiler = Profiler(
     token='hsp_3082429f0d874f685c28ba3d0be0f35ad9fb8324203a7941080c2879df13ece8'
 )
 
-config.set_default_apiKey("sk-proj-1mRFqps3-6dSOPA5oz9cmYIYVAN0XkFgY9DQxnwPkJ"
-                          "VJ5ixY7nX8Ny1G0_WYngpcY9e1ViNzTcT3BlbkFJAnhNT5LbilW"
-                          "xvbfLGFvZ-MLr2Bfg2SYDthNpwJsten6YKWPiuSCNOkwDLpSDDoDAphkrowQhIA")
+config.set_default_apiKey("sk-proj-...")
 
 def print_function_name_decorator(func):
     def wrapper(*args, **kwargs):
