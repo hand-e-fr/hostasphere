@@ -16,6 +16,7 @@ class Session:
         self.metrics.start_time = time.time()
         self.metrics.session_uuid = str(uuid.uuid4())
         self.metrics.token_id = token_id
+        self._stop_event = threading.Event()  # Event to signal the thread to stop
 
         # Create a separate thread to save metrics
         self.save_thread = threading.Thread(target=self.save_metrics)
@@ -34,7 +35,7 @@ class Session:
 
         # Record disk usage
         disk_usage = psutil.disk_usage('/').percent
-        self.metrics.disk_usage.append(session_pb2.UsageAtTime(time=current_time,memory_usage=disk_usage))
+        self.metrics.disk_usage.append(session_pb2.UsageAtTime(time=current_time, memory_usage=disk_usage))
 
         # Record network usage
         net_io = psutil.net_io_counters()
@@ -43,19 +44,18 @@ class Session:
 
     def save_metrics(self):
         try:
-            while True:
+            while not self._stop_event.is_set():
                 self.record_usage()
-                print("Recording metrics...")
                 sleep(0.2)  # Simulate time interval for metrics recording
         except KeyboardInterrupt:
             self.end_session()
 
     def end_session(self):
-        print("Ending session...")
+        self._stop_event.set()  # Signal the thread to stop
+        self.save_thread.join()  # Wait for the thread to finish
         self.metrics.end_time = time.time()
         self.metrics.execution_time = (self.metrics.end_time - self.metrics.start_time) * 1000  # milliseconds
         self.save_session()
-        print("Session ended.")
 
     def save_session(self):
         with grpc.insecure_channel(self._address) as channel:
