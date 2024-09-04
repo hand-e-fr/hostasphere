@@ -2,7 +2,7 @@ from profiler.core import Profiler
 
 profiler = Profiler(
     address='localhost:50051',
-    token='hsp_2561346f824a05f7b6ce3b8180e608ca2bb8ca7874658181daaacb851daeef82'
+    token='hsp_a8503d8e080835557917c0da33228a461a22aab822a7a09a994d181ac8450474'
 )
 
 @profiler.track()

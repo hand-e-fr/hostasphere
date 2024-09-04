@@ -31,6 +31,7 @@ message ProfilerOutput {
   double cpu_usage = 9;
   repeated FuncParams func_params = 10;
   ReturnedValue returned_value = 11;
+  string session_uuid = 12;
 }
 
 message ProfilerOutputRequest {

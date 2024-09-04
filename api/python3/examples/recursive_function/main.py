@@ -1,4 +1,5 @@
 import asyncio
+from time import sleep
 
 from profiler.core import Profiler
 
@@ -11,6 +12,7 @@ profiler = Profiler(
 def fibonacci(n):
     if n <= 1:
         return n
+    sleep(0.1)
     return fibonacci(n-1) + fibonacci(n-2)
 
 if __name__ == "__main__":

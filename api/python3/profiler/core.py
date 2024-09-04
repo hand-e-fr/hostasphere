@@ -10,14 +10,15 @@ from .utils import *
 from .token import token_exists
 
 class Profiler:
-    def __init__(self, address: str, token: str):
+    def __init__(self, address: str, token: str, refresh_interval: float = 0.1):
+        self.refresh_interval = refresh_interval
         self._address = address
         self._token = token
         token_res: token_pb2.ExistsTokenResponse = token_exists(self._token, self._address)
         if not token_res.exists:
             raise Exception("Invalid token")
         self._token_id = token_res.id
-        self._session = Session(self._address, self._token, self._token_id)
+        self._session = Session(self._address, self._token, self._token_id, self.refresh_interval)
         atexit.register(self._session.end_session)
 
     def sendProfilerOutput(self, profiler_data: profiler_output.ProfilerOutput):
@@ -62,7 +63,8 @@ class Profiler:
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(copied_args, func),
-                        returned_value=returned_value
+                        returned_value=returned_value,
+                        session_uuid=self._session.metrics.session_uuid
                     )
                 )
                 self.sendProfilerOutputAsync(profiler_data)

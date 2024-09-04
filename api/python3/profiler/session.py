@@ -9,9 +9,10 @@ import psutil
 from . import session_pb2_grpc, session_pb2
 
 class Session:
-    def __init__(self, address: str, token: str, token_id: str):
+    def __init__(self, address: str, token: str, token_id: str, refresh_interval: float = 0.1):
         self._address = address
         self._token = token
+        self._refresh_interval = refresh_interval
         self.metrics = session_pb2.Session()
         self.metrics.start_time = time.time()
         self.metrics.session_uuid = str(uuid.uuid4())
@@ -19,7 +20,7 @@ class Session:
         self._stop_event = threading.Event()  # Event to signal the thread to stop
 
         # Create a separate thread to save metrics
-        self.save_thread = threading.Thread(target=self.save_metrics)
+        self.save_thread = threading.Thread(target=self.save_metrics, daemon=True)
         self.save_thread.start()
 
     def record_usage(self):
@@ -46,7 +47,7 @@ class Session:
         try:
             while not self._stop_event.is_set():
                 self.record_usage()
-                sleep(0.2)  # Simulate time interval for metrics recording
+                sleep(self._refresh_interval)  # Simulate time interval for metrics recording
         except KeyboardInterrupt:
             self.end_session()
 
