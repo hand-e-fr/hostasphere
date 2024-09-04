@@ -1,13 +1,16 @@
 import copy
-
-from . import profiler_output_pb2 as profiler_output
+import hashlib
 import inspect
 import os
+
 import psutil
-import hashlib
+
+from . import profiler_output_pb2 as profiler_output
+
 
 def get_function_name(func):
     return func.__name__
+
 
 def get_func_params(args, func):
     result = []
@@ -22,13 +25,16 @@ def get_func_params(args, func):
         ))
     return result
 
+
 def get_memory_usage():
     process = psutil.Process(os.getpid())
     return process.memory_info().rss
 
+
 def get_cpu_usage():
     process = psutil.Process(os.getpid())
     return process.cpu_percent()
+
 
 def deep_copy_args(args):
     result = []
@@ -39,6 +45,7 @@ def deep_copy_args(args):
             result.append(copy.copy(arg))
     return result
 
+
 def hash_function(func):
     try:
         source_code = inspect.getsource(func)
@@ -47,6 +54,7 @@ def hash_function(func):
 
     source_hash = hashlib.sha256(source_code.encode('utf-8')).hexdigest()
     return source_hash
+
 
 def get_caller():
     if len(inspect.stack()) < 3:

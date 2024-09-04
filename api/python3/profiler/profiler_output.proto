@@ -5,41 +5,41 @@ package profiler_output;
 option go_package = "./proto";
 
 service Profiler {
-  rpc SendProfilerOutput (ProfilerOutputRequest) returns (Response);
+    rpc SendProfilerOutput (ProfilerOutputRequest) returns (Response);
 }
 
 message FuncParams {
-  string arg = 1;
-  string arg_name = 2;
-  string type = 3;
+    string arg = 1;
+    string arg_name = 2;
+    string type = 3;
 }
 
 message ReturnedValue {
-  string value = 1;
-  string type = 2;
+    string value = 1;
+    string type = 2;
 }
 
 message ProfilerOutput {
-  string function_name = 1;
-  string function_id = 2;
-  string function_caller = 3;
-  string token_id = 4;
-  double start_time = 5;
-  double end_time = 6;
-  double execution_time = 7; // in milliseconds
-  double memory_usage = 8;
-  double cpu_usage = 9;
-  repeated FuncParams func_params = 10;
-  ReturnedValue returned_value = 11;
-  string session_uuid = 12;
+    string function_name = 1;
+    string function_id = 2;
+    string function_caller = 3;
+    string token_id = 4;
+    double start_time = 5;
+    double end_time = 6;
+    double execution_time = 7; // in milliseconds
+    double memory_usage = 8;
+    double cpu_usage = 9;
+    repeated FuncParams func_params = 10;
+    ReturnedValue returned_value = 11;
+    string session_uuid = 12;
 }
 
 message ProfilerOutputRequest {
-  string token = 1;
-  ProfilerOutput profiler_output = 2;
+    string token = 1;
+    ProfilerOutput profiler_output = 2;
 }
 
 message Response {
-  bool ok = 1;
-  string message = 2;
+    bool ok = 1;
+    string message = 2;
 }

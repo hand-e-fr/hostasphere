@@ -2,6 +2,7 @@ import grpc
 
 from . import token_pb2, token_pb2_grpc
 
+
 def token_exists(token: str, address: str) -> token_pb2.ExistsTokenResponse:
     with grpc.insecure_channel(address) as channel:
         stub = token_pb2_grpc.TokenServiceStub(channel)

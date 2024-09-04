@@ -3,14 +3,14 @@ syntax = "proto3";
 package calculator;
 
 service Calculator {
-  rpc Add (AddRequest) returns (AddResponse);
+    rpc Add (AddRequest) returns (AddResponse);
 }
 
 message AddRequest {
-  int32 num1 = 1;
-  int32 num2 = 2;
+    int32 num1 = 1;
+    int32 num2 = 2;
 }
 
 message AddResponse {
-  int32 result = 1;
+    int32 result = 1;
 }

@@ -7,6 +7,7 @@ profiler = Profiler(
     token='hsp_514ff0e682f285e2320fc7e6e161557344f154e73ac4bb4d122f959c938e6e6b'
 )
 
+
 @profiler.track()
 def quicksort(arr):
     if len(arr) <= 1:
@@ -17,6 +18,7 @@ def quicksort(arr):
     right = [x for x in arr if x > pivot]
     sleep(0.1)
     return quicksort(left) + middle + quicksort(right)
+
 
 if __name__ == "__main__":
     quicksort([3, 6, 8, 10, 1, 2, 1])

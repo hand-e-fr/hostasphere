@@ -1,4 +1,5 @@
 from OpenHosta import *
+
 from profiler.core import Profiler
 
 profiler = Profiler(
@@ -8,16 +9,20 @@ profiler = Profiler(
 
 config.set_default_apiKey("sk-proj-...")
 
+
 def print_function_name_decorator(func):
     def wrapper(*args, **kwargs):
         print(f"Calling function: {func.__name__}")
         return func(*args, **kwargs)
+
     return wrapper
+
 
 # Example usage
 @print_function_name_decorator
 def example_function():
     print("Inside example_function")
+
 
 @print_function_name_decorator
 def openhosta_function(input_string: str) -> str:

@@ -1,27 +1,33 @@
-import functools
-import time
-import grpc
-import threading
 import atexit
+import functools
+import threading
+import time
+
+import grpc
 
 from . import profiler_output_pb2_grpc as profiler_output_grpc, token_pb2
 from .session import Session
-from .utils import *
 from .token import token_exists
+from .utils import *
+
 
 class Profiler:
-    def __init__(self, address: str, token: str, refresh_interval: float = 0.1):
+    def __init__(self, address: str, token: str,
+                 refresh_interval: float = 0.1):
         self.refresh_interval = refresh_interval
         self._address = address
         self._token = token
-        token_res: token_pb2.ExistsTokenResponse = token_exists(self._token, self._address)
+        token_res: token_pb2.ExistsTokenResponse = token_exists(self._token,
+                                                                self._address)
         if not token_res.exists:
             raise Exception("Invalid token")
         self._token_id = token_res.id
-        self._session = Session(self._address, self._token, self._token_id, self.refresh_interval)
+        self._session = Session(self._address, self._token, self._token_id,
+                                self.refresh_interval)
         atexit.register(self._session.end_session)
 
-    def sendProfilerOutput(self, profiler_data: profiler_output.ProfilerOutput):
+    def sendProfilerOutput(self,
+                           profiler_data: profiler_output.ProfilerOutput):
         try:
             with grpc.insecure_channel(self._address) as channel:
                 stub = profiler_output_grpc.ProfilerStub(channel)
@@ -31,10 +37,13 @@ class Profiler:
                 raise Exception(
                     f"Error sending profiler output: {response.message}")
         except grpc.RpcError as e:
-            raise Exception("Impossible to send profiler output check address, or check if hostaspere is running")
+            raise Exception(
+                "Impossible to send profiler output check address, or check if hostaspere is running")
 
-    def sendProfilerOutputAsync(self, profiler_data: profiler_output.ProfilerOutput):
-        thread = threading.Thread(target=self.sendProfilerOutput, args=(profiler_data,))
+    def sendProfilerOutputAsync(self,
+                                profiler_data: profiler_output.ProfilerOutput):
+        thread = threading.Thread(target=self.sendProfilerOutput,
+                                  args=(profiler_data,))
         thread.start()
 
     def track(self):
@@ -59,7 +68,8 @@ class Profiler:
                         token_id=self._token_id,
                         start_time=start_time,
                         end_time=end_time,
-                        execution_time=(end_time - start_time) * 1000,  # in milliseconds
+                        execution_time=(end_time - start_time) * 1000,
+                        # in milliseconds
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(copied_args, func),
@@ -69,5 +79,7 @@ class Profiler:
                 )
                 self.sendProfilerOutputAsync(profiler_data)
                 return result
+
             return wrapper
+
         return decorator

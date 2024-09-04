@@ -5,14 +5,14 @@ package token;
 option go_package = "./proto";
 
 service TokenService {
-  rpc ExistsToken (ExistsTokenRequest) returns (ExistsTokenResponse);
+    rpc ExistsToken (ExistsTokenRequest) returns (ExistsTokenResponse);
 }
 
 message ExistsTokenRequest {
-  string token = 1;
+    string token = 1;
 }
 
 message ExistsTokenResponse {
-  bool exists = 1;
-  string id = 2;
+    bool exists = 1;
+    string id = 2;
 }
