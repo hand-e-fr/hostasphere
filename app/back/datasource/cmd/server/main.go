@@ -7,10 +7,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"log"
 	"net"
-	"openHostaLogs/internal/config"
 	"openHostaLogs/internal/db"
 	"openHostaLogs/internal/profiler"
 	"openHostaLogs/internal/session"
@@ -19,10 +19,12 @@ import (
 )
 
 func main() {
-	config.Load()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	db.InitMongoDB()
-// 	db.InitRedis()
 
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {

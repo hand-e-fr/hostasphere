@@ -1,37 +1,21 @@
-from OpenHosta import *
-
 from profiler.core import Profiler
+from OpenHosta import emulate, config
+
+config.set_default_apiKey("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")
 
 profiler = Profiler(
-    address='localhost:50051',
-    token='hsp_3082429f0d874f685c28ba3d0be0f35ad9fb8324203a7941080c2879df13ece8'
+    address='localhost:50051', # required
+    token='hsp_d0946b91afbce72c107e51bfb60f52da352cfea16fba71f8232ac1bfe06e9ecb',
+    session_tag='uwu' # required
 )
 
-config.set_default_apiKey("sk-proj-...")
-
-
-def print_function_name_decorator(func):
-    def wrapper(*args, **kwargs):
-        print(f"Calling function: {func.__name__}")
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
-# Example usage
-@print_function_name_decorator
-def example_function():
-    print("Inside example_function")
-
-
-@print_function_name_decorator
-def openhosta_function(input_string: str) -> str:
+@profiler.track()
+def translate(text: str) -> str:
     """
-    this function reverse the string
+    Translate text to french.
     """
     return emulate()
 
 
 if __name__ == '__main__':
-    print(openhosta_function("Hello everyone it's me, the programmer"))
-    example_function()
+    print(translate("Hello, how are you?"))
