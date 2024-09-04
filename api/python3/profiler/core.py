@@ -12,7 +12,7 @@ from .utils import *
 
 
 class Profiler:
-    def __init__(self, address: str, token: str, refresh_interval: float = 0.1, session_tag: str = None):
+    def __init__(self, address: str, token: str, refresh_interval: float = 0.1, session_tag: str = ''):
         self.refresh_interval = refresh_interval
         self._address = address
         self._token = token
@@ -20,7 +20,7 @@ class Profiler:
         if not token_res.exists:
             raise Exception("Invalid token")
         self._token_id = token_res.id
-        self._session = Session(self._address, self._token, self._token_id, self.refresh_interval)
+        self._session = Session(self._address, self._token, self._token_id, self.refresh_interval, session_tag)
         atexit.register(self._session.end_session)
 
     def sendProfilerOutput(self, profiler_data: profiler_output.ProfilerOutput):
