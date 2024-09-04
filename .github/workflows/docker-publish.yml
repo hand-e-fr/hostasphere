@@ -40,7 +40,6 @@ jobs:
         with:
           context: app/back/datasource
           file: app/back/datasource/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ghcr.io/${{ github.repository }}/datasource:latest
             ghcr.io/${{ github.repository }}/datasource:${{ github.sha }}
@@ -51,7 +50,6 @@ jobs:
         with:
           context: app/back/rest
           file: app/back/rest/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ghcr.io/${{ github.repository }}/rest:latest
             ghcr.io/${{ github.repository }}/rest:${{ github.sha }}
@@ -62,7 +60,6 @@ jobs:
         with:
           context: app/front
           file: app/front/Dockerfile
-          push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ghcr.io/${{ github.repository }}/front:latest
             ghcr.io/${{ github.repository }}/front:${{ github.sha }}
