@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
                     <div key={index}>
                         <Link href={`/dashboard/${token.id}`} passHref>
                             <button
-                                className="btn btn-neutral w-[100%] p-4 rounded-lg shadow-lg cursor-pointer hover:bg-base-200 transition-colors duration-300">
+                                className="btn btn-secondary w-[100%] p-4 rounded-lg shadow-lg cursor-pointer hover:bg-base-200 transition-colors duration-300">
                                 $ {token.name}
                             </button>
                         </Link>

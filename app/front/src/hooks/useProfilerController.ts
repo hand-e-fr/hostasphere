@@ -24,6 +24,7 @@ interface ProfilerData {
     returnedvalue: ReturnedValue;
     starttime: number;
     tokenid: string;
+    sessionuuid: string;
 }
 
 interface UseProfilerDataResult {

@@ -37,16 +37,7 @@ const Function: React.FC = () => {
                     Functions - {tokenId}
                 </h1>
             </div>
-            <div className="stats shadow mb-4">
-                <div className="stat">
-                    <div className="stat-figure text-secondary">
-                        <RestartAltIcon/>
-                    </div>
-                    <div className="stat-title">Usage</div>
-                    <div className="stat-value">25</div>
-                    <div className="stat-desc">functions started this week</div>
-                </div>
-            </div>
+            
             <div className="divider"></div>
             <div>
                 <ExecutionTimeAreaChart tokenId={tokenId as string} sortFields={["starttime"]}/>
