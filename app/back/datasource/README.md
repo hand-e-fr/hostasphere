@@ -3,11 +3,13 @@
 ## Hostasphere - backend
 
 ### Installation
+
 ```bash
 go mod download
 ```
 
 ### How to run
+
 ```bash
 docker-compose up --build
 ```
@@ -17,6 +19,7 @@ docker-compose up --build
 - [**William JOLIVET**](https://github.com/WilliamJlvt)
 
 ### Libraries used
+
 - [Go](https://golang.org/)
 - [Grpc](https://grpc.io/)
 - [MongoDB](https://www.mongodb.com/)

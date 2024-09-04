@@ -5,32 +5,39 @@ package token;
 option go_package = "./proto";
 
 service SessionService {
-    rpc SaveSession (SaveSessionRequest) returns (SaveSessionResponse);
+  rpc SaveSession (SaveSessionRequest) returns (SaveSessionResponse);
 }
 
 message UsageAtTime {
-    double time = 1;
-    double memory_usage = 2;
+  double time = 1;
+  double memory_usage = 2;
 }
 
 message Session {
-    string session_uuid = 1;
-    double start_time = 2;
-    double end_time = 3;
-    double execution_time = 4; // in milliseconds
-    repeated UsageAtTime memory_usage = 5;
-    repeated UsageAtTime cpu_usage = 6;
-    repeated UsageAtTime disk_usage = 7;
-    repeated UsageAtTime network_usage = 8;
-    string token_id = 9;
+  string session_uuid = 1;
+  string session_tag = 2;
+  double start_time = 3;
+  double end_time = 4;
+  double execution_time = 5; // in milliseconds
+  repeated UsageAtTime memory_usage = 6;
+  repeated UsageAtTime cpu_usage = 7;
+  repeated UsageAtTime disk_usage = 8;
+  repeated UsageAtTime network_usage = 9;
+  string token_id = 10;
+  int64 pid = 11; //todo
+  string hostname = 12; //todo
+  string os = 13; //todo
+  string os_version = 14; //todo
+  string kernel_version = 15; //todo
+  string architecture = 16; //todo
 }
 
 message SaveSessionRequest {
-    string token = 1;
-    Session session = 2;
+  string token = 1;
+  Session session = 2;
 }
 
 message SaveSessionResponse {
-    bool ok = 1;
-    string message = 2;
+  bool ok = 1;
+  string message = 2;
 }
