@@ -2,7 +2,7 @@ FROM golang:1.22
 
 WORKDIR /app
 
-COPY . ./
+COPY go.mod go.sum ./
 
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
@@ -11,6 +11,8 @@ RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 RUN apt-get update && apt-get install -y protobuf-compiler
 
 ENV PATH=$PATH:$GOPATH/bin
+
+COPY . .
 
 RUN make proto
 
