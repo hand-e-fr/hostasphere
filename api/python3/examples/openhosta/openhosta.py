@@ -1,7 +1,7 @@
 from profiler.core import Profiler
 from OpenHosta import emulate, config
 
-config.set_default_apiKey("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")
+config.set_default_apiKey("sk-proj-...")
 
 profiler = Profiler(
     address='localhost:50051', # required
