@@ -22,7 +22,7 @@ func main() {
 	config.Load()
 
 	db.InitMongoDB()
-	db.InitRedis()
+// 	db.InitRedis()
 
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
