@@ -32,7 +32,7 @@ export const useTokenController = () => {
     const [tokens, setTokens] = useState<Token[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const url = "http://localhost:8080";
+    const url = process.env.HS_REST_API_URL;
 
     const createToken = async (data: CreateTokenRequest): Promise<TokenResponse | null> => {
         setLoading(true);

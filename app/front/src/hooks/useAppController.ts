@@ -18,7 +18,7 @@ interface Response {
 export const useAppController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const url = "http://localhost:8080";
+    const url = process.env.HS_REST_API_URL;
 
     const getApp = async (): Promise<App | null> => {
         setLoading(true);

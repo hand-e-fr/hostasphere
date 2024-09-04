@@ -36,7 +36,7 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
     const [data, setData] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const url = "http://localhost:8080";
+    const url = process.env.HS_REST_API_URL;
 
     useEffect(() => {
         const fetchData = async () => {

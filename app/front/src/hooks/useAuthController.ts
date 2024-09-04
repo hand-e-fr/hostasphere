@@ -16,7 +16,7 @@ interface CheckTokenResponse {
 export const useAuthController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const url = "http://localhost:8080";
+    const url = process.env.HS_REST_API_URL;
 
     const login = async (email: string, password: string): Promise<LoginResponse | null> => {
         setLoading(true);
