@@ -13,7 +13,7 @@ The collected data is sent to your Hostasphere monitoring interface.
 Install the required dependencies with pip :
 
 ```schell
-pip install hostasphere-profiler==0.1.8
+pip install hostasphere-profiler==0.1.9
 ```
 
 ### Usage
@@ -24,7 +24,7 @@ To profile a function, use the decorator `@profiler.track()`:
 from profiler.core import Profiler
 
 profiler = Profiler(
-    address='localhost:50051', # required
+    address='localhost:50051', # required, is the address of the datasource, default is 'localhost:50051'
     token='hsp_0d6d562910026e3ba0b511dd2c99a47d374f810055003c149eb5fbcdad693319', # required
     refresh_interval=0.1, # optional, double representing the interval in seconds between each refresh of recorded metrics, default is 0.1
     session_tag="dev-1", # optional, string representing the session tag, default is None, esaier to identify the session in the monitoring interface
