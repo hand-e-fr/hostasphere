@@ -1,29 +1,21 @@
 import {useState} from 'react';
 import axios from 'axios';
+import {Token} from "@/types/TokenData";
 
-interface CreateTokenRequest {
+export interface CreateTokenRequest {
     name: string;
 }
 
-interface Token {
-    id: string;
-    name: string;
-    value: string;
-    created_at: number;
-    last_used: number;
-    owner: string;
-}
-
-interface TokenResponse {
+export interface TokenResponse {
     message: string;
     token: string;
 }
 
-interface TokensResponse {
+export interface TokensResponse {
     tokens: Token[];
 }
 
-interface ExistsTokenResponse {
+export interface ExistsTokenResponse {
     exists: boolean;
     id?: string;
 }
@@ -136,5 +128,3 @@ export const useTokenController = () => {
         deleteToken,
     };
 };
-
-export type {Token, TokenResponse, TokensResponse, ExistsTokenResponse, CreateTokenRequest};

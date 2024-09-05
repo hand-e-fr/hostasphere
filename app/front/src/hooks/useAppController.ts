@@ -1,7 +1,21 @@
 import axios from 'axios';
 import {useState} from 'react';
 
-interface App {
+export interface RegisterAppRequest {
+    name: string;
+    license: {
+        id: string;
+        secret: string;
+    };
+    admin_user: {
+        email: string;
+        first_name: string;
+        last_name: string;
+        password: string;
+    };
+}
+
+export interface App {
     id: string;
     name: string;
     license: {
@@ -10,7 +24,7 @@ interface App {
     };
 }
 
-interface Response {
+export interface RegisterAppResponse {
     ok: boolean;
     error: string | null;
 }
@@ -34,7 +48,7 @@ export const useAppController = () => {
         }
     };
 
-    const updateApp = async (appData: Partial<App>): Promise<boolean> => {
+    const updateApp = async (appData: Partial<RegisterAppRequest>): Promise<boolean> => {
         setLoading(true);
         setError(null);
         try {
@@ -48,7 +62,7 @@ export const useAppController = () => {
         }
     };
 
-    const registerApp = async (appData: Partial<App>): Promise<Response> => {
+    const registerApp = async (appData: Partial<RegisterAppRequest>): Promise<RegisterAppResponse> => {
         setLoading(true);
         setError(null);
         try {

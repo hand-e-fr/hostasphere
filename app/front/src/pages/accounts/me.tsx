@@ -1,6 +1,6 @@
 import React from 'react';
 import {useRouter} from "next/router";
-import {User, useUserController} from "@/hooks/profiler/useUserController";
+import {User, useUserController} from "@/hooks/useUserController";
 
 const Account = () => {
     const {getUser, loading, error} = useUserController();

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {CreateUserRequest} from "@/hooks/profiler/useUserController";
+import {CreateUserRequest} from "@/hooks/useUserController";
 
 interface RegisterAccountModalProps {
     isOpen: boolean;

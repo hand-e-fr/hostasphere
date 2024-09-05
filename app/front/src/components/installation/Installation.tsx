@@ -1,5 +1,5 @@
 import React from 'react';
-import {useAppController} from "@/hooks/useAppController";
+import {RegisterAppRequest, RegisterAppResponse, useAppController} from "@/hooks/useAppController";
 
 type InstallationProps = {
     onInstalled: () => void;
@@ -22,7 +22,7 @@ const Installation: React.FC<InstallationProps> = ({onInstalled}) => {
                     e.preventDefault();
                     const form = e.target as HTMLFormElement;
                     const formData = new FormData(form);
-                    const appData = {
+                    const appData: RegisterAppRequest = {
                         name: formData.get('name') as string,
                         license: {
                             id: formData.get('licenseId') as string,
@@ -35,7 +35,7 @@ const Installation: React.FC<InstallationProps> = ({onInstalled}) => {
                             password: formData.get('adminPassword') as string,
                         },
                     };
-                    registerApp(appData).then((response) => {
+                    registerApp(appData).then((response: RegisterAppResponse) => {
                         if (response.ok) {
                             handleInstall();
                         }

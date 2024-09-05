@@ -1,37 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ProfilerData } from './useProfilerController';
+import {SessionData} from "@/types/SessionData";
+import {ProfilerData} from "@/types/ProfilerData";
 
-interface UsageAtTime {
-    time: number;
-    value: number;
-}
-
-interface SessionData {
-    _id: string;
-    sessionuuid: string;
-    sessiontag: string;
-    starttime: number;
-    endtime: number;
-    executiontime: number;
-    memoryusage: UsageAtTime[];
-    cpuusage: UsageAtTime[];
-    diskusage: UsageAtTime[];
-    networkusage: UsageAtTime[];
-    tokenid: string;
-    pid: number;
-    hostname: string;
-    os: string;
-    osversion: string;
-    kernelversion: string;
-    architecture: string;
-    pythonversion: string;
-    processor: string;
-    cpucount: number;
-    boottime: number;
-    currentuser: string;
-}
-
-interface UseSessionDataResult {
+export interface UseSessionDataResult {
     session: SessionData | null;
     functions: ProfilerData[] | null;
     loading: boolean;
@@ -94,4 +65,3 @@ const useSessionData = (sessionUUID: string, sessionTag: string = ''): UseSessio
 };
 
 export default useSessionData;
-export type { SessionData, UseSessionDataResult };

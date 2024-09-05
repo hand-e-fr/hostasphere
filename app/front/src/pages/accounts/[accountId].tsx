@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import useUserController, {User} from '@/hooks/profiler/useUserController';
+import useUserController from '@/hooks/useUserController';
 import Loading from '@/components/Loading';
 import UpdateAccountModal from '@/components/account/UpdateAccountModal';
 import Link from "next/link";
+import {User} from "@/types/UserData";
 
 const AccountDetails = () => {
     const router = useRouter();

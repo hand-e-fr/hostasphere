@@ -1,23 +1,13 @@
+import { User } from '@/types/UserData';
 import axios from 'axios';
 import {useState} from 'react';
 
-interface User {
-    id: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    password?: string;
-    is_admin: boolean;
-    created_at: number;
-    needs_password_change: boolean;
-}
-
-interface Users {
+export interface Users {
     users: User[];
     total: number;
 }
 
-interface CreateUserRequest {
+export interface CreateUserRequest {
     email: string;
     first_name: string;
     last_name: string;
@@ -181,6 +171,3 @@ export const useUserController = () => {
 };
 
 export default useUserController;
-export type {User};
-export type {Users};
-export type {CreateUserRequest};
