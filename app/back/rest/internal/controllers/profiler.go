@@ -271,7 +271,7 @@ func GroupSessions(c *gin.Context) {
 				{"_id", bson.D{
 					{"$dateToString", bson.D{
 						{"format", "%Y-%m-%d"},
-						{"date", bson.D{{"$toDate", "$starttime"}}},
+						{"date", bson.D{{"$toDate", "$date"}}},
 					}},
 				}},
 				{"sessions", bson.D{{"$push", "$$ROOT"}}},
@@ -281,8 +281,8 @@ func GroupSessions(c *gin.Context) {
 		groupStage = bson.D{
 			{"$group", bson.D{
 				{"_id", bson.D{
-					{"year", bson.D{{"$isoWeekYear", bson.D{{"$toDate", "$starttime"}}}}},
-					{"week", bson.D{{"$isoWeek", bson.D{{"$toDate", "$starttime"}}}}},
+					{"year", bson.D{{"$isoWeekYear", bson.D{{"$toDate", "$date"}}}}},
+					{"week", bson.D{{"$isoWeek", bson.D{{"$toDate", "$date"}}}}},
 				}},
 				{"sessions", bson.D{{"$push", "$$ROOT"}}},
 			}},

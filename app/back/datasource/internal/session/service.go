@@ -16,6 +16,10 @@ func (s *Server) SaveSession(ctx context.Context, in *proto.SaveSessionRequest) 
 		return &proto.SaveSessionResponse{Ok: false, Message: "Invalid token"}, nil
 	}
 
+	if len(in.GetSession().GetSessionTag()) == 0 {
+		in.GetSession().SessionTag = in.GetSession().GetCurrentUser()
+	}
+
 	collection := config.GetCollection("sessions")
 	_, err := collection.InsertOne(context.Background(), in.Session)
 	if err != nil {

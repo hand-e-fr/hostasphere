@@ -38,7 +38,7 @@ const useSessionData = (sessionUUID: string, sessionTag: string = ''): UseSessio
                     return;
                 }
 
-                const response = await fetch(`${url}/session?${queryParams.toString()}`, {
+                const response = await fetch(`${url}/api/profiler/session?${queryParams.toString()}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

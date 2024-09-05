@@ -26,4 +26,5 @@ export interface SessionData {
     cpucount: number;
     boottime: number;
     currentuser: string;
+    date: number;
 }
