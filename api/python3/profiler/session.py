@@ -19,6 +19,7 @@ class Session:
         self._refresh_interval = refresh_interval
         self.metrics = session_pb2.Session()
         self.metrics.start_time = time.time()
+        self.metrics.start_date = int(time.time() * 1000)
         self.metrics.session_uuid = str(uuid.uuid4())
         self.metrics.session_tag = session_tag
         self.metrics.token_id = token_id
@@ -41,7 +42,6 @@ class Session:
         self.metrics.cpu_count = os.cpu_count()
         self.metrics.boot_time = psutil.boot_time()
         self.metrics.current_user = os.getlogin()
-        self.metrics.date = int(time.time() * 1000)
 
     def record_usage(self):
         current_time = time.time()
@@ -77,6 +77,7 @@ class Session:
         self._stop_event.set()  # Signal the thread to stop
         self.save_thread.join()  # Wait for the thread to finish
         self.metrics.end_time = time.time()
+        self.metrics.end_date = int(time.time() * 1000)
         self.metrics.execution_time = (self.metrics.end_time - self.metrics.start_time) * 1000  # milliseconds
         self.save_session()
 

@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 import {useRouter} from "next/router";
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ExecutionTimeAreaChart from "@/components/dashboard/ExecutionTimeAreaChart";
+import Link from "next/link";
 
-const Function: React.FC = () => {
+const TokenDashboard: React.FC = () => {
     const {checkToken} = useAuthController();
     const router = useRouter();
     const {tokenId} = router.query;
@@ -37,7 +37,11 @@ const Function: React.FC = () => {
                     Functions - {tokenId}
                 </h1>
             </div>
-            
+            <Link href={`/dashboard/${tokenId}/sessions`}>
+                <button className="btn btn-secondary">
+                    See sessions
+                </button>
+            </Link>
             <div className="divider"></div>
             <div>
                 <ExecutionTimeAreaChart tokenId={tokenId as string} sortFields={["starttime"]}/>
@@ -46,4 +50,4 @@ const Function: React.FC = () => {
     );
 };
 
-export default Function;
+export default TokenDashboard;

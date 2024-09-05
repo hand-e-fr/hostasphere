@@ -1,22 +1,30 @@
 import { useRouter } from "next/router";
+import SessionUsageChart from "@/components/dashboard/SessionUsageChart";
+import { useEffect } from "react";
 
-const Function: React.FC = () => {
+const Session: React.FC = () => {
     const router = useRouter();
-    const { tokenId } = router.query;
+    const { sessionId } = router.query;
+
+    useEffect(() => {
+        if (sessionId) {
+            document.title = `Session - ${sessionId}`;
+        }
+    }, [sessionId]);
 
     return (
         <>
             <div className="mb-4">
                 <h1 className="text-2xl font-bold">
-                    Session - {tokenId}
+                    Session - {sessionId}
                 </h1>
             </div>
-
             <div className="divider"></div>
             <div>
+                <SessionUsageChart sessionuuid={sessionId as string} />
             </div>
         </>
     );
 };
 
-export default Function;
+export default Session;

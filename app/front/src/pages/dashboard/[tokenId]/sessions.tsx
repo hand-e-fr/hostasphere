@@ -1,15 +1,27 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import useGroupedSessions, {GroupedSessionResponse} from "@/hooks/profiler/useGroupedSessionsData";
 import {SessionData} from "@/types/SessionData";
 import DataArrayIcon from '@mui/icons-material/DataArray';
 import FolderIcon from '@mui/icons-material/Folder';
 import Link from "next/link";
+import {useRouter} from "next/router";
+import Loading from "@/components/Loading";
 
 const Sessions: React.FC = () => {
+    const router = useRouter();
+    const {tokenId} = router.query;
     const [grouping, setGrouping] = React.useState<string>('day');
-    const { groupedSessions, loading, error } = useGroupedSessions(grouping, 10, 0);
+    const [pageLoading, setPageLoading] = useState(true);
+    const { groupedSessions, loading, error, fetchGroupedSessions } = useGroupedSessions(tokenId as string, grouping, 100, 0);
 
-    if (loading) return <div>Loading...</div>;
+    useEffect(() => {
+        if (tokenId) {
+            setPageLoading(false);
+            fetchGroupedSessions().then();
+        }
+    }, [tokenId]);
+
+    if (loading || pageLoading) return <Loading/>;
     if (error) return <div>Error: {error}</div>;
 
     return (
@@ -18,6 +30,7 @@ const Sessions: React.FC = () => {
             <div className="mb-4">
                 <p className="text-gray-500">Grouped by:</p>
                 <select className="select select-bordered select-sm w-full max-w-xs" value={grouping} onChange={(e) => setGrouping(e.target.value)}>
+                    <option value="hour">Hour</option>
                     <option value="day">Day</option>
                     <option value="week">Week</option>
                     <option value="tag">Tag</option>
@@ -37,9 +50,9 @@ const Sessions: React.FC = () => {
                                     {group.sessions.map((session: SessionData) => (
                                         <li key={session._id}>
                                             <summary>
-                                                <Link href={`/dashboard/${session.tokenid}/session/${session._id}`}>
+                                                <Link href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
                                                     <DataArrayIcon/>
-                                                    {new Date(session.date).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
+                                                    {new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
                                                     ({session._id})
                                                 </Link>
                                             </summary>

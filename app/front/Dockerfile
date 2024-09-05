@@ -1,4 +1,9 @@
 FROM node:18-alpine AS builder
+LABEL org.opencontainers.image.title="Frontend"
+LABEL org.opencontainers.image.description="Frontend client of Hostasphere"
+LABEL org.opencontainers.image.authors="Hand-e"
+LABEL org.opencontainers.image.source='https://github.com/hand-e-fr/hostasphere'
+LABEL org.opencontainers.image.url='https://github.com/hand-e-fr/hostasphere'
 
 WORKDIR /app
 

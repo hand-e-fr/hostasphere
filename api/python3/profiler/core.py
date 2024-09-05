@@ -45,8 +45,10 @@ class Profiler:
             def wrapper(*args, **kwargs):
                 copied_args = deep_copy_args(args)
                 start_time = time.time()
+                start_date = int(time.time() * 1000)
                 result = func(*args, **kwargs)
                 end_time = time.time()
+                end_date = int(time.time() * 1000)
 
                 returned_value = profiler_output.ReturnedValue(
                     value=str(result),
@@ -60,9 +62,10 @@ class Profiler:
                         function_caller=get_caller(),
                         token_id=self._token_id,
                         start_time=start_time,
+                        start_date=start_date,
                         end_time=end_time,
-                        execution_time=(end_time - start_time) * 1000,
-                        # in milliseconds
+                        end_date=end_date,
+                        execution_time=(end_time - start_time) * 1000, # in milliseconds
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(copied_args, func),

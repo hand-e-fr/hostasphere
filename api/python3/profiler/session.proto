@@ -17,25 +17,26 @@ message Session {
     string session_uuid = 1;
     string session_tag = 2;
     double start_time = 3;
-    double end_time = 4;
-    double execution_time = 5; // in milliseconds
-    repeated UsageAtTime memory_usage = 6;
-    repeated UsageAtTime cpu_usage = 7;
-    repeated UsageAtTime disk_usage = 8;
-    repeated UsageAtTime network_usage = 9;
-    string token_id = 10;
-    int64 pid = 11;
-    string hostname = 12;
-    string os = 13;
-    string os_version = 14;
-    string kernel_version = 15;
-    string architecture = 16;
-    string python_version = 17;
-    string processor = 18;
-    int32 cpu_count = 19;
-    double boot_time = 20;
-    string current_user = 21;
-    int64 date = 22;
+    int64 start_date = 4;
+    double end_time = 5;
+    int64 end_date = 6;
+    double execution_time = 7; // in milliseconds
+    repeated UsageAtTime memory_usage = 8;
+    repeated UsageAtTime cpu_usage = 9;
+    repeated UsageAtTime disk_usage = 10;
+    repeated UsageAtTime network_usage = 11;
+    string token_id = 12;
+    int64 pid = 13;
+    string hostname = 14;
+    string os = 15;
+    string os_version = 16;
+    string kernel_version = 17;
+    string architecture = 18;
+    string python_version = 19;
+    string processor = 20;
+    int32 cpu_count = 21;
+    double boot_time = 22;
+    string current_user = 23;
 }
 
 message SaveSessionRequest {

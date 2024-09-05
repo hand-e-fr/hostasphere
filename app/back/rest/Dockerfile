@@ -1,4 +1,9 @@
 FROM golang:1.22 AS builder
+LABEL org.opencontainers.image.title="RestAPI"
+LABEL org.opencontainers.image.description="RestAPI, used by hostasphere frontend"
+LABEL org.opencontainers.image.authors="Hand-e"
+LABEL org.opencontainers.image.source='https://github.com/hand-e-fr/hostasphere'
+LABEL org.opencontainers.image.url='https://github.com/hand-e-fr/hostasphere'
 
 WORKDIR /app
 

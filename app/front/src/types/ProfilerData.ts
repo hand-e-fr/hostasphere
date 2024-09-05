@@ -13,6 +13,7 @@ export interface ProfilerData {
     _id: string;
     cpuusage: number;
     endtime: number;
+    enddate: number;
     executiontime: number;
     funcparams: FuncParam[];
     functioncaller: string;
@@ -21,6 +22,7 @@ export interface ProfilerData {
     memoryusage: number;
     returnedvalue: ReturnedValue;
     starttime: number;
+    startdate: number;
     tokenid: string;
     sessionuuid: string;
 }
