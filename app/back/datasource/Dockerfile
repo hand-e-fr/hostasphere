@@ -1,9 +1,4 @@
 FROM golang:1.22
-LABEL org.opencontainers.image.title="Datasource"
-LABEL org.opencontainers.image.description="Datasource service for Hostasphere, used to push data to the database with hostashphere-profiler api"
-LABEL org.opencontainers.image.authors="Hand-e"
-LABEL org.opencontainers.image.source='https://github.com/hand-e-fr/hostasphere'
-LABEL org.opencontainers.image.url='https://github.com/hand-e-fr/hostasphere'
 
 WORKDIR /app
 
