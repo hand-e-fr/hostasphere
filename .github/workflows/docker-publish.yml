@@ -42,7 +42,7 @@ jobs:
           file: app/back/datasource/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}/datasource:latest
-            ghcr.io/${{ github.repository }}/datasource:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/datasource:${{ github.sha.substring(0, 7) }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push rest image
@@ -52,7 +52,7 @@ jobs:
           file: app/back/rest/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}/rest:latest
-            ghcr.io/${{ github.repository }}/rest:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/rest:${{ github.sha.substring(0, 7) }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push front image
@@ -62,5 +62,5 @@ jobs:
           file: app/front/Dockerfile
           tags: |
             ghcr.io/${{ github.repository }}/front:latest
-            ghcr.io/${{ github.repository }}/front:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/front:${{ github.sha.substring(0, 7) }}
           labels: ${{ steps.meta.outputs.labels }}
