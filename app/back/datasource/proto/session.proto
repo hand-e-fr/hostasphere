@@ -35,6 +35,7 @@ message Session {
     int32 cpu_count = 19;
     double boot_time = 20;
     string current_user = 21;
+    int64 date = 22;
 }
 
 message SaveSessionRequest {

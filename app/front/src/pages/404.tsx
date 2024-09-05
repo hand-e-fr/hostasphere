@@ -11,8 +11,8 @@ const Custom404: NextPage = () => {
 
     return (
         <div className="flex justify-center flex-col items-center px-4 py-16 text-center">
-            <h1 className="text-4xl font-bold text-gray-200">404 - Page Not Found</h1>
-            <p className="mt-4 text-lg text-gray-300">Sorry, the page you are looking for does not exist.</p>
+            <h1 className="text-4xl font-bold text-primary">404 - Page Not Found</h1>
+            <p className="mt-4 text-lg text-secondary">Sorry, the page you are looking for does not exist.</p>
             <button className="btn btn-link mt-6 text-blue-500" onClick={goBackHome}>Go back home</button>
         </div>
     );

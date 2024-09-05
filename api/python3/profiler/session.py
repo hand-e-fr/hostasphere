@@ -41,6 +41,7 @@ class Session:
         self.metrics.cpu_count = os.cpu_count()
         self.metrics.boot_time = psutil.boot_time()
         self.metrics.current_user = os.getlogin()
+        self.metrics.date = int(time.time() * 1000)
 
     def record_usage(self):
         current_time = time.time()

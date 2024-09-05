@@ -40,7 +40,7 @@ function MyApp({Component, pageProps}: AppProps) {
             );
         }
         return (
-            <div className="flex h-screen bg-base-200 overflow-y-auto max-h-[calc(100vh-4rem)]">
+            <div className="flex h-screen bg-base-200 overflow-y-auto">
                 <main className={`flex-1 p-[2em]`}>
                     <Installation onInstalled={triggerUpdate}/>
                 </main>

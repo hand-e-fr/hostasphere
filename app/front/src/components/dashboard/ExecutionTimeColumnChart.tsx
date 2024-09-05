@@ -1,6 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import useProfilerData from "@/hooks/useProfilerController";
+import useProfilerData from "@/hooks/profiler/useProfilerController";
 import {ApexOptions} from "apexcharts";
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});

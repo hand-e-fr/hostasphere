@@ -1,32 +1,7 @@
+import { ProfilerData } from '@/types/ProfilerData';
 import {useEffect, useState} from 'react';
 
-interface FuncParam {
-    arg: string;
-    argname: string;
-    type: string;
-}
-
-interface ReturnedValue {
-    type: string;
-    value: string;
-}
-
-interface ProfilerData {
-    _id: string;
-    cpuusage: number;
-    endtime: number;
-    executiontime: number;
-    funcparams: FuncParam[];
-    functioncaller: string;
-    functionid: string;
-    functionname: string;
-    memoryusage: number;
-    returnedvalue: ReturnedValue;
-    starttime: number;
-    tokenid: string;
-}
-
-interface UseProfilerDataResult {
+export interface UseProfilerDataResult {
     data: ProfilerData[] | null;
     loading: boolean;
     error: string | null;
@@ -81,4 +56,3 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
 };
 
 export default useProfilerData;
-export type {ProfilerData, FuncParam, ReturnedValue, UseProfilerDataResult};
