@@ -2,9 +2,10 @@ import React, {useState} from 'react';
 import Link from "next/link";
 import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
-import {Token, useTokenController} from "@/hooks/useTokenController";
+import {useTokenController} from "@/hooks/useTokenController";
 import RegisterTokenModal from '@/components/token/RegisterTokenModal';
 import ConfirmDeleteModal from '@/components/token/ConfirmDeleteModal';
+import {Token} from "@/types/TokenData";
 
 const Tokens = () => {
     const {checkToken} = useAuthController();

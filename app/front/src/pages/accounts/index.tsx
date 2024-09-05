@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import useUserController, {CreateUserRequest, User, Users} from "@/hooks/useUserController";
+import useUserController, {CreateUserRequest, Users} from "@/hooks/useUserController";
 import Link from "next/link";
 import {useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 import RegisterAccountModal from '@/components/account/RegisterAccountModal';
+import {User} from "@/types/UserData";
 
 const Accounts = () => {
     const {checkToken} = useAuthController();
