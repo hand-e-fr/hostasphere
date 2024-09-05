@@ -8,7 +8,9 @@ export interface SessionData {
     sessionuuid: string;
     sessiontag: string;
     starttime: number;
+    startdate: number;
     endtime: number;
+    enddate: number;
     executiontime: number;
     memoryusage: UsageAtTime[];
     cpuusage: UsageAtTime[];
@@ -26,5 +28,4 @@ export interface SessionData {
     cpucount: number;
     boottime: number;
     currentuser: string;
-    date: number;
 }

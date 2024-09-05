@@ -66,8 +66,15 @@ docker rm rest datasource front
 - `MONGO_DB`: Name of the mongoDB database, default is `hostasphere`
 - `JWT_SECRET`: Secret used to sign the JWT, default
 - `TOKEN_SALT`: Salt used to hash the JWT, default is `salt`
+- `TIMEZONE`: Timezone used to display dates, default is `Europe/Paris`
 ##### DATASOURCE:
 - `MONGO_URI`: URI of the mongoDB, default is `mongodb://localhost:27017`
 - `MONGO_DB`: Name of the mongoDB database, default is `hostasphere`
 ##### FRONT:
 - `HS_REST_API_URL`: URL of the REST API, default is `http://localhost:8080`
+
+
+### Push profiler data to the REST API
+
+#### Python3 API:
+Ressource: [Python3 API](https://github.com/hand-e-fr/hostasphere/tree/main/api/python3)

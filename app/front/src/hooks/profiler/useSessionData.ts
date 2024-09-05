@@ -9,7 +9,7 @@ export interface UseSessionDataResult {
     error: string | null;
 }
 
-const useSessionData = (sessionUUID: string, sessionTag: string = ''): UseSessionDataResult => {
+const useSessionData = (sessionuuid: string, sessionTag: string = ''): UseSessionDataResult => {
     const [session, setSession] = useState<SessionData | null>(null);
     const [functions, setFunctions] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -28,12 +28,12 @@ const useSessionData = (sessionUUID: string, sessionTag: string = ''): UseSessio
 
             try {
                 const queryParams = new URLSearchParams();
-                if (sessionUUID) {
-                    queryParams.append('sessionuuid', sessionUUID);
-                } else if (sessionTag) {
+                if (sessionuuid !== '') {
+                    queryParams.append('sessionuuid', sessionuuid);
+                } else if (sessionTag !== '') {
                     queryParams.append('sessiontag', sessionTag);
                 } else {
-                    setError('Either sessionUUID or sessionTag must be provided');
+                    setError('Either sessionuuid or sessionTag must be provided');
                     setLoading(false);
                     return;
                 }
@@ -59,7 +59,7 @@ const useSessionData = (sessionUUID: string, sessionTag: string = ''): UseSessio
         };
 
         fetchData();
-    }, [sessionUUID, sessionTag]);
+    }, [sessionuuid, sessionTag]);
 
     return { session, functions, loading, error };
 };

@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -163,6 +164,12 @@ func FetchSessionData(c *gin.Context) {
 		return
 	}
 
+	tokenID := c.Query("tokenid")
+	if tokenID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
+		return
+	}
+
 	sessionUUID := c.Query("sessionuuid")
 	sessionTag := c.Query("sessiontag")
 
@@ -176,6 +183,7 @@ func FetchSessionData(c *gin.Context) {
 
 	// Build the filter for the session query
 	sessionFilter := bson.M{}
+	sessionFilter["tokenid"] = tokenID
 	if sessionUUID != "" {
 		sessionFilter["sessionuuid"] = sessionUUID
 	} else if sessionTag != "" {
@@ -229,6 +237,12 @@ func GroupSessions(c *gin.Context) {
 		return
 	}
 
+	tokenID := c.Query("tokenid")
+	if tokenID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
+		return
+	}
+
 	groupBy := c.Query("groupby")
 	if groupBy == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "groupby query parameter is required"})
@@ -265,13 +279,27 @@ func GroupSessions(c *gin.Context) {
 	var groupStage bson.D
 
 	switch groupBy {
+	case "hour":
+		groupStage = bson.D{
+			{"$group", bson.D{
+				{"_id", bson.D{
+					{"$dateToString", bson.D{
+						{"timezone", os.Getenv("TIMEZONE")},
+						{"format", "%Y-%m-%d %H:%M"},
+						{"date", bson.D{{"$toDate", "$startdate"}}},
+					}},
+				}},
+				{"sessions", bson.D{{"$push", "$$ROOT"}}},
+			}},
+		}
 	case "day":
 		groupStage = bson.D{
 			{"$group", bson.D{
 				{"_id", bson.D{
 					{"$dateToString", bson.D{
+						{"timezone", os.Getenv("TIMEZONE")},
 						{"format", "%Y-%m-%d"},
-						{"date", bson.D{{"$toDate", "$date"}}},
+						{"date", bson.D{{"$toDate", "$startdate"}}},
 					}},
 				}},
 				{"sessions", bson.D{{"$push", "$$ROOT"}}},
@@ -281,8 +309,8 @@ func GroupSessions(c *gin.Context) {
 		groupStage = bson.D{
 			{"$group", bson.D{
 				{"_id", bson.D{
-					{"year", bson.D{{"$isoWeekYear", bson.D{{"$toDate", "$date"}}}}},
-					{"week", bson.D{{"$isoWeek", bson.D{{"$toDate", "$date"}}}}},
+					{"year", bson.D{{"$isoWeekYear", bson.D{{"$toDate", "$startdate"}}}}},
+					{"week", bson.D{{"$isoWeek", bson.D{{"$toDate", "$startdate"}}}}},
 				}},
 				{"sessions", bson.D{{"$push", "$$ROOT"}}},
 			}},
@@ -300,7 +328,10 @@ func GroupSessions(c *gin.Context) {
 	}
 
 	// Create the aggregation pipeline
-	pipeline := mongo.Pipeline{groupStage}
+	pipeline := mongo.Pipeline{
+		{{"$match", bson.M{"tokenid": tokenID}}},
+		groupStage,
+	}
 
 	// Add pagination stages if a limit is set
 	if limit > 0 {

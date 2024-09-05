@@ -13,4 +13,4 @@ def read_large_file(file_path):
 
 
 if __name__ == "__main__":
-    read_large_file("large_file.txt")
+    read_large_file("fit_file.txt")

@@ -81,7 +81,7 @@ const Tokens = () => {
                                 {tokenInfo && (tokenInfo.is_admin || token.owner === tokenInfo.email) ? (
                                     <>
                                         <th className="w-0">
-                                            <Link href={`/settings/tokens/manage/${token.id}`}>
+                                            <Link href={`/dashboard/${token.id}`}>
                                                 <button className="btn btn-info btn-sm">usage</button>
                                             </Link>
                                         </th>

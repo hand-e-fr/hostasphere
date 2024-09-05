@@ -25,13 +25,15 @@ message ProfilerOutput {
   string function_caller = 3;
   string token_id = 4;
   double start_time = 5;
-  double end_time = 6;
-  double execution_time = 7; // in milliseconds
-  double memory_usage = 8;
-  double cpu_usage = 9;
-  repeated FuncParams func_params = 10;
-  ReturnedValue returned_value = 11;
-  string session_uuid = 12;
+  int64 start_date = 6;
+  double end_time = 7;
+  int64 end_date = 8;
+  double execution_time = 9; // in milliseconds
+  double memory_usage = 10;
+  double cpu_usage = 11;
+  repeated FuncParams func_params = 12;
+  ReturnedValue returned_value = 13;
+  string session_uuid = 14;
 }
 
 message ProfilerOutputRequest {

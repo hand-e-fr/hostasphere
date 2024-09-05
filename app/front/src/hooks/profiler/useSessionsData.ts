@@ -7,7 +7,7 @@ interface UseSessionsResult {
     error: string | null;
 }
 
-const useSessions = (sortBy: string = '', limit: number = 10, page: number = 0): UseSessionsResult => {
+const useSessions = (tokenid: string, sortBy: string = '', limit: number = 10, page: number = 0): UseSessionsResult => {
     const [sessions, setSessions] = useState<SessionData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -25,6 +25,7 @@ const useSessions = (sortBy: string = '', limit: number = 10, page: number = 0):
 
             try {
                 const queryParams = new URLSearchParams();
+                queryParams.append('tokenid', tokenid);
                 if (sortBy) {
                     queryParams.append('sortby', sortBy);
                 }
