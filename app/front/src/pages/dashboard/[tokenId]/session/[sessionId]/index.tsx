@@ -1,7 +1,8 @@
-import {router} from "next/client";
+import { useRouter } from "next/router";
 
 const Function: React.FC = () => {
-    const {tokenId} = router.query;
+    const router = useRouter();
+    const { tokenId } = router.query;
 
     return (
         <>

@@ -1,9 +1,8 @@
-// src/components/dashboard/ExecutionTimeAreaChart.tsx
-
 import React from 'react';
 import dynamic from 'next/dynamic';
-import useProfilerData, {FuncParam} from "@/hooks/profiler/useProfilerController";
+import useProfilerData from "@/hooks/profiler/useProfilerController";
 import {ApexOptions} from "apexcharts";
+import {FuncParam} from "@/types/ProfilerData";
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
