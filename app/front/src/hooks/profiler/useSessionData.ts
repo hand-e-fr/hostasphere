@@ -9,59 +9,66 @@ export interface UseSessionDataResult {
     error: string | null;
 }
 
-const useSessionData = (sessionuuid: string, sessionTag: string = ''): UseSessionDataResult => {
+const useSessionData = (tokenid: string, sessionuuid: string, sessionTag: string = ''): {
+    fetchData: () => Promise<void>;
+    functions: ProfilerData[] | null;
+    session: SessionData | null;
+    loading: boolean;
+    error: string | null
+} => {
     const [session, setSession] = useState<SessionData | null>(null);
     const [functions, setFunctions] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const url = process.env.HS_REST_API_URL;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            const token = localStorage.getItem('token');
-            if (!token) {
-                setError('No token found');
+    const fetchData = async () => {
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setError('No token found');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const queryParams = new URLSearchParams();
+            queryParams.append('tokenid', tokenid);
+            if (sessionuuid !== '') {
+                queryParams.append('sessionuuid', sessionuuid);
+            } else if (sessionTag !== '') {
+                queryParams.append('sessiontag', sessionTag);
+            } else {
+                setError('Either sessionuuid or sessionTag must be provided');
                 setLoading(false);
                 return;
             }
 
-            try {
-                const queryParams = new URLSearchParams();
-                if (sessionuuid !== '') {
-                    queryParams.append('sessionuuid', sessionuuid);
-                } else if (sessionTag !== '') {
-                    queryParams.append('sessiontag', sessionTag);
-                } else {
-                    setError('Either sessionuuid or sessionTag must be provided');
-                    setLoading(false);
-                    return;
-                }
+            const response = await fetch(`${url}/api/profiler/session?${queryParams.toString()}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-                const response = await fetch(`${url}/api/profiler/session?${queryParams.toString()}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Failed to fetch session data');
-                }
-
-                const result = await response.json();
-                setSession(result.session);
-                setFunctions(result.functions);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
+            if (!response.ok) {
+                throw new Error('Failed to fetch session data');
             }
-        };
 
-        fetchData();
+            const result = await response.json();
+            setSession(result.session);
+            setFunctions(result.functions);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData().then();
     }, [sessionuuid, sessionTag]);
 
-    return { session, functions, loading, error };
+    return { session, functions, loading, error, fetchData };
 };
 
 export default useSessionData;

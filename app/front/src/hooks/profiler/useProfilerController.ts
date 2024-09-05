@@ -49,7 +49,7 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
             }
         };
 
-        fetchData();
+        fetchData().then();
     }, [tokenId, sortFields]);
 
     return {data, loading, error};

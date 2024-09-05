@@ -51,7 +51,7 @@ const useSessions = (tokenid: string, sortBy: string = '', limit: number = 10, p
             }
         };
 
-        fetchSessions();
+        fetchSessions().then();
     }, [sortBy, limit, page]);
 
     return { sessions, loading, error };

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const Session: React.FC = () => {
     const router = useRouter();
-    const { sessionId } = router.query;
+    const { tokenId, sessionId } = router.query;
 
     useEffect(() => {
         if (sessionId) {
@@ -21,7 +21,7 @@ const Session: React.FC = () => {
             </div>
             <div className="divider"></div>
             <div>
-                <SessionUsageChart sessionuuid={sessionId as string} />
+                <SessionUsageChart tokenid={tokenId as string} sessionuuid={sessionId as string} />
             </div>
         </>
     );

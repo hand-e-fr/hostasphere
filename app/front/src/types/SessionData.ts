@@ -1,6 +1,6 @@
 export interface UsageAtTime {
     time: number;
-    value: number;
+    memoryusage: number;
 }
 
 export interface SessionData {

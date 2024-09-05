@@ -59,7 +59,7 @@ const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10
     };
 
     useEffect(() => {
-        fetchGroupedSessions();
+        fetchGroupedSessions().then();
     }, [groupBy, limit, page]);
 
     return { groupedSessions, loading, error, fetchGroupedSessions };
