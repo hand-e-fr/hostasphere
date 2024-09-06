@@ -9,7 +9,7 @@ export interface UseSessionDataResult {
     error: string | null;
 }
 
-const useSessionData = (tokenid: string, sessionuuid: string, sessionTag: string = ''): {
+const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: string | string[] | undefined, sessionTag: string = ''): {
     fetchData: () => Promise<void>;
     functions: ProfilerData[] | null;
     session: SessionData | null;
@@ -33,10 +33,12 @@ const useSessionData = (tokenid: string, sessionuuid: string, sessionTag: string
 
         try {
             const queryParams = new URLSearchParams();
-            queryParams.append('tokenid', tokenid);
-            if (sessionuuid !== '') {
+            if (typeof tokenid === "string") {
+                queryParams.append('tokenid', tokenid);
+            }
+            if (sessionuuid && typeof sessionuuid === "string") {
                 queryParams.append('sessionuuid', sessionuuid);
-            } else if (sessionTag !== '') {
+            } else if (sessionTag) {
                 queryParams.append('sessiontag', sessionTag);
             } else {
                 setError('Either sessionuuid or sessionTag must be provided');
@@ -65,7 +67,9 @@ const useSessionData = (tokenid: string, sessionuuid: string, sessionTag: string
     };
 
     useEffect(() => {
-        fetchData().then();
+        if (tokenid && (sessionuuid || sessionTag)) {
+            fetchData().then();
+        }
     }, [sessionuuid, sessionTag]);
 
     return { session, functions, loading, error, fetchData };

@@ -93,12 +93,11 @@ const Sidebar = () => {
                 <div className="flex flex-col w-full">
                     {!isCollapsed ? (
                         <p className="text-xl font-semibold flex items-center">
-                            <SpaIcon className="mr-2"/>
-                            Hostasphere
+                            HostaSphere
                         </p>
                     ) : (
-                        <div className="text-xl font-semibold flex items-center justify-center">
-                            <SpaIcon className="mr-2"/>
+                        <div className="text-xs font-semibold flex items-center justify-center">
+                            Hosta<br/>Sphere.
                         </div>
                     )}
                     <div className="divider"></div>
@@ -115,7 +114,7 @@ const Sidebar = () => {
                                             router.pathname === href ? "bg-secondary" : ""
                                         } ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}>
                                         <div className="flex justify-center items-center">
-                                        <span className="mt-1">
+                                        <span className="mt-1 max-w-7">
                                             <Icon/>
                                         </span>
                                             {!isCollapsed && <span className="mt-2 ml-2">{name}</span>}

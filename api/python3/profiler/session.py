@@ -48,8 +48,7 @@ class Session:
 
         # Record memory usage
         memory_usage = psutil.virtual_memory().percent
-        self.metrics.memory_usage.append(
-            session_pb2.UsageAtTime(time=current_time, memory_usage=memory_usage))
+        self.metrics.memory_usage.append(session_pb2.UsageAtTime(time=current_time, memory_usage=memory_usage))
 
         # Record CPU usage
         cpu_usage = psutil.cpu_percent(interval=None)
@@ -57,8 +56,7 @@ class Session:
 
         # Record disk usage
         disk_usage = psutil.disk_usage('/').percent
-        self.metrics.disk_usage.append(
-            session_pb2.UsageAtTime(time=current_time, memory_usage=disk_usage))
+        self.metrics.disk_usage.append(session_pb2.UsageAtTime(time=current_time, memory_usage=disk_usage))
 
         # Record network usage
         net_io = psutil.net_io_counters()

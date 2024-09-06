@@ -41,7 +41,7 @@ const Sessions: React.FC = () => {
                 <ul className="menu rounded-box ">
                     {groupedSessions && groupedSessions.map((group: GroupedSessionResponse, index) => (
                         <li key={index}>
-                            <details>
+                            <details open>
                                 <summary>
                                     <FolderIcon/>
                                     {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}

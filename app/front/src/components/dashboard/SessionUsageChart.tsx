@@ -26,8 +26,25 @@ const UsageChart: React.FC<UsageChartProps> = ({ tokenid, sessionuuid }) => {
     const diskUsageData = session.diskusage.map(({ time, memoryusage }) => ({ x: time * 1000, y: memoryusage }));
     const networkUsageData = session.networkusage.map(({ time, memoryusage }) => ({ x: time * 1000, y: memoryusage }));
 
-    console.log(session.starttime, session.endtime);
-    console.log(session.memoryusage);
+    const functionAnnotations = functions.map((func) => ({
+        x: func.starttime * 1000,
+        y: func.memoryusage,
+        marker: {
+            size: 6,
+            fillColor: '#FF4560',
+            strokeColor: '#fff',
+            cssClass: 'apexcharts-custom-class',
+        },
+        label: {
+            borderColor: '#FF4560',
+            offsetY: 0,
+            style: {
+                color: '#fff',
+                background: '#FF4560',
+            },
+            text: func.functionname,
+        }
+    }));
 
     const series = [
         {
@@ -80,7 +97,7 @@ const UsageChart: React.FC<UsageChartProps> = ({ tokenid, sessionuuid }) => {
                 format: 'dd MMM yyyy HH:mm:ss',
             },
             y: {
-                formatter: (val: number) => val.toFixed(2),
+                formatter: (val: number) => (val !== null && val !== undefined) ? val.toFixed(2) : '0',
             },
         },
         legend: {
@@ -114,6 +131,7 @@ const UsageChart: React.FC<UsageChartProps> = ({ tokenid, sessionuuid }) => {
                     },
                 },
             ],
+            points: functionAnnotations,
         },
     };
 

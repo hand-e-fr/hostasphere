@@ -44,9 +44,11 @@ class Profiler:
             @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 copied_args = deep_copy_args(args)
+                self._session.record_usage()
                 start_time = time.time()
                 start_date = int(time.time() * 1000)
                 result = func(*args, **kwargs)
+                self._session.record_usage()
                 end_time = time.time()
                 end_date = int(time.time() * 1000)
 
