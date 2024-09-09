@@ -40,7 +40,7 @@ jobs:
           file: app/back/datasource/Dockerfile
           tags: |
             handoe/hostasphere-datasource:latest
-            handoe/hostasphere-datasource:sha-${{ env.GITHUB_SHA }}
+            handoe/hostasphere-datasource:sha-${{ env.SHORT_SHA }}
 
       - name: Build and push rest image
         uses: docker/build-push-action@v6
@@ -50,7 +50,7 @@ jobs:
           file: app/back/rest/Dockerfile
           tags: |
             handoe/hostasphere-rest:latest
-            handoe/hostasphere-rest:sha-${{ env.GITHUB_SHA }}
+            handoe/hostasphere-rest:sha-${{ env.SHORT_SHA }}
 
       - name: Build and push front image
         uses: docker/build-push-action@v6
@@ -60,4 +60,4 @@ jobs:
           file: app/front/Dockerfile
           tags: |
             handoe/hostasphere-front:latest
-            handoe/hostasphere-front:sha-${{ env.GITHUB_SHA }}
+            handoe/hostasphere-front:sha-${{ env.SHORT_SHA }}
