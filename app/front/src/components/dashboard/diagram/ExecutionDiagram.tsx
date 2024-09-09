@@ -18,7 +18,6 @@ const Diagram: React.FC<{ functionCallers: string[] }> = ({ functionCallers }) =
         const newEngine = createEngine();
         const model = new DiagramModel();
 
-        // Create a map to store nodes for quick lookup
         const nodesMap = new Map<string, typeof DefaultNodeModel>();
 
         functionCallers.forEach((caller, index) => {

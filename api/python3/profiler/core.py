@@ -18,6 +18,8 @@ class Profiler:
         self._address = address
         self._token = token
         token_res: token_pb2.ExistsTokenResponse = token_exists(self._token, self._address)
+        if token_res is None:
+            raise Exception("Invalid address, target is not a hostaspere server")
         if not token_res.exists:
             raise Exception("Invalid token")
         self._token_id = token_res.id
@@ -50,6 +52,7 @@ class Profiler:
                 start_date = int(time.time() * 1000)
                 stack = traceback.extract_stack()
                 callers = [f[2] for f in stack[:-1]]
+                callers.append(get_function_name(func))
                 result = func(*args, **kwargs)
                 self._session.record_usage()
                 end_time = time.time()
