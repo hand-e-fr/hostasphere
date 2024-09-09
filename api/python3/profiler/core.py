@@ -51,8 +51,13 @@ class Profiler:
                 start_time = time.time()
                 start_date = int(time.time() * 1000)
                 stack = traceback.extract_stack()
-                callers = [f[2] for f in stack[:-1]]
-                callers.append(get_function_name(func))
+                callers = []
+                for f in stack[:-1]:
+                    callers.append(profiler_output.FuncCaller(
+                        caller_file=f[0],
+                        caller_line=f[1],
+                        caller=f[2]
+                    ))
                 result = func(*args, **kwargs)
                 self._session.record_usage()
                 end_time = time.time()

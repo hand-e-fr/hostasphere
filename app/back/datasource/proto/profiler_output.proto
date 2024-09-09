@@ -19,10 +19,16 @@ message ReturnedValue {
   string type = 2;
 }
 
+message FuncCaller {
+  string caller_file = 1;
+  int64 caller_line = 2;
+  string caller = 3;
+}
+
 message ProfilerOutput {
   string function_name = 1;
   string function_id = 2;
-  repeated string function_callers = 3;
+  repeated FuncCaller function_callers = 3;
   string token_id = 4;
   double start_time = 5;
   int64 start_date = 6;
