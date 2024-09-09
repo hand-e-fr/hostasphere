@@ -83,7 +83,7 @@ export const useTokenController = () => {
         setError(null);
 
         try {
-            const response = await axios.get<ExistsTokenResponse>(url + `/api/token/${tokenValue}`);
+            const response = await axios.get<ExistsTokenResponse>(`${url}/api/token/${tokenValue}`);
             setLoading(false);
             return response.data;
         } catch (err: any) {
@@ -105,7 +105,7 @@ export const useTokenController = () => {
         }
 
         try {
-            await axios.delete(url + `/api/token/${tokenId}`, {
+            await axios.delete(`${url}/api/token/${tokenId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -118,6 +118,27 @@ export const useTokenController = () => {
         }
     };
 
+    const fetchTokenNameFromId = async (tokenId: string): Promise<string | null> => {
+        try {
+            const response = await fetch(`${url}/api/token/${tokenId}/name`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.name;
+        } catch (error) {
+            console.error('Failed to fetch token name:', error);
+            return null;
+        }
+    }
+
     return {
         tokens,
         loading,
@@ -126,5 +147,6 @@ export const useTokenController = () => {
         getTokens,
         existsToken,
         deleteToken,
+        fetchTokenNameFromId
     };
 };

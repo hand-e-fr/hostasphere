@@ -141,3 +141,23 @@ func DeleteToken(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Token deleted successfully"})
 }
+
+func TokenNameFromId(c *gin.Context) {
+	tokenID := c.Param("token")
+
+	// tokenID to ObjectID
+	var oid primitive.ObjectID
+	var err error
+	if oid, err = primitive.ObjectIDFromHex(tokenID); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid token ID"})
+		return
+	}
+
+	var token models.Token
+	if err := config.GetCollection("tokens").FindOne(c, bson.M{"_id": oid}).Decode(&token); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Token not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"name": token.Name})
+}

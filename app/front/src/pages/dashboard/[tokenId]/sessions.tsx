@@ -6,10 +6,13 @@ import FolderIcon from '@mui/icons-material/Folder';
 import Link from "next/link";
 import {useRouter} from "next/router";
 import Loading from "@/components/Loading";
+import {useTokenController} from "@/hooks/useTokenController";
 
 const Sessions: React.FC = () => {
     const router = useRouter();
     const {tokenId} = router.query;
+    const [tokenName, setTokenName] = useState<string | null>(null);
+    const {fetchTokenNameFromId} = useTokenController();
     const [grouping, setGrouping] = React.useState<string>('day');
     const [pageLoading, setPageLoading] = useState(true);
     const {
@@ -22,6 +25,9 @@ const Sessions: React.FC = () => {
     useEffect(() => {
         if (tokenId) {
             setPageLoading(false);
+            fetchTokenNameFromId(tokenId as string).then((response) => {
+                setTokenName(response);
+            });
             fetchGroupedSessions().then();
         }
     }, [tokenId]);
@@ -31,7 +37,18 @@ const Sessions: React.FC = () => {
 
     return (
         <>
-            <h1 className="text-2xl font-semibold mb-4">Sessions</h1>
+            <div className="mb-4">
+                <h1 className="text-2xl font-bold">
+                    Dashboard
+                </h1>
+                <div className="breadcrumbs text-sm">
+                    <ul>
+                        <li><Link href={`/dashboard`}>Dashboard</Link></li>
+                        <li><Link href={`/dashboard/${tokenId}`}>{tokenName && tokenName}</Link></li>
+                        <li>Sessions</li>
+                    </ul>
+                </div>
+            </div>
             <div className="mb-4">
                 <p className="text-gray-500">Grouped by:</p>
                 <select className="select select-bordered select-sm w-full max-w-xs" value={grouping}
