@@ -13,7 +13,7 @@ const Sessions: React.FC = () => {
     const {tokenId} = router.query;
     const [tokenName, setTokenName] = useState<string | null>(null);
     const {fetchTokenNameFromId} = useTokenController();
-    const [grouping, setGrouping] = React.useState<string>('day');
+    const [grouping, setGrouping] = React.useState<string>(localStorage.getItem('grouping') || 'hour');
     const [pageLoading, setPageLoading] = useState(true);
     const {
         groupedSessions,
@@ -23,12 +23,18 @@ const Sessions: React.FC = () => {
     } = useGroupedSessions(tokenId as string, grouping, 100, 0);
 
     useEffect(() => {
+        if (localStorage.getItem('grouping')) {
+            setGrouping(localStorage.getItem('grouping') as string);
+        }
+    }, []);
+
+    useEffect(() => {
         if (tokenId) {
-            setPageLoading(false);
             fetchTokenNameFromId(tokenId as string).then((response) => {
                 setTokenName(response);
             });
             fetchGroupedSessions().then();
+            setPageLoading(false);
         }
     }, [tokenId]);
 
@@ -64,7 +70,7 @@ const Sessions: React.FC = () => {
                 <ul className="menu rounded-box ">
                     {groupedSessions && groupedSessions.map((group: GroupedSessionResponse, index) => (
                         <li key={index}>
-                            <details open>
+                            <details>
                                 <summary>
                                     <FolderIcon/>
                                     {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}
