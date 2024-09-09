@@ -51,7 +51,7 @@ const Sessions: React.FC = () => {
                     <ul>
                         <li><Link href={`/dashboard`}>Dashboard</Link></li>
                         <li><Link href={`/dashboard/${tokenId}`}>{tokenName && tokenName}</Link></li>
-                        <li>Sessions</li>
+                        <li>sessions</li>
                     </ul>
                 </div>
             </div>

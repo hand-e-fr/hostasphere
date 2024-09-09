@@ -13,6 +13,12 @@ message UsageAtTime {
     double memory_usage = 2;
 }
 
+message TrackAnnotation {
+    double time = 1;
+    string annotation = 2;
+    string color = 3; // hex color
+}
+
 message Session {
     string session_uuid = 1;
     string session_tag = 2;
@@ -37,6 +43,7 @@ message Session {
     int32 cpu_count = 21;
     double boot_time = 22;
     string current_user = 23;
+    repeated TrackAnnotation track_annotations = 24;
 }
 
 message SaveSessionRequest {

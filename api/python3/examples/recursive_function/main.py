@@ -4,7 +4,8 @@ from profiler.core import Profiler
 
 profiler = Profiler(
     address='localhost:50051',
-    token='hsp_68db56c5c3358b168d3a50c1564a9bdfd67bd6b001dba321e5a79a44280b70b8'
+    token='hsp_2c284057717697990f8b5bebcd48781ad85d602ddc05e4d69ba01a8ed7066984',
+    session_tag='fibonacci_3'
 )
 
 

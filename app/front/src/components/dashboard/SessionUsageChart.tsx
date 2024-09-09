@@ -9,13 +9,31 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 interface UsageChartProps {
     session: SessionData;
     functions: ProfilerData[];
+    hideTrackAnnotations?: boolean;
 }
 
-const UsageChart: React.FC<UsageChartProps> = ({session, functions}) => {
+const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnnotations}) => {
     const memoryUsageData = session.memoryusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const cpuUsageData = session.cpuusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const diskUsageData = session.diskusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const networkUsageData = session.networkusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
+
+    var trackAnnotations: { x: number; borderColor: string; label: { borderColor: string; style: { color: string; background: string; }; text: string; }; }[] = [];
+
+    if (!hideTrackAnnotations && session.trackannotations) {
+        trackAnnotations = session.trackannotations.map((track) => ({
+            x: track.time * 1000,
+            borderColor: track.color,
+            label: {
+                borderColor: track.color,
+                style: {
+                    color: '#fff',
+                    background: track.color,
+                },
+                text: track.annotation
+            },
+        }));
+    }
 
     const functionAnnotations = functions.map((func) => ({
         x: func.starttime * 1000,
@@ -121,6 +139,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions}) => {
                         text: 'Session End'
                     },
                 },
+                ...trackAnnotations,
             ],
             points: functionAnnotations,
         },

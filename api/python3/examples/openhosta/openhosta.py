@@ -1,13 +1,15 @@
-from profiler.core import Profiler
 from OpenHosta import emulate, config
+
+from profiler.core import Profiler
 
 config.set_default_apiKey("sk-proj-...")
 
 profiler = Profiler(
-    address='localhost:50051', # required
+    address='localhost:50051',  # required
     token='hsp_d0946b91afbce72c107e51bfb60f52da352cfea16fba71f8232ac1bfe06e9ecb',
-    session_tag='uwu' # required
+    session_tag='uwu'  # required
 )
+
 
 @profiler.track()
 def translate(text: str) -> str:

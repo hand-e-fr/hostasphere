@@ -3,6 +3,12 @@ export interface UsageAtTime {
     memoryusage: number;
 }
 
+export interface TrackAnnotation {
+    annotation: string;
+    time: number;
+    color: string;
+}
+
 export interface SessionData {
     _id: string;
     sessionuuid: string;
@@ -28,4 +34,5 @@ export interface SessionData {
     cpucount: number;
     boottime: number;
     currentuser: string;
+    trackannotations: TrackAnnotation[];
 }

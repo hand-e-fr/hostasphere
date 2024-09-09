@@ -9,6 +9,12 @@ export interface ReturnedValue {
     value: string;
 }
 
+export interface FunctionCall {
+    callerfile: string;
+    callerline: number;
+    caller: string;
+}
+
 export interface ProfilerData {
     _id: string;
     cpuusage: number;
@@ -16,7 +22,7 @@ export interface ProfilerData {
     enddate: number;
     executiontime: number;
     funcparams: FuncParam[];
-    functioncallers: string[];
+    functioncallers: FunctionCall[];
     functionid: string;
     functionname: string;
     memoryusage: number;

@@ -1,8 +1,8 @@
 import atexit
 import functools
 import threading
-import traceback
 import time
+import traceback
 
 import grpc
 
@@ -13,7 +13,8 @@ from .utils import *
 
 
 class Profiler:
-    def __init__(self, address: str, token: str, refresh_interval: float = 0.1, session_tag: str = ''):
+    def __init__(self, address: str, token: str, refresh_interval: float = 0.1,
+                 session_tag: str = ''):
         self.refresh_interval = refresh_interval
         self._address = address
         self._token = token
@@ -78,7 +79,8 @@ class Profiler:
                         start_date=start_date,
                         end_time=end_time,
                         end_date=end_date,
-                        execution_time=(end_time - start_time) * 1000, # in milliseconds
+                        execution_time=(end_time - start_time) * 1000,
+                        # in milliseconds
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(copied_args, func),
@@ -92,3 +94,6 @@ class Profiler:
             return wrapper
 
         return decorator
+
+    def get_session(self):
+        return self._session

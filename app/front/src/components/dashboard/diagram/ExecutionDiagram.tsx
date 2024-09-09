@@ -1,69 +1,33 @@
-import React, {useEffect, useState} from 'react';
-import dynamic from 'next/dynamic';
+import React from 'react';
+import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
+import 'beautiful-react-diagrams/styles.css';
+import { ProfilerData } from "@/types/ProfilerData";
 
-const CanvasWidget = dynamic(
-    () => import('@projectstorm/react-canvas-core').then(mod => mod.CanvasWidget),
-    {ssr: false}
-);
+interface ExecutionDiagramProps {
+    functions: ProfilerData[];
+}
 
-const ExecutionDiagram: React.FC<{ functionCallers: string[] }> = ({functionCallers}) => {
-    const [engine, setEngine] = useState<any>(null);
+const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ functions }) => {
+    const nodes: any = Array.from(new Set(functions.map(func => ({
+        id: func.functionid,
+        content: func.functionname,
+        coordinates: [Math.random() * 500, Math.random() * 500] // Randomize for better spread
+    }))));
 
-    useEffect(() => {
-        const createEngine = require('@projectstorm/react-diagrams').default;
-        const DiagramModel = require('@projectstorm/react-diagrams').DiagramModel;
-        const DefaultNodeModel = require('@projectstorm/react-diagrams').DefaultNodeModel;
-        const DefaultLinkModel = require('@projectstorm/react-diagrams').DefaultLinkModel;
+    const links = functions.flatMap((func) =>
+        func.functioncallers.map((caller) => ({
+            input: functions.find(f => f.functionname === caller.caller)?.functionid || 'unknown',
+            output: func.functionid
+        }))
+    ).filter(link => link.input !== 'unknown');
 
-        const newEngine = createEngine();
-        const model = new DiagramModel();
+    const initialSchema = createSchema({ nodes, links });
 
-        const nodesMap = new Map<string, typeof DefaultNodeModel>();
-
-        functionCallers.forEach((caller, index) => {
-            const color = getColorForIndex(index);
-            const node = new DefaultNodeModel(caller, color);
-            nodesMap.set(caller, node);
-
-            if (index > 0) {
-                const prevCaller = functionCallers[index - 1];
-                const prevNode = nodesMap.get(prevCaller);
-                if (prevNode) {
-                    const link = new DefaultLinkModel();
-                    link.setSourcePort(prevNode.addOutPort('Out'));
-                    link.setTargetPort(node.addInPort('In'));
-                    model.addLink(link);
-                }
-            }
-
-            node.setPosition(100 + index * 150, 100);
-            model.addNode(node);
-        });
-
-        newEngine.setModel(model);
-        setEngine(newEngine);
-    }, [functionCallers]);
-
-    // Helper function to generate a color based on the index
-    const getColorForIndex = (index: number) => {
-        const colors = [
-            'rgb(0,192,255)',
-            'rgb(192,255,0)',
-            'rgb(255,0,192)',
-            'rgb(255,192,0)',
-            'rgb(0,255,192)',
-            'rgb(192,0,255)',
-            'rgb(255,128,0)',
-            'rgb(0,128,255)',
-            'rgb(128,255,0)',
-            'rgb(255,0,128)',
-        ];
-        return colors[index % colors.length];
-    };
+    const [schema, { onChange }] = useSchema(initialSchema);
 
     return (
-        <div className="w-full h-full bg-gray-100">
-            {engine && <CanvasWidget className="w-full h-full" engine={engine}/>}
+        <div className="h-full">
+            <Diagram schema={schema} onChange={onChange} />
         </div>
     );
 };

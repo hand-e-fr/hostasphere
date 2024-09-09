@@ -36,7 +36,7 @@ const Session: React.FC = () => {
                     <ul>
                         <li><Link href={`/dashboard`}>Dashboard</Link></li>
                         <li><Link href={`/dashboard/${tokenId}`}>{tokenName && tokenName}</Link></li>
-                        <li><Link href={`/dashboard/${tokenId}/sessions`}>Sessions</Link></li>
+                        <li><Link href={`/dashboard/${tokenId}/sessions`}>sessions</Link></li>
                         <li>{session && session.sessiontag}</li>
                     </ul>
                 </div>
@@ -48,14 +48,14 @@ const Session: React.FC = () => {
                        defaultChecked/>
                 <div role="tabpanel" className="tab-content mt-4 w-full">
                     <div className="min-w-full">
-                        <SessionUsageChart session={session} functions={functions}/>
+                        <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
                     </div>
                 </div>
                 <input type="radio" name="my_tabs_1" role="tab"
                        className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Call Graph"/>
                 <div role="tabpanel" className="tab-content mt-4 w-full">
-                    <div className="min-w-full h-[500px]">
-                        <ExecutionDiagram functionCallers={["main", "test"]}/>
+                    <div className="min-w-full h-[800px]">
+                        <ExecutionDiagram functions={functions}/>
                     </div>
                 </div>
             </div>
