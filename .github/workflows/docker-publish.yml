@@ -23,21 +23,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GitHub Container Registry
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN }}
+          registry: docker.io
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Extract metadata (tags, labels)
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/${{ github.repository }}/docker-datasource
-            ghcr.io/${{ github.repository }}/docker-rest
-            ghcr.io/${{ github.repository }}/docker-front
+            handoe/hostasphere-datasource
+            handoe/hostasphere-rest
+            handoe/hostasphere-front
           tags: |
             type=ref,event=branch
             type=sha
@@ -48,8 +48,8 @@ jobs:
           context: app/back/datasource
           file: app/back/datasource/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository }}/docker-datasource:latest
-            ghcr.io/${{ github.repository }}/docker-datasource:sha-${{ env.GITHUB_SHA }}
+            handoe/hostasphere-datasource:latest
+            handoe/hostasphere-datasource:sha-${{ env.GITHUB_SHA }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push rest image
@@ -58,8 +58,8 @@ jobs:
           context: app/back/rest
           file: app/back/rest/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository }}/docker-rest:latest
-            ghcr.io/${{ github.repository }}/docker-rest:sha-${{ env.GITHUB_SHA }}
+            handoe/hostasphere-rest:latest
+            handoe/hostasphere-rest:sha-${{ env.GITHUB_SHA }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push front image
@@ -68,6 +68,6 @@ jobs:
           context: app/front
           file: app/front/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository }}/docker-front:latest
-            ghcr.io/${{ github.repository }}/docker-front:sha-${{ env.GITHUB_SHA }}
+            handoe/hostasphere-front:latest
+            handoe/hostasphere-front:sha-${{ env.GITHUB_SHA }}
           labels: ${{ steps.meta.outputs.labels }}

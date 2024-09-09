@@ -5,6 +5,8 @@ import React, {useEffect, useState} from "react";
 import ExecutionDiagram from "@/components/dashboard/diagram/ExecutionDiagram";
 import Link from "next/link";
 import {useTokenController} from "@/hooks/useTokenController";
+import DiagramContainer from "@/components/dashboard/diagram/DiagramContainer";
+import Image from "next/image";
 
 const Session: React.FC = () => {
     const router = useRouter();
@@ -54,8 +56,10 @@ const Session: React.FC = () => {
                 <input type="radio" name="my_tabs_1" role="tab"
                        className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Call Graph"/>
                 <div role="tabpanel" className="tab-content mt-4 w-full">
-                    <div className="min-w-full h-[800px]">
-                        <ExecutionDiagram functions={functions}/>
+                    <div className="min-w-full h-[1000px]">
+                        {/*<DiagramContainer>*/}
+                            <ExecutionDiagram profilerData={functions}/>
+                        {/*</DiagramContainer>*/}
                     </div>
                 </div>
             </div>

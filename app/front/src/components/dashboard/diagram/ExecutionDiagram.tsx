@@ -3,31 +3,49 @@ import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
 import 'beautiful-react-diagrams/styles.css';
 import { ProfilerData } from "@/types/ProfilerData";
 
-interface ExecutionDiagramProps {
-    functions: ProfilerData[];
+/*
+
+export interface FunctionCall {
+    callerfile: string;
+    callerline: number;
+    caller: string;
 }
 
-const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ functions }) => {
-    const nodes: any = Array.from(new Set(functions.map(func => ({
-        id: func.functionid,
-        content: func.functionname,
-        coordinates: [Math.random() * 500, Math.random() * 500] // Randomize for better spread
-    }))));
+export interface ProfilerData {
+    ...,
+    functioncallers: FunctionCall[];
+    ...,
+    functionname: string;
+ */
 
-    const links = functions.flatMap((func) =>
-        func.functioncallers.map((caller) => ({
-            input: functions.find(f => f.functionname === caller.caller)?.functionid || 'unknown',
-            output: func.functionid
-        }))
-    ).filter(link => link.input !== 'unknown');
+interface ExecutionDiagramProps {
+    profilerData: ProfilerData[];
+}
 
-    const initialSchema = createSchema({ nodes, links });
+const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
+    // create node for all functionname and each caller of functioncallers
+
+
+    const initialSchema = createSchema({
+        nodes: [
+            { id: 'node-1', content: 'Node 1', coordinates: [250, 250] },
+            { id: 'node-2', content: 'Node 2', coordinates: [100, 100] },
+            { id: 'node-3', content: 'Node 3', coordinates: [400, 100] },
+            { id: 'node-4', content: 'Node 4', coordinates: [250, 400] },
+        ],
+        links: [
+            { input: 'node-1',  output: 'node-2', label: 'Link 1', readonly: true },
+            { input: 'node-1',  output: 'node-3', label: 'Link 2', readonly: true },
+            { input: 'node-1',  output: 'node-4', label: 'Link 3', readonly: true },
+        ]
+    });
+
 
     const [schema, { onChange }] = useSchema(initialSchema);
 
     return (
-        <div className="h-full">
-            <Diagram schema={schema} onChange={onChange} />
+        <div className="h-[1000px]">
+            <Diagram schema={schema} onChange={onChange}/>
         </div>
     );
 };
