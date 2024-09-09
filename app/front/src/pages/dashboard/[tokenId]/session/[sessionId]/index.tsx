@@ -1,10 +1,23 @@
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
+import useSessionData from "@/hooks/profiler/useSessionData";
 import SessionUsageChart from "@/components/dashboard/SessionUsageChart";
-import TestDiagram from "@/components/dashboard/diagram/TestDiagram";
+import {useEffect} from "react";
+import ExecutionDiagram from "@/components/dashboard/diagram/ExecutionDiagram";
 
 const Session: React.FC = () => {
     const router = useRouter();
-    const { tokenId, sessionId } = router.query;
+    const {tokenId, sessionId} = router.query;
+    const {session, functions, loading, error, fetchData} = useSessionData(tokenId as string, sessionId as string);
+
+    useEffect(() => {
+        if (tokenId && sessionId) {
+            fetchData().then();
+        }
+    }, [tokenId, sessionId]);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!session || !functions) return <p>No data available</p>;
 
     return (
         <>
@@ -15,16 +28,19 @@ const Session: React.FC = () => {
             </div>
             <div className="divider"></div>
             <div role="tablist" className="tabs tabs-bordered tabs-xl">
-                <input type="radio" name="my_tabs_1" role="tab" className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Usage" defaultChecked/>
+                <input type="radio" name="my_tabs_1" role="tab"
+                       className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Usage"
+                       defaultChecked/>
                 <div role="tabpanel" className="tab-content mt-4 w-full">
                     <div className="min-w-full">
-                        {tokenId && sessionId && (<SessionUsageChart tokenid={tokenId as string} sessionuuid={sessionId as string}/>)}
+                        <SessionUsageChart session={session} functions={functions}/>
                     </div>
                 </div>
-                <input type="radio" name="my_tabs_1" role="tab" className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Call Graph"/>
+                <input type="radio" name="my_tabs_1" role="tab"
+                       className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Call Graph"/>
                 <div role="tabpanel" className="tab-content mt-4 w-full">
                     <div className="min-w-full h-[500px]">
-                        <TestDiagram functionCallers={["main", "test"]}/>
+                        <ExecutionDiagram functionCallers={["main", "test"]}/>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { User } from '@/types/UserData';
+import {User} from '@/types/UserData';
 import axios from 'axios';
 import {useState} from 'react';
 

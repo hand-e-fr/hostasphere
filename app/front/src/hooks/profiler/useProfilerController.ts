@@ -1,4 +1,4 @@
-import { ProfilerData } from '@/types/ProfilerData';
+import {ProfilerData} from '@/types/ProfilerData';
 import {useEffect, useState} from 'react';
 
 export interface UseProfilerDataResult {

@@ -1,30 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
-import { ApexOptions } from 'apexcharts';
-import useSessionData from '@/hooks/profiler/useSessionData';
+import {ApexOptions} from 'apexcharts';
+import {SessionData} from "@/types/SessionData";
+import {ProfilerData} from "@/types/ProfilerData";
 
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
 interface UsageChartProps {
-    tokenid: string;
-    sessionuuid: string;
+    session: SessionData;
+    functions: ProfilerData[];
 }
 
-const UsageChart: React.FC<UsageChartProps> = ({ tokenid, sessionuuid }) => {
-    const { session, functions, loading, error, fetchData } = useSessionData(tokenid, sessionuuid);
-
-    useEffect(() => {
-        fetchData().then();
-    }, [tokenid, sessionuuid]);
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-    if (!session || !functions) return <p>No data available</p>;
-
-    const memoryUsageData = session.memoryusage.map(({ time, memoryusage }) => ({ x: time * 1000, y: memoryusage }));
-    const cpuUsageData = session.cpuusage.map(({ time, memoryusage }) => ({ x: time * 1000, y: memoryusage }));
-    const diskUsageData = session.diskusage.map(({ time, memoryusage }) => ({ x: time * 1000, y: memoryusage }));
-    const networkUsageData = session.networkusage.map(({ time, memoryusage }) => ({ x: time * 1000, y: memoryusage }));
+const UsageChart: React.FC<UsageChartProps> = ({session, functions}) => {
+    const memoryUsageData = session.memoryusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
+    const cpuUsageData = session.cpuusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
+    const diskUsageData = session.diskusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
+    const networkUsageData = session.networkusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
 
     const functionAnnotations = functions.map((func) => ({
         x: func.starttime * 1000,
@@ -137,7 +128,7 @@ const UsageChart: React.FC<UsageChartProps> = ({ tokenid, sessionuuid }) => {
 
     return (
         <div className="p-4 bg-white shadow rounded-lg">
-            <ReactApexChart options={options} series={series} type="line" height={500} />
+            <ReactApexChart options={options} series={series} type="line" height={500}/>
         </div>
     );
 };

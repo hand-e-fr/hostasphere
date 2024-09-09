@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import dynamic from 'next/dynamic';
 
 const CanvasWidget = dynamic(
     () => import('@projectstorm/react-canvas-core').then(mod => mod.CanvasWidget),
-    { ssr: false }
+    {ssr: false}
 );
 
-const Diagram: React.FC<{ functionCallers: string[] }> = ({ functionCallers }) => {
+const ExecutionDiagram: React.FC<{ functionCallers: string[] }> = ({functionCallers}) => {
     const [engine, setEngine] = useState<any>(null);
 
     useEffect(() => {
@@ -63,9 +63,9 @@ const Diagram: React.FC<{ functionCallers: string[] }> = ({ functionCallers }) =
 
     return (
         <div className="w-full h-full bg-gray-100">
-            {engine && <CanvasWidget className="w-full h-full" engine={engine} />}
+            {engine && <CanvasWidget className="w-full h-full" engine={engine}/>}
         </div>
     );
 };
 
-export default Diagram;
+export default ExecutionDiagram;

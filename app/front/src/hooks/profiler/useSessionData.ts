@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
 import {ProfilerData} from "@/types/ProfilerData";
 
@@ -72,7 +72,7 @@ const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: str
         }
     }, [sessionuuid, sessionTag]);
 
-    return { session, functions, loading, error, fetchData };
+    return {session, functions, loading, error, fetchData};
 };
 
 export default useSessionData;

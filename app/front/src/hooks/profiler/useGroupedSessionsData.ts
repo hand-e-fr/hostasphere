@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
 
 export interface GroupedSessionResponse {
@@ -62,7 +62,7 @@ const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10
         fetchGroupedSessions().then();
     }, [groupBy, limit, page]);
 
-    return { groupedSessions, loading, error, fetchGroupedSessions };
+    return {groupedSessions, loading, error, fetchGroupedSessions};
 };
 
 export default useGroupedSessions;

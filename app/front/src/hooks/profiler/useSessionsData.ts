@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
 
 interface UseSessionsResult {
@@ -54,7 +54,7 @@ const useSessions = (tokenid: string, sortBy: string = '', limit: number = 10, p
         fetchSessions().then();
     }, [sortBy, limit, page]);
 
-    return { sessions, loading, error };
+    return {sessions, loading, error};
 };
 
 export default useSessions;

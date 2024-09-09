@@ -1,0 +1,8 @@
+[run]
+omit =
+    profiler/profiler_output_pb2_grpc.py
+    profiler/profiler_output_pb2.py
+    profiler/session_pb2_grpc.py
+    profiler/session_pb2.py
+    profiler/token_pb2_grpc.py
+    profiler/token_pb2.py

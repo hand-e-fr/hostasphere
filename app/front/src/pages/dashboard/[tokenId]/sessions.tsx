@@ -12,7 +12,12 @@ const Sessions: React.FC = () => {
     const {tokenId} = router.query;
     const [grouping, setGrouping] = React.useState<string>('day');
     const [pageLoading, setPageLoading] = useState(true);
-    const { groupedSessions, loading, error, fetchGroupedSessions } = useGroupedSessions(tokenId as string, grouping, 100, 0);
+    const {
+        groupedSessions,
+        loading,
+        error,
+        fetchGroupedSessions
+    } = useGroupedSessions(tokenId as string, grouping, 100, 0);
 
     useEffect(() => {
         if (tokenId) {
@@ -29,7 +34,8 @@ const Sessions: React.FC = () => {
             <h1 className="text-2xl font-semibold mb-4">Sessions</h1>
             <div className="mb-4">
                 <p className="text-gray-500">Grouped by:</p>
-                <select className="select select-bordered select-sm w-full max-w-xs" value={grouping} onChange={(e) => setGrouping(e.target.value)}>
+                <select className="select select-bordered select-sm w-full max-w-xs" value={grouping}
+                        onChange={(e) => setGrouping(e.target.value)}>
                     <option value="hour">Hour</option>
                     <option value="day">Day</option>
                     <option value="week">Week</option>
@@ -50,7 +56,8 @@ const Sessions: React.FC = () => {
                                     {group.sessions.map((session: SessionData) => (
                                         <li key={session._id}>
                                             <summary>
-                                                <Link href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
+                                                <Link
+                                                    href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
                                                     <DataArrayIcon/>
                                                     {new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
                                                     ({session._id})

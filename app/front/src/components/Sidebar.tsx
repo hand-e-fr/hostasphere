@@ -6,7 +6,6 @@ import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import DataArrayIcon from '@mui/icons-material/DataArray';
 import HomeIcon from '@mui/icons-material/Home';
-import SpaIcon from '@mui/icons-material/Spa';
 import Person2Icon from '@mui/icons-material/Person2';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LoginIcon from '@mui/icons-material/Login';
