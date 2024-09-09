@@ -13,12 +13,13 @@ const Diagram: React.FC<{ functionCallers: string[] }> = ({ functionCallers }) =
         const createEngine = require('@projectstorm/react-diagrams').default;
         const DiagramModel = require('@projectstorm/react-diagrams').DiagramModel;
         const DefaultNodeModel = require('@projectstorm/react-diagrams').DefaultNodeModel;
+        const DefaultLinkModel = require('@projectstorm/react-diagrams').DefaultLinkModel;
 
         const newEngine = createEngine();
         const model = new DiagramModel();
 
         // Create a map to store nodes for quick lookup
-        const nodesMap = new Map<string, DefaultNodeModel>();
+        const nodesMap = new Map<string, typeof DefaultNodeModel>();
 
         functionCallers.forEach((caller, index) => {
             const color = getColorForIndex(index);
@@ -29,9 +30,10 @@ const Diagram: React.FC<{ functionCallers: string[] }> = ({ functionCallers }) =
                 const prevCaller = functionCallers[index - 1];
                 const prevNode = nodesMap.get(prevCaller);
                 if (prevNode) {
-                    const prevOut = prevNode.addOutPort('Out');
-                    const currIn = node.addInPort('In');
-                    prevOut.link(currIn);
+                    const link = new DefaultLinkModel();
+                    link.setSourcePort(prevNode.addOutPort('Out'));
+                    link.setTargetPort(node.addInPort('In'));
+                    model.addLink(link);
                 }
             }
 
