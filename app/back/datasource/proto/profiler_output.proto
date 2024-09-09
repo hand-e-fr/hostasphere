@@ -22,7 +22,7 @@ message ReturnedValue {
 message ProfilerOutput {
   string function_name = 1;
   string function_id = 2;
-  string function_caller = 3;
+  repeated string function_callers = 3;
   string token_id = 4;
   double start_time = 5;
   int64 start_date = 6;

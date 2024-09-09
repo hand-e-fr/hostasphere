@@ -35,9 +35,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/${{ github.repository }}/datasource
-            ghcr.io/${{ github.repository }}/rest
-            ghcr.io/${{ github.repository }}/front
+            ghcr.io/${{ github.repository }}/docker-datasource
+            ghcr.io/${{ github.repository }}/docker-rest
+            ghcr.io/${{ github.repository }}/docker-front
           tags: |
             type=ref,event=branch
             type=sha
@@ -48,8 +48,8 @@ jobs:
           context: app/back/datasource
           file: app/back/datasource/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository }}/datasource:latest
-            ghcr.io/${{ github.repository }}/datasource:${{ env.GITHUB_SHA }}
+            ghcr.io/${{ github.repository }}/docker-datasource:latest
+            ghcr.io/${{ github.repository }}/docker-datasource:sha-${{ env.GITHUB_SHA }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push rest image
@@ -58,8 +58,8 @@ jobs:
           context: app/back/rest
           file: app/back/rest/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository }}/rest:latest
-            ghcr.io/${{ github.repository }}/rest:${{ env.GITHUB_SHA }}
+            ghcr.io/${{ github.repository }}/docker-rest:latest
+            ghcr.io/${{ github.repository }}/docker-rest:sha-${{ env.GITHUB_SHA }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push front image
@@ -68,6 +68,6 @@ jobs:
           context: app/front
           file: app/front/Dockerfile
           tags: |
-            ghcr.io/${{ github.repository }}/front:latest
-            ghcr.io/${{ github.repository }}/front:${{ env.GITHUB_SHA }}
+            ghcr.io/${{ github.repository }}/docker-front:latest
+            ghcr.io/${{ github.repository }}/docker-front:sha-${{ env.GITHUB_SHA }}
           labels: ${{ steps.meta.outputs.labels }}

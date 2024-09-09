@@ -1,6 +1,7 @@
 import atexit
 import functools
 import threading
+import traceback
 import time
 
 import grpc
@@ -47,6 +48,8 @@ class Profiler:
                 self._session.record_usage()
                 start_time = time.time()
                 start_date = int(time.time() * 1000)
+                stack = traceback.extract_stack()
+                callers = [f[2] for f in stack[:-1]]
                 result = func(*args, **kwargs)
                 self._session.record_usage()
                 end_time = time.time()
@@ -61,7 +64,7 @@ class Profiler:
                     profiler_output=profiler_output.ProfilerOutput(
                         function_name=get_function_name(func),
                         function_id=hash_function(func),
-                        function_caller=get_caller(),
+                        function_callers=callers,
                         token_id=self._token_id,
                         start_time=start_time,
                         start_date=start_date,

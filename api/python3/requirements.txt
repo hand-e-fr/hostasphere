@@ -2,4 +2,3 @@ requests
 psutil
 grpcio
 grpcio-tools
-OpenHosta==1.0.2

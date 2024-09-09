@@ -16,7 +16,7 @@ export interface ProfilerData {
     enddate: number;
     executiontime: number;
     funcparams: FuncParam[];
-    functioncaller: string;
+    functioncallers: string[];
     functionid: string;
     functionname: string;
     memoryusage: number;
