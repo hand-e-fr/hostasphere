@@ -36,6 +36,14 @@ def my_func():
     pass
 ```
 
+#### Add markers
+Yo can add markers to your profiling session to help you identify specific parts of your code.
+```python
+profiler.get_session().add_annotation('Calculating CPU usage', '#008000')
+```
+annotation: str
+color: str # optional, default is '#000000'
+
 You can find many examples in the [examples](https://github.com/hand-e-fr/hostasphere/tree/main/api/python3/examples) folder.
 
 ### In future versions
