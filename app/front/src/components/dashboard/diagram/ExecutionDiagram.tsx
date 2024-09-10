@@ -59,6 +59,15 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
         highestNodesMap.set(node, map.get(node) as TreeNode);
     });
 
+    const renderCustomNode = ({ nodeDatum, toggleNode }: any) => (
+        <g>
+            <circle r={15} fill={nodeDatum.attributes.color} />
+            <text fill="black" strokeWidth="1" x="20">
+                {nodeDatum.name}
+            </text>
+        </g>
+    );
+
     return (
         <div id="treeWrapper" className="h-[1000px] w-full">
             {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
@@ -68,6 +77,7 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
                     orientation="horizontal"
                     pathFunc="elbow"
                     nodeSize={{ x: 420, y: 200 }}
+                    renderCustomNodeElement={renderCustomNode}  // Use custom node rendering
                 />
             ))}
         </div>
