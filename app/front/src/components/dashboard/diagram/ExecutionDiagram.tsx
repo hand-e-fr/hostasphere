@@ -8,8 +8,9 @@ interface ExecutionDiagramProps {
 }
 
 const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
-    var nodes: any[] = [];
-    var links: any[] = [];
+    let nodes: any[] = [];
+    let links: any[] = [];
+
     profilerData.forEach((data) => {
         nodes.push({ id: data.functionname, content: data.functionname, coordinates: [0, 0] });
         data.functioncallers.forEach((caller, index) => {
@@ -23,6 +24,7 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
         }
     });
 
+    // Remove duplicate nodes and links
     nodes = nodes.filter((node, index, self) => self.findIndex((t) => t.id === node.id) === index);
     links = links.filter((link, index, self) => self.findIndex((t) => t.input === link.input && t.output === link.output) === index);
 
@@ -34,7 +36,6 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
             ...links
         ]
     });
-
 
     const [schema, { onChange }] = useSchema(initialSchema);
 
