@@ -22,11 +22,11 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
                 highestNodes.push(data.functioncallers[0].caller);
             }
             if (index > 0) {
-                links.push({ input: data.functioncallers[index - 1].caller, output: caller.caller });
+                links.push({ input: data.functioncallers[index - 1].caller, output: caller.caller, readonly: true });
             }
         });
         if (data.functioncallers.length > 0) {
-            links.push({ input: data.functionname, output: data.functioncallers[data.functioncallers.length - 1].caller });
+            links.push({ input: data.functioncallers[data.functioncallers.length - 1].caller, output: data.functionname, readonly: true });
         }
     });
 
