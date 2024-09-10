@@ -15,7 +15,6 @@
     "@mui/material": "^5.16.7",
     "apexcharts": "^3.53.0",
     "axios": "^1.7.5",
-    "beautiful-react-diagrams": "^0.5.1",
     "d3": "^7.9.0",
     "dotenv": "^16.4.5",
     "next": "14.2.6",

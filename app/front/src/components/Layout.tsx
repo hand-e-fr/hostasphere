@@ -1,5 +1,4 @@
 import '../app/globals.css';
-import 'beautiful-react-diagrams/styles.css';
 import React, {useContext, useEffect} from 'react';
 import {useRouter} from "next/router";
 import {SidebarContext, SidebarContextType} from "@/context/SidebarContext";

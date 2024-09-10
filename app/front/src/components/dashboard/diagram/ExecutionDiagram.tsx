@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'beautiful-react-diagrams/styles.css';
 import { ProfilerData } from "@/types/ProfilerData";
 import Tree from "react-d3-tree";
@@ -7,15 +7,30 @@ interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
 }
 
+interface Attributes {
+    color: string;
+    customData: ProfilerData | null;
+}
+
+class Node {
+    constructor(
+        public id: string,
+        public attributes: Attributes = { color: 'red', customData: null }
+    ) {}
+}
+
 const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
-    let nodes: any[] = [];
+    const [hoveredNode, setHoveredNode] = useState<TreeNode | null>(null);
+    const [isSideBoardActive, setIsSideBoardActive] = useState<boolean>(false);
+
+    let nodes: Node[] = [];
     let links: any[] = [];
     let highestNodes: string[] = [];
 
     profilerData.forEach((data) => {
-        nodes.push({ id: data.functionname, content: data.functionname, coordinates: [0, 0], attributes: { color: 'red' } });
+        nodes.push({ id: data.functionname, attributes: { color: 'red', customData: data }});
         data.functioncallers.forEach((caller, index) => {
-            nodes.push({ id: caller.caller, content: caller.caller, coordinates: [0, 0], attributes: { color: 'blue' } });
+            nodes.push({ id: caller.caller, attributes: { color: 'blue', customData: null }});
             if (data.functioncallers.length === 0) {
                 highestNodes.push(data.functionname);
             } else {
@@ -60,26 +75,60 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
     });
 
     const renderCustomNode = ({ nodeDatum, toggleNode }: any) => (
-        <g>
+        <g
+            onClick={() => {
+                toggleNode();
+                setHoveredNode(null); // Ensure tooltip is hidden when toggling
+            }}
+            onMouseEnter={() => setHoveredNode(nodeDatum)}
+            onMouseLeave={() => setHoveredNode(null)}
+            style={{ cursor: 'pointer' }}
+        >
             <circle r={15} fill={nodeDatum.attributes.color} />
-            <text fill="black" strokeWidth="1" x="20">
+            <rect x="18" y="-10" width={nodeDatum.name.length * 10} height="20" fill="white" stroke="none" />
+            <text fill="black" strokeWidth="1" x="20" dy=".35em">
                 {nodeDatum.name}
             </text>
         </g>
     );
 
+    const renderTooltip = () => {
+        if (!hoveredNode) return null;
+        return (
+            <div style={{
+                position: 'absolute',
+                backgroundColor: 'white',
+                border: '1px solid black',
+                padding: '5px',
+                pointerEvents: 'none',
+                left: '10px',
+                top: '10px',
+            }}>
+                <strong>{hoveredNode.name}</strong>
+                <div>Attributes:</div>
+                <pre>{JSON.stringify(hoveredNode.attributes, (key, value) => {
+                    if (key === 'functioncallers') {
+                        return undefined;
+                    }
+                    return value;
+                }, 2)}</pre>
+            </div>
+        );
+    };
+
     return (
-        <div id="treeWrapper" className="h-[1000px] w-full">
+        <div id="treeWrapper" className="h-[1000px] w-full" style={{ position: 'relative' }}>
             {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
                 <Tree
                     key={key}
                     data={treeData}
                     orientation="horizontal"
-                    pathFunc="elbow"
+                    pathFunc="diagonal"
                     nodeSize={{ x: 420, y: 200 }}
-                    renderCustomNodeElement={renderCustomNode}  // Use custom node rendering
+                    renderCustomNodeElement={renderCustomNode}
                 />
             ))}
+            {renderTooltip()}
         </div>
     );
 };
