@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'beautiful-react-diagrams/styles.css';
 import { ProfilerData } from "@/types/ProfilerData";
 import Tree from "react-d3-tree";
 
