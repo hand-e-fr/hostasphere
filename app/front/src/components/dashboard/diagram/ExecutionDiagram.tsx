@@ -10,11 +10,17 @@ interface ExecutionDiagramProps {
 const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
     let nodes: any[] = [];
     let links: any[] = [];
+    let highestNodes: string[] = [];
 
     profilerData.forEach((data) => {
         nodes.push({ id: data.functionname, content: data.functionname, coordinates: [0, 0] });
         data.functioncallers.forEach((caller, index) => {
             nodes.push({ id: caller.caller, content: caller.caller, coordinates: [0, 0] });
+            if (data.functioncallers.length === 0) {
+                highestNodes.push(data.functionname);
+            } else {
+                highestNodes.push(data.functioncallers[0].caller);
+            }
             if (index > 0) {
                 links.push({ input: data.functioncallers[index - 1].caller, output: caller.caller });
             }
@@ -27,6 +33,9 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
     // Remove duplicate nodes and links
     nodes = nodes.filter((node, index, self) => self.findIndex((t) => t.id === node.id) === index);
     links = links.filter((link, index, self) => self.findIndex((t) => t.input === link.input && t.output === link.output) === index);
+    highestNodes = highestNodes.filter((node, index, self) => self.findIndex((t) => t === node) === index);
+
+    console.log(highestNodes);
 
     const initialSchema = createSchema({
         nodes: [
