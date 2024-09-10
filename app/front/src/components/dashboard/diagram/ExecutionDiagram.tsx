@@ -53,37 +53,28 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
         }
     });
 
-    console.log(map);
-
     const highestNodesMap = new Map<string, TreeNode>();
 
     highestNodes.forEach((node) => {
         highestNodesMap.set(node, map.get(node) as TreeNode);
     });
 
-    const dfs = (node: TreeNode, level: number) => {
-        node.children.forEach((child) => {
-            dfs(child, level + 1);
+    const assignCoordinates = (node: TreeNode, level: number, xOffset: number, yOffset: number) => {
+        // Assign coordinates based on level and offset
+        nodesArray.push({ id: node.name, content: node.name, coordinates: [xOffset, yOffset] });
+        let currentXOffset = xOffset;
+        node.children.forEach((child, index) => {
+            linksArray.push({ input: node.name, output: child.name });
+            assignCoordinates(child, level + 1, currentXOffset, yOffset + 100); // Move to next layer
+            currentXOffset += 200; // Adjust horizontal spacing
         });
     };
-
-    highestNodesMap.forEach((node) => {
-        dfs(node, 0);
-    });
 
     const nodesArray: any[] = [];
     const linksArray: any[] = [];
 
-    const dfs2 = (node: TreeNode, level: number) => {
-        nodesArray.push({ id: node.name, content: node.name, coordinates: [level * 200, level * 80] });
-        node.children.forEach((child) => {
-            linksArray.push({ input: node.name, output: child.name });
-            dfs2(child, level + 1);
-        });
-    };
-
     highestNodesMap.forEach((node) => {
-        dfs2(node, 0);
+        assignCoordinates(node, 0, 0, 0);
     });
 
     nodes = nodesArray;
