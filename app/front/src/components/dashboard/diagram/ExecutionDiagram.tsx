@@ -3,40 +3,35 @@ import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
 import 'beautiful-react-diagrams/styles.css';
 import { ProfilerData } from "@/types/ProfilerData";
 
-/*
-
-export interface FunctionCall {
-    callerfile: string;
-    callerline: number;
-    caller: string;
-}
-
-export interface ProfilerData {
-    ...,
-    functioncallers: FunctionCall[];
-    ...,
-    functionname: string;
- */
-
 interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
 }
 
 const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
-    // create node for all functionname and each caller of functioncallers
+    var nodes: any[] = [];
+    var links: any[] = [];
+    profilerData.forEach((data) => {
+        nodes.push({ id: data.functionname, content: data.functionname, coordinates: [0, 0] });
+        data.functioncallers.forEach((caller, index) => {
+            nodes.push({ id: caller.caller, content: caller.caller, coordinates: [0, 0] });
+            if (index > 0) {
+                links.push({ input: data.functioncallers[index - 1].caller, output: caller.caller });
+            }
+        });
+        if (data.functioncallers.length > 0) {
+            links.push({ input: data.functionname, output: data.functioncallers[data.functioncallers.length - 1].caller });
+        }
+    });
 
+    nodes = nodes.filter((node, index, self) => self.findIndex((t) => t.id === node.id) === index);
+    links = links.filter((link, index, self) => self.findIndex((t) => t.input === link.input && t.output === link.output) === index);
 
     const initialSchema = createSchema({
         nodes: [
-            { id: 'node-1', content: 'Node 1', coordinates: [250, 250] },
-            { id: 'node-2', content: 'Node 2', coordinates: [100, 100] },
-            { id: 'node-3', content: 'Node 3', coordinates: [400, 100] },
-            { id: 'node-4', content: 'Node 4', coordinates: [250, 400] },
+            ...nodes
         ],
         links: [
-            { input: 'node-1',  output: 'node-2', label: 'Link 1', readonly: true },
-            { input: 'node-1',  output: 'node-3', label: 'Link 2', readonly: true },
-            { input: 'node-1',  output: 'node-4', label: 'Link 3', readonly: true },
+            ...links
         ]
     });
 
