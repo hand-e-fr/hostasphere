@@ -21,25 +21,31 @@ docker login
 ```
 
 Then pull the images:
+front:
 ```bash
 docker pull handoe/hostasphere-front:latest
 ```
+rest:
 ```bash
 docker pull handoe/hostasphere-rest:latest 
 ```
+datasource:
 ```bash
 docker pull handoe/hostasphere-datasource:latest 
 ```
 
 #### Run the containers:
+front:
 ```bash
-docker run -d --name rest -p 8080:8080 --network my_network --restart unless-stopped handoe/hostasphere-rest:latest
+docker run -d --name front -p 3000:3000 --network my_network --restart unless-stopped handoe/hostasphere-front:latest
 ```
+rest:
 ```bash
-docker run -d --name datasource -p 50051:50051 -e MONGO_URI=mongodb://mongodb:27017 --network my_network --restart unless-stopped handoe/hostasphere-datasource:latest 
+docker run -d --name rest -p 8080:8080 --network my_network -e MONGO_URI=mongodb://mongodb:27017 --restart unless-stopped handoe/hostasphere-rest:latest
 ```
+datasource:
 ```bash
-docker run -d --name front -p 3000:3000 -e MONGO_URI=mongodb://mongodb:27017 --network my_network --restart unless-stopped handoe/hostasphere-front:latest
+docker run -d --name datasource -p 50051:50051 --network my_network -e MONGO_URI=mongodb://mongodb:27017 --restart unless-stopped handoe/hostasphere-datasource:latest 
 ```
 You can now access the front at `http://localhost:3000` and the rest at `http://localhost:8080`.
 The datasource is not accessible from the browser, it is used by client api to pull data.
