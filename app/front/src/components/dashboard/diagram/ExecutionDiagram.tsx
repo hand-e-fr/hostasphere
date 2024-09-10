@@ -1,7 +1,7 @@
 import React from 'react';
-import Diagram, { createSchema, useSchema } from 'beautiful-react-diagrams';
 import 'beautiful-react-diagrams/styles.css';
 import { ProfilerData } from "@/types/ProfilerData";
+import Tree from "react-d3-tree";
 
 interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
@@ -13,9 +13,9 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
     let highestNodes: string[] = [];
 
     profilerData.forEach((data) => {
-        nodes.push({ id: data.functionname, content: data.functionname, coordinates: [0, 0] });
+        nodes.push({ id: data.functionname, content: data.functionname, coordinates: [0, 0], attributes: { color: 'red' } });
         data.functioncallers.forEach((caller, index) => {
-            nodes.push({ id: caller.caller, content: caller.caller, coordinates: [0, 0] });
+            nodes.push({ id: caller.caller, content: caller.caller, coordinates: [0, 0], attributes: { color: 'blue' } });
             if (data.functioncallers.length === 0) {
                 highestNodes.push(data.functionname);
             } else {
@@ -36,13 +36,13 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
     highestNodes = highestNodes.filter((node, index, self) => self.findIndex((t) => t === node) === index);
 
     class TreeNode {
-        constructor(public name: string, public children: TreeNode[] = []) {}
+        constructor(public name: string, public attributes: any = {}, public children: TreeNode[] = []) {}
     }
 
     const map = new Map<string, TreeNode>();
 
     nodes.forEach((node) => {
-        map.set(node.id, new TreeNode(node.id));
+        map.set(node.id, new TreeNode(node.id, node.attributes));
     });
 
     links.forEach((link) => {
@@ -59,41 +59,17 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
         highestNodesMap.set(node, map.get(node) as TreeNode);
     });
 
-    const assignCoordinates = (node: TreeNode, level: number, xOffset: number, yOffset: number) => {
-        // Assign coordinates based on level and offset
-        nodesArray.push({ id: node.name, content: node.name, coordinates: [xOffset, yOffset] });
-        let currentXOffset = xOffset;
-        node.children.forEach((child, index) => {
-            linksArray.push({ input: node.name, output: child.name });
-            assignCoordinates(child, level + 1, currentXOffset, yOffset + 100); // Move to next layer
-            currentXOffset += 200; // Adjust horizontal spacing
-        });
-    };
-
-    const nodesArray: any[] = [];
-    const linksArray: any[] = [];
-
-    highestNodesMap.forEach((node) => {
-        assignCoordinates(node, 0, 0, 0);
-    });
-
-    nodes = nodesArray;
-    links = linksArray;
-
-    const initialSchema = createSchema({
-        nodes: [
-            ...nodes
-        ],
-        links: [
-            ...links
-        ]
-    });
-
-    const [schema, { onChange }] = useSchema(initialSchema);
-
     return (
-        <div className="h-[1000px]">
-            <Diagram schema={schema} onChange={onChange}/>
+        <div id="treeWrapper" className="h-[1000px] w-full">
+            {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
+                <Tree
+                    key={key}
+                    data={treeData}
+                    orientation="horizontal"
+                    pathFunc="elbow"
+                    nodeSize={{ x: 420, y: 200 }}
+                />
+            ))}
         </div>
     );
 };

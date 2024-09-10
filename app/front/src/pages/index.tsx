@@ -1,3 +1,6 @@
+import Tree from "@/components/dashboard/diagram/TestTree";
+import OrgChartTree from "@/components/dashboard/diagram/TestTree";
+
 export default function Home() {
     return (
         <div>
@@ -59,6 +62,7 @@ export default function Home() {
                     <div className="stat-desc">↘︎ 90 (14%)</div>
                 </div>
             </div>
+            <OrgChartTree/>
         </div>
     );
 }
