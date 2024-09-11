@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ProfilerData } from "@/types/ProfilerData";
 import Tree from "react-d3-tree";
-import FuncStats from "@/components/dashboard/FuncStats";
 
 interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
