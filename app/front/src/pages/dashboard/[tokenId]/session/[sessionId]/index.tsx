@@ -42,24 +42,11 @@ const Session: React.FC = () => {
                 </div>
             </div>
             <div className="divider"></div>
-            <div role="tablist" className="tabs tabs-bordered tabs-xl">
-                <input type="radio" name="my_tabs_1" role="tab"
-                       className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Usage"
-                       defaultChecked/>
-                <div role="tabpanel" className="tab-content mt-4 w-full">
-                    <div className="min-w-full">
-                        <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
-                    </div>
-                </div>
-                <input type="radio" name="my_tabs_1" role="tab"
-                       className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Call Graph"/>
-                <div role="tabpanel" className="tab-content mt-4 w-full">
-                    <div className="min-w-full h-[640px]">
-                        <ExecutionDiagram profilerData={functions}/>
-                    </div>
-                </div>
+            <div className="min-w-full">
+                <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
             </div>
-            <div>
+            <div className="h-[640px]">
+                <ExecutionDiagram profilerData={functions}/>
             </div>
         </>
     );

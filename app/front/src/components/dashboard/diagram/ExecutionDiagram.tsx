@@ -130,24 +130,26 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
                     />
                 ))}
             </div>
-            <div className={`${isSideBoardActive ? 'h-1/3' : 'hidden'} overflow-y-auto`}>
+            <div className={`${isSideBoardActive ? 'h-1/3' : 'hidden'} overflow-y-auto border-t border-base-200 p-4`}>
                 {isSideBoardActive && hoveredNode && hoveredNode.attributes.customData && (
                     <>
                         <h2 className="text-lg font-bold">{hoveredNode.name}:</h2>
                         <p className="text-sm">Function Prototype:</p>
-                        <CodeBlock text={
-                            `@profiler.track()\ndef ${hoveredNode.name}(${
-                                hoveredNode.attributes.customData.funcparams &&
-                                hoveredNode.attributes.customData.funcparams.map((param: any) => {
-                                    return param.argname + (param.type ? ': ' + param.type : '');
-                                }).join(', ')
-                                || ''
-                            })${hoveredNode.attributes.customData.returnedvalue && ' -> ' + hoveredNode.attributes.customData.returnedvalue.type + ':' || ':'}\n    #...\n    return ${
-                                hoveredNode.attributes.customData.returnedvalue &&
-                                hoveredNode.attributes.customData.returnedvalue.value
-                                || ''
-                            }`
-                        } language="Python" showLineNumbers={false}/>
+                        <div className={`w-[calc(100%-2rem)]`}>
+                            <CodeBlock text={
+                                `@profiler.track()\ndef ${hoveredNode.name}(${
+                                    hoveredNode.attributes.customData.funcparams &&
+                                    hoveredNode.attributes.customData.funcparams.map((param: any) => {
+                                        return param.argname + (param.type ? ': ' + param.type : '');
+                                    }).join(', ')
+                                    || ''
+                                })${hoveredNode.attributes.customData.returnedvalue && ' -> ' + hoveredNode.attributes.customData.returnedvalue.type + ':' || ':'}\n    #...\n    return ${
+                                    hoveredNode.attributes.customData.returnedvalue &&
+                                    hoveredNode.attributes.customData.returnedvalue.value
+                                    || ''
+                                }`
+                            } language="Python" showLineNumbers={false}/>
+                        </div>
                         <p className="text-sm">Execution Time: {hoveredNode.attributes.customData.executiontime}ms</p>
                         <p className="text-sm">Execution
                             Timeline: {new Date(hoveredNode.attributes.customData.starttime * 1000).toLocaleString() + ' => ' + new Date(hoveredNode.attributes.customData.endtime * 1000).toLocaleString()}</p>
