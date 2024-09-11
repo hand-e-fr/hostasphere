@@ -54,7 +54,7 @@ const Session: React.FC = () => {
                 <input type="radio" name="my_tabs_1" role="tab"
                        className="tab overflow-hidden min-w-[12em] whitespace-nowrap" aria-label="Call Graph"/>
                 <div role="tabpanel" className="tab-content mt-4 w-full">
-                    <div className="min-w-full h-[1000px]">
+                    <div className="min-w-full h-[640px]">
                         <ExecutionDiagram profilerData={functions}/>
                     </div>
                 </div>

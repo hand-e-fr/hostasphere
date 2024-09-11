@@ -76,14 +76,19 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
     const renderCustomNode = ({ nodeDatum, toggleNode }: any) => (
         <g
             onClick={() => {
-                toggleNode();
-                setHoveredNode(null); // Ensure tooltip is hidden when toggling
+                if (nodeDatum.customData === null) {
+                    setIsSideBoardActive(false);
+                    setHoveredNode(null);
+                    return;
+                }
+                if (nodeDatum.name === hoveredNode?.name) {
+                    setIsSideBoardActive(!isSideBoardActive);
+                }
+                setHoveredNode(nodeDatum);
             }}
-            onMouseEnter={() => setHoveredNode(nodeDatum)}
-            onMouseLeave={() => setHoveredNode(null)}
             style={{ cursor: 'pointer' }}
         >
-            <circle r={15} fill={nodeDatum.attributes.color} />
+            <circle r={15} fill={isSideBoardActive && nodeDatum.name === hoveredNode?.name ? 'green' : nodeDatum.attributes.color} />
             <rect x="18" y="-10" width={nodeDatum.name.length * 10} height="20" fill="white" stroke="none" />
             <text fill="black" strokeWidth="1" x="20" dy=".35em">
                 {nodeDatum.name}
@@ -91,43 +96,35 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
         </g>
     );
 
-    const renderTooltip = () => {
-        if (!hoveredNode) return null;
-        return (
-            <div style={{
-                position: 'absolute',
-                backgroundColor: 'white',
-                border: '1px solid black',
-                padding: '5px',
-                pointerEvents: 'none',
-                left: '10px',
-                top: '10px',
-            }}>
-                <strong>{hoveredNode.name}</strong>
-                <div>Attributes:</div>
-                <pre>{JSON.stringify(hoveredNode.attributes, (key, value) => {
-                    if (key === 'functioncallers') {
-                        return undefined;
-                    }
-                    return value;
-                }, 2)}</pre>
-            </div>
-        );
-    };
-
     return (
-        <div id="treeWrapper" className="h-[1000px] w-full" style={{ position: 'relative' }}>
-            {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
-                <Tree
-                    key={key}
-                    data={treeData}
-                    orientation="horizontal"
-                    pathFunc="diagonal"
-                    nodeSize={{ x: 420, y: 200 }}
-                    renderCustomNodeElement={renderCustomNode}
-                />
-            ))}
-            {renderTooltip()}
+        <div className="h-full w-full flex flex-col" id="execution-diagram">
+            <div id="treeWrapper" className={`relative ${isSideBoardActive ? 'h-1/2' : 'h-full'}`}>
+                {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
+                    <Tree
+                        key={key}
+                        data={treeData}
+                        orientation="horizontal"
+                        pathFunc="diagonal"
+                        nodeSize={{x: 420, y: 200}}
+                        renderCustomNodeElement={renderCustomNode}
+                    />
+                ))}
+            </div>
+            <div className={`${isSideBoardActive ? 'h-1/2' : 'hidden'} overflow-y-auto`}>
+                {isSideBoardActive && hoveredNode && hoveredNode.attributes.customData && (
+                    <>
+                        <h2 className="text-lg font-bold">{hoveredNode.name}:</h2>
+                        <pre className="text-sm w-0">
+                            {JSON.stringify(hoveredNode.attributes.customData, (key, value) => {
+                                if (key === 'functioncallers') {
+                                    return undefined;
+                                }
+                                return value;
+                            }, 2)}
+                    </pre>
+                    </>
+                )}
+            </div>
         </div>
     );
 };
