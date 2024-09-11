@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProfilerData } from "@/types/ProfilerData";
 import Tree from "react-d3-tree";
+import {CodeBlock} from "react-code-blocks";
 
 interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
@@ -117,7 +118,7 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
 
     return (
         <div className="h-full w-full flex flex-col" id="execution-diagram">
-            <div id="treeWrapper" className={`relative ${isSideBoardActive ? 'h-1/2' : 'h-full'}`}>
+            <div id="treeWrapper" className={`relative ${isSideBoardActive ? 'h-2/3' : 'h-full'}`}>
                 {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
                     <Tree
                         key={key}
@@ -129,18 +130,27 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
                     />
                 ))}
             </div>
-            <div className={`${isSideBoardActive ? 'h-1/2' : 'hidden'} overflow-y-auto`}>
+            <div className={`${isSideBoardActive ? 'h-1/3' : 'hidden'} overflow-y-auto`}>
                 {isSideBoardActive && hoveredNode && hoveredNode.attributes.customData && (
                     <>
                         <h2 className="text-lg font-bold">{hoveredNode.name}:</h2>
-                        <pre className="text-sm w-0">
-                            {JSON.stringify(hoveredNode.attributes.customData, (key, value) => {
-                                if (key === 'functioncallers') {
-                                    return undefined;
-                                }
-                                return value;
-                            }, 2)}
-                        </pre>
+                        <p className="text-sm">Function Prototype:</p>
+                        <CodeBlock text={
+                            `@profiler.track()\ndef ${hoveredNode.name}(${
+                                hoveredNode.attributes.customData.funcparams &&
+                                hoveredNode.attributes.customData.funcparams.map((param: any) => {
+                                    return param.argname + (param.type ? ': ' + param.type : '');
+                                }).join(', ')
+                                || ''
+                            })${hoveredNode.attributes.customData.returnedvalue && ' -> ' + hoveredNode.attributes.customData.returnedvalue.type + ':' || ':'}\n    #...\n    return ${
+                                hoveredNode.attributes.customData.returnedvalue &&
+                                hoveredNode.attributes.customData.returnedvalue.value
+                                || ''
+                            }`
+                        } language="Python" showLineNumbers={false}/>
+                        <p className="text-sm">Execution Time: {hoveredNode.attributes.customData.executiontime}ms</p>
+                        <p className="text-sm">Execution
+                            Timeline: {new Date(hoveredNode.attributes.customData.starttime * 1000).toLocaleString() + ' => ' + new Date(hoveredNode.attributes.customData.endtime * 1000).toLocaleString()}</p>
                     </>
                 )}
             </div>
