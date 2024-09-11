@@ -110,7 +110,7 @@ const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({tokenId,
                 formatter: (val, {seriesIndex, dataPointIndex, w}) => {
                     const pointData = w.config.series[seriesIndex].data[dataPointIndex];
                     var params;
-                    if (pointData !== undefined && pointData.params !== undefined) {
+                    if (pointData && pointData.params) {
                         params = pointData.params.map((param: FuncParam) => `${param.argname}: ${param.arg} (${param.type})`).join(', ');
                     } else {
                         params = 'N/A';

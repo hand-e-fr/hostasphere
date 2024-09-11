@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ProfilerData } from "@/types/ProfilerData";
 import Tree from "react-d3-tree";
+import FuncStats from "@/components/dashboard/FuncStats";
 
 interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
@@ -59,24 +60,43 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
         map.set(node.id, new TreeNode(node.id, node.attributes));
     });
 
-    links.forEach((link) => {
-        const parent = map.get(link.input);
-        const child = map.get(link.output);
-        if (parent && child) {
-            parent.children.push(child);
+    const buildTree = (nodeId: string, visited: Set<string>): TreeNode | null => {
+        if (visited.has(nodeId)) {
+            return null;
         }
-    });
+
+        const node = map.get(nodeId);
+        if (!node) {
+            return null;
+        }
+
+        visited.add(nodeId);
+
+        links.forEach((link) => {
+            if (link.input === nodeId) {
+                const childNode = buildTree(link.output, new Set(visited)); // Pass a copy of visited set
+                if (childNode) {
+                    node.children.push(childNode);
+                }
+            }
+        });
+
+        return node;
+    };
 
     const highestNodesMap = new Map<string, TreeNode>();
 
     highestNodes.forEach((node) => {
-        highestNodesMap.set(node, map.get(node) as TreeNode);
+        const tree = buildTree(node, new Set());
+        if (tree) {
+            highestNodesMap.set(node, tree);
+        }
     });
 
     const renderCustomNode = ({ nodeDatum, toggleNode }: any) => (
         <g
             onClick={() => {
-                if (nodeDatum.customData === null) {
+                if (!nodeDatum.attributes.customData) {
                     setIsSideBoardActive(false);
                     setHoveredNode(null);
                     return;
@@ -121,7 +141,7 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
                                 }
                                 return value;
                             }, 2)}
-                    </pre>
+                        </pre>
                     </>
                 )}
             </div>
