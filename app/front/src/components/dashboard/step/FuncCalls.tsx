@@ -5,11 +5,6 @@ interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
 }
 
-const colors: string[] = [
-    'step-primary',
-    'step-secondary',
-]
-
 const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
     const [targetFunction, setTargetFunction] = useState<ProfilerData | null>(null);
 
@@ -22,11 +17,11 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
 
     return (
         <>
-            <div className="flex justify-center mt-10">
+            <div className="flex justify-start mt-10">
                 <div>
                     <ul className="steps steps-vertical">
                         {profilerData.map((data, index) => (
-                            <li key={index} className={`step step-accent`} data-content={``}
+                            <li key={index} data-content={``} className={`step ${targetFunction === data ? 'step-error' : 'step-accent'}`}
                                 onClick={() => setTargetFunction(data)}>
                                 <div className="flex items-center">
                                     <div className="badge">{data.starttime - start}ms</div>
@@ -70,7 +65,7 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
                                 </ul>
                             </div>
                         ) : (
-                            <div className="bg-gray-100 border rounded-lg m-4 h-full">
+                            <div className="bg-gray-100 border rounded-lg m-4 h-full w-full">
                                 <div className="flex justify-center mt-72">
                                     <h1>Click on a function to see its calls</h1>
                                 </div>
