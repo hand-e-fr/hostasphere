@@ -56,7 +56,6 @@ const Session: React.FC = () => {
                     </ul>
                 </div>
             </div>
-            <div className="divider"></div>
             <div role="tablist" className="tabs tabs-bordered">
                 <Link href={`/dashboard/${tokenId}/session/${sessionId}#overview`} role="tab" className={`tab ${currentTab === 'overview' ? 'tab-active' : ''}`}
                       onClick={() => setCurrentTab('overview')}>
@@ -74,11 +73,10 @@ const Session: React.FC = () => {
             <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
                 <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
             </div>
-            <div className={`h-[630px] ${currentTab !== 'diagram' && 'hidden'}`}>
+            <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
                 <ExecutionDiagram profilerData={functions}/>
             </div>
             <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
-                {/* Add your content for the "func calls" tab here */}
                 <p>Function Calls Content</p>
             </div>
         </>
