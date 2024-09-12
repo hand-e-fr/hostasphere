@@ -12,6 +12,11 @@ const Session: React.FC = () => {
     const [tokenName, setTokenName] = useState<string | null>(null);
     const {fetchTokenNameFromId} = useTokenController();
     const {session, functions, loading, error, fetchData} = useSessionData(tokenId as string, sessionId as string);
+    const [currentTab, setCurrentTab] = useState<string>(router.asPath.includes('#diagram') ? 'diagram' : 'overview');
+
+    useEffect(() => {
+        setCurrentTab(router.asPath.includes('#diagram') ? 'diagram' : 'overview');
+    }, [router.asPath]);
 
     useEffect(() => {
         if (tokenId && sessionId) {
@@ -42,10 +47,20 @@ const Session: React.FC = () => {
                 </div>
             </div>
             <div className="divider"></div>
-            <div className="min-w-full">
+            <div role="tablist" className="tabs tabs-bordered">
+                <Link href={`/dashboard/${tokenId}/session/${sessionId}#overview`} role="tab" className={`tab ${currentTab === 'overview' ? 'tab-active' : ''}`}
+                      onClick={() => setCurrentTab('overview')}>
+                    <p>Overview</p>
+                </Link>
+                <Link href={`/dashboard/${tokenId}/session/${sessionId}#diagram`} role="tab" className={`tab ${currentTab === 'diagram' ? 'tab-active' : ''}`}
+                      onClick={() => setCurrentTab('diagram')}>
+                    <p>Call Diagram</p>
+                </Link>
+            </div>
+            <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
                 <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
             </div>
-            <div className="h-[640px]">
+            <div className={`h-[630px] ${currentTab !== 'diagram' && 'hidden'}`}>
                 <ExecutionDiagram profilerData={functions}/>
             </div>
         </>
