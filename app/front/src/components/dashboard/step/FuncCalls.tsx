@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { ProfilerData } from "@/types/ProfilerData";
+import {CodeBlock, CopyBlock} from "react-code-blocks";
 
 interface ExecutionDiagramProps {
     profilerData: ProfilerData[];
@@ -50,14 +51,20 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
                                     ))}
                                     { targetFunction.funcparams && (
                                         <li className={`step step-accent`} data-content={``}>
-                                            <div className="flex items-center">
-                                                <div className="badge">params</div>
-                                                <p className="m-2">-</p>
-                                                <div className="badge">{targetFunction.funcparams.map((param, index) => (
-                                                    <div key={index} className="badge ml-1">
-                                                        {param.argname}: {param.type}
-                                                    </div>
-                                                ))}</div>
+                                            <div className="text-left">
+                                                <p>params:</p>
+                                                    {targetFunction.funcparams.map((param, index) => (
+                                                        <div key={index} className="ml-4">
+                                                            <div className="underline bold">{param.argname}: {param.type}</div>
+                                                            <div className="ml-4 max-w-[50em] overflow-x-auto">
+                                                                <CopyBlock
+                                                                    text={param.arg}
+                                                                    language={"javascript"}
+                                                                    showLineNumbers={false}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    ))}
                                             </div>
                                         </li>
                                     )}
