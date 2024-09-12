@@ -48,6 +48,19 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
                                             </div>
                                         </li>
                                     ))}
+                                    { targetFunction.funcparams && (
+                                        <li className={`step step-accent`} data-content={``}>
+                                            <div className="flex items-center">
+                                                <div className="badge">params</div>
+                                                <p className="m-2">-</p>
+                                                <div className="badge">{targetFunction.funcparams.map((param, index) => (
+                                                    <div key={index} className="badge ml-1">
+                                                        {param.argname}: {param.type}
+                                                    </div>
+                                                ))}</div>
+                                            </div>
+                                        </li>
+                                    )}
                                     <li className={`step step-accent`} data-content={``}>
                                         <div className="flex items-center">
                                             <div className="badge">{targetFunction.starttime - start}ms</div>
