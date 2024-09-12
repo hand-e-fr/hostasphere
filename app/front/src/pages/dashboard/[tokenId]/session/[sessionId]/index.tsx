@@ -12,10 +12,20 @@ const Session: React.FC = () => {
     const [tokenName, setTokenName] = useState<string | null>(null);
     const {fetchTokenNameFromId} = useTokenController();
     const {session, functions, loading, error, fetchData} = useSessionData(tokenId as string, sessionId as string);
-    const [currentTab, setCurrentTab] = useState<string>(router.asPath.includes('#diagram') ? 'diagram' : 'overview');
+    const [currentTab, setCurrentTab] = useState<string>(() => {
+        if (router.asPath.includes('#diagram')) return 'diagram';
+        if (router.asPath.includes('#func-calls')) return 'func-calls';
+        return 'overview';
+    });
 
     useEffect(() => {
-        setCurrentTab(router.asPath.includes('#diagram') ? 'diagram' : 'overview');
+        if (router.asPath.includes('#diagram')) {
+            setCurrentTab('diagram');
+        } else if (router.asPath.includes('#func-calls')) {
+            setCurrentTab('func-calls');
+        } else {
+            setCurrentTab('overview');
+        }
     }, [router.asPath]);
 
     useEffect(() => {
@@ -56,12 +66,20 @@ const Session: React.FC = () => {
                       onClick={() => setCurrentTab('diagram')}>
                     <p>Call Diagram</p>
                 </Link>
+                <Link href={`/dashboard/${tokenId}/session/${sessionId}#func-calls`} role="tab" className={`tab ${currentTab === 'func-calls' ? 'tab-active' : ''}`}
+                      onClick={() => setCurrentTab('func-calls')}>
+                    <p>Func Calls</p>
+                </Link>
             </div>
             <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
                 <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
             </div>
             <div className={`h-[630px] ${currentTab !== 'diagram' && 'hidden'}`}>
                 <ExecutionDiagram profilerData={functions}/>
+            </div>
+            <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
+                {/* Add your content for the "func calls" tab here */}
+                <p>Function Calls Content</p>
             </div>
         </>
     );
