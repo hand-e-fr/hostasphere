@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import ExecutionDiagram from "@/components/dashboard/diagram/ExecutionDiagram";
 import Link from "next/link";
 import {useTokenController} from "@/hooks/useTokenController";
+import FuncCalls from "@/components/dashboard/step/FuncCalls";
 
 const Session: React.FC = () => {
     const router = useRouter();
@@ -77,7 +78,7 @@ const Session: React.FC = () => {
                 <ExecutionDiagram profilerData={functions}/>
             </div>
             <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
-                <p>Function Calls Content</p>
+                <FuncCalls profilerData={functions}/>
             </div>
         </>
     );
