@@ -1,5 +1,6 @@
 import {ProfilerData} from '@/types/ProfilerData';
 import {useEffect, useState} from 'react';
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface UseProfilerDataResult {
     data: ProfilerData[] | null;
@@ -11,10 +12,11 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
     const [data, setData] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     useEffect(() => {
         const fetchData = async () => {
+            const url = await getRestApiUrl();
+
             setLoading(true);
             const token = localStorage.getItem('token');
             if (!token) {

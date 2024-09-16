@@ -17,7 +17,7 @@ WORKDIR /app
 COPY --from=builder /app ./
 
 ENV NODE_ENV=production
-ENV HS_REST_API_URL=http://localhost:8080
+ENV NEXT_PUBLIC_HS_REST_API_URL=http://localhost:8080
 
 EXPOSE 3000
 

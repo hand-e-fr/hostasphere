@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 interface UseSessionsResult {
     sessions: SessionData[] | null;
@@ -11,10 +12,11 @@ const useSessions = (tokenid: string, sortBy: string = '', limit: number = 10, p
     const [sessions, setSessions] = useState<SessionData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     useEffect(() => {
         const fetchSessions = async () => {
+            const url = await getRestApiUrl();
+
             setLoading(true);
             const token = localStorage.getItem('token');
             if (!token) {

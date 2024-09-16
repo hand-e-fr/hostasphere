@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useState} from 'react';
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 interface LoginResponse {
     token: string;
@@ -16,9 +17,10 @@ interface CheckTokenResponse {
 export const useAuthController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     const login = async (email: string, password: string): Promise<LoginResponse | null> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
         try {
@@ -33,6 +35,8 @@ export const useAuthController = () => {
     };
 
     const firstConnect = async (new_password: string): Promise<LoginResponse | null> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
@@ -60,6 +64,8 @@ export const useAuthController = () => {
     };
 
     const checkToken = async (): Promise<CheckTokenResponse> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');

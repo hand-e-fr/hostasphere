@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
 import {ProfilerData} from "@/types/ProfilerData";
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface UseSessionDataResult {
     session: SessionData | null;
@@ -20,9 +21,10 @@ const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: str
     const [functions, setFunctions] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     const fetchData = async () => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {

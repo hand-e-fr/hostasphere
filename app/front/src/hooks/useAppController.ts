@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {useState} from 'react';
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface RegisterAppRequest {
     name: string;
@@ -32,13 +33,13 @@ export interface RegisterAppResponse {
 export const useAppController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     const getApp = async (): Promise<App | null> => {
+        const url = await getRestApiUrl();
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get<App>(url + `/api/app`);
+            const response = await axios.get<App>(`${url}/api/app`);
             return response.data;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -49,10 +50,11 @@ export const useAppController = () => {
     };
 
     const updateApp = async (appData: Partial<RegisterAppRequest>): Promise<boolean> => {
+        const url = await getRestApiUrl();
         setLoading(true);
         setError(null);
         try {
-            await axios.put(url + `/api/app`, appData);
+            await axios.put(`${url}/api/app`, appData);
             return true;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -63,11 +65,12 @@ export const useAppController = () => {
     };
 
     const registerApp = async (appData: Partial<RegisterAppRequest>): Promise<RegisterAppResponse> => {
+        const url = await getRestApiUrl();
         setLoading(true);
         setError(null);
         try {
             await axios.request({
-                url: url + `/api/register/app`,
+                url: `${url}/api/register/app`,
                 method: 'POST',
                 data: appData,
             });
@@ -81,13 +84,13 @@ export const useAppController = () => {
     }
 
     const fetchIsAppInitialized = async (): Promise<boolean> => {
-        console.log('fetchIsAppInitialized to ' + url + `/api/app/isInitialized`);
+        const url = await getRestApiUrl();
         setLoading(true);
         setError(null);
         let isInit = false;
 
         try {
-            await axios.get(url + `/api/app/isInitialized`).then(
+            await axios.get(`${url}/api/app/isInitialized`).then(
                 response => {
                     isInit = response.data.initialized;
                 }

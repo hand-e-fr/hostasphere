@@ -1,6 +1,7 @@
 import {User} from '@/types/UserData';
 import axios from 'axios';
 import {useState} from 'react';
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface Users {
     users: User[];
@@ -17,9 +18,10 @@ export interface CreateUserRequest {
 export const useUserController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     const updateUser = async (id: string, userData: Partial<User>): Promise<boolean> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
         try {
@@ -38,6 +40,8 @@ export const useUserController = () => {
     };
 
     const deleteUser = async (id: string): Promise<boolean> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
         try {
@@ -56,6 +60,8 @@ export const useUserController = () => {
     };
 
     const getUser = async (): Promise<User | null> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -82,6 +88,8 @@ export const useUserController = () => {
     }
 
     const getUserById = async (id: string): Promise<User | null> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -108,6 +116,8 @@ export const useUserController = () => {
     };
 
     const getUsers = async (page: number, limit: number): Promise<Users | null> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -141,6 +151,8 @@ export const useUserController = () => {
     }
 
     const createUser = async (userData: CreateUserRequest): Promise<boolean> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {

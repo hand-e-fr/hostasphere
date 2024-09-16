@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface GroupedSessionResponse {
     _id: string | { week: number; year: number };
@@ -21,9 +22,10 @@ const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10
     const [groupedSessions, setGroupedSessions] = useState<GroupedSessionResponse[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     const fetchGroupedSessions = async () => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {

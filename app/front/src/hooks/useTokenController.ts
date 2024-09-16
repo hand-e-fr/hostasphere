@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import axios from 'axios';
 import {Token} from "@/types/TokenData";
+import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface CreateTokenRequest {
     name: string;
@@ -24,9 +25,10 @@ export const useTokenController = () => {
     const [tokens, setTokens] = useState<Token[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const url = process.env.HS_REST_API_URL;
 
     const createToken = async (data: CreateTokenRequest): Promise<TokenResponse | null> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
 
@@ -53,6 +55,8 @@ export const useTokenController = () => {
     };
 
     const getTokens = async (): Promise<void> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
 
@@ -79,6 +83,8 @@ export const useTokenController = () => {
     };
 
     const existsToken = async (tokenValue: string): Promise<ExistsTokenResponse | null> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
 
@@ -94,6 +100,8 @@ export const useTokenController = () => {
     };
 
     const deleteToken = async (tokenId: string): Promise<void> => {
+        const url = await getRestApiUrl();
+
         setLoading(true);
         setError(null);
 
@@ -119,6 +127,8 @@ export const useTokenController = () => {
     };
 
     const fetchTokenNameFromId = async (tokenId: string): Promise<string | null> => {
+        const url = await getRestApiUrl();
+
         try {
             const response = await fetch(`${url}/api/token/${tokenId}/name`, {
                 method: 'GET',
