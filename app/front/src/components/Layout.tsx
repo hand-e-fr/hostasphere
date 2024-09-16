@@ -1,6 +1,5 @@
 import '../app/globals.css';
 import React, {useContext, useEffect} from 'react';
-import {useRouter} from "next/router";
 import {SidebarContext, SidebarContextType} from "@/context/SidebarContext";
 import Sidebar from "@/components/Sidebar";
 import {Bounce, ToastContainer} from "react-toastify";
@@ -18,7 +17,6 @@ const contextClass = {
 };
 
 const Layout: React.FC<LayoutProps> = ({children}) => {
-    const router = useRouter();
     const {setSidebarCollapsed} = useContext<SidebarContextType>(SidebarContext);
 
     useEffect(() => {

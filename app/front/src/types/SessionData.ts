@@ -10,29 +10,29 @@ export interface TrackAnnotation {
 }
 
 export interface SessionData {
-    _id: string;
-    sessionuuid: string;
-    sessiontag: string;
-    starttime: number;
-    startdate: number;
-    endtime: number;
-    enddate: number;
-    executiontime: number;
-    memoryusage: UsageAtTime[];
-    cpuusage: UsageAtTime[];
-    diskusage: UsageAtTime[];
-    networkusage: UsageAtTime[];
-    tokenid: string;
-    pid: number;
-    hostname: string;
-    os: string;
-    osversion: string;
-    kernelversion: string;
-    architecture: string;
-    pythonversion: string;
-    processor: string;
-    cpucount: number;
-    boottime: number;
-    currentuser: string;
-    trackannotations: TrackAnnotation[];
+    _id: string
+    architecture: string
+    boottime: number
+    cpucount: number
+    cpuusage: UsageAtTime[]
+    currentuser: string
+    diskusage: UsageAtTime[]
+    enddate: number
+    endtime: number
+    executiontime: number
+    hostname: string
+    kernelversion: string
+    memoryusage: UsageAtTime[]
+    networkusage: UsageAtTime[]
+    os: string
+    osversion: string
+    pid: number
+    processor: string
+    pythonversion: string
+    sessiontag: string
+    sessionuuid: string
+    startdate: number
+    starttime: number
+    tokenid: string
+    trackannotations: TrackAnnotation[]
 }

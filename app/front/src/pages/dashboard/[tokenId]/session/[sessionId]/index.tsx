@@ -40,7 +40,7 @@ const Session: React.FC = () => {
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
-    if (!session || !functions) return <p>No data available</p>;
+    if (!session) return <p>No data available</p>;
 
     return (
         <>
@@ -71,15 +71,19 @@ const Session: React.FC = () => {
                     <p>Func Calls</p>
                 </Link>
             </div>
-            <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
-                <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
-            </div>
-            <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
-                <ExecutionDiagram profilerData={functions}/>
-            </div>
-            <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
-                <FuncCalls profilerData={functions}/>
-            </div>
+            {
+                functions && <>
+                    <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
+                        <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
+                    </div>
+                    <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
+                        <ExecutionDiagram profilerData={functions}/>
+                    </div>
+                    <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
+                        <FuncCalls profilerData={functions}/>
+                    </div>
+                </>
+            }
         </>
     );
 };

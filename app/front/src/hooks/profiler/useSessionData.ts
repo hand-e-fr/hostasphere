@@ -3,13 +3,6 @@ import {SessionData} from "@/types/SessionData";
 import {ProfilerData} from "@/types/ProfilerData";
 import {getRestApiUrl} from "@/utils/apiUrl";
 
-export interface UseSessionDataResult {
-    session: SessionData | null;
-    functions: ProfilerData[] | null;
-    loading: boolean;
-    error: string | null;
-}
-
 const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: string | string[] | undefined, sessionTag: string = ''): {
     fetchData: () => Promise<void>;
     functions: ProfilerData[] | null;
