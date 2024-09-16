@@ -7,7 +7,7 @@ interface ExecutionDiagramProps {
 }
 
 const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
-    const [targetFunction, setTargetFunction] = useState<ProfilerData | null>(null);
+    const [targetFunction, setTargetFunction] = useState<ProfilerData | null>(profilerData.length > 0 ? profilerData[0] : null);
 
     if (profilerData.length === 0) {
         return <div>No data</div>;
@@ -22,11 +22,10 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
                 <div>
                     <ul className="steps steps-vertical">
                         {profilerData.map((data, index) => (
-                            <li key={index} data-content={``} className={`step ${targetFunction === data ? 'step-error' : 'step-accent'}`}
+                            <li key={index} className={`step cursor-pointer hover:bg-gray-100 p-2 ${targetFunction === data ? 'step-error bg-gray-100' : 'step-accent'}`}
                                 onClick={() => setTargetFunction(data)}>
                                 <div className="flex items-center">
                                     <div className="badge">{data.starttime - start}ms</div>
-                                    <p className="m-2">-</p>
                                     <div className="badge">{data.functionname}</div>
                                 </div>
                             </li>
@@ -41,7 +40,7 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
                                 <h1 className="text-center text-l underline bold">{targetFunction.functionname}:</h1>
                                 <ul className="steps steps-vertical">
                                     {targetFunction.functioncallers && targetFunction.functioncallers.map((data, index) => (
-                                        <li key={index} className={`step step-warning`} data-content={``}>
+                                        <li key={index} className={`step step-warning`}>
                                             <div className="flex items-center">
                                                 <div className="badge">{data.caller}</div>
                                                 <p className="m-2">-</p>
@@ -50,7 +49,7 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
                                         </li>
                                     ))}
                                     { targetFunction.funcparams && (
-                                        <li className={`step step-accent`} data-content={``}>
+                                        <li className={`step step-accent`}>
                                             <div className="text-left">
                                                 <p>params:</p>
                                                     {targetFunction.funcparams.map((param, index) => (
@@ -68,14 +67,14 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData }) => {
                                             </div>
                                         </li>
                                     )}
-                                    <li className={`step step-accent`} data-content={``}>
+                                    <li className={`step step-accent`}>
                                         <div className="flex items-center">
                                             <div className="badge">{targetFunction.starttime - start}ms</div>
                                             <p className="m-2">-</p>
                                             <div className="badge">{targetFunction.functionname}</div>
                                         </div>
                                     </li>
-                                    <li className={`step step-info`} data-content={``}>
+                                    <li className={`step step-info`}>
                                         <div className="flex items-center">
                                             <div className="badge">{targetFunction.returnedvalue.type}</div>
                                             <p className="m-2">-</p>
