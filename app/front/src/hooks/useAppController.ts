@@ -81,6 +81,7 @@ export const useAppController = () => {
     }
 
     const fetchIsAppInitialized = async (): Promise<boolean> => {
+        console.log('fetchIsAppInitialized to ' + url + `/api/app/isInitialized`);
         setLoading(true);
         setError(null);
         let isInit = false;
