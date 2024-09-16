@@ -4,7 +4,7 @@ from profiler.core import Profiler
 
 profiler = Profiler(
     address='localhost:50051',
-    token='hsp_514ff0e682f285e2320fc7e6e161557344f154e73ac4bb4d122f959c938e6e6b'
+    token='hsp_2c284057717697990f8b5bebcd48781ad85d602ddc05e4d69ba01a8ed7066984'
 )
 
 

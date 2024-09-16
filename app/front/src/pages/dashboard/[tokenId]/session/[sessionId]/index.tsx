@@ -5,6 +5,7 @@ import React, {useEffect, useState} from "react";
 import ExecutionDiagram from "@/components/dashboard/diagram/ExecutionDiagram";
 import Link from "next/link";
 import {useTokenController} from "@/hooks/useTokenController";
+import FuncCalls from "@/components/dashboard/step/FuncCalls";
 
 const Session: React.FC = () => {
     const router = useRouter();
@@ -12,6 +13,21 @@ const Session: React.FC = () => {
     const [tokenName, setTokenName] = useState<string | null>(null);
     const {fetchTokenNameFromId} = useTokenController();
     const {session, functions, loading, error, fetchData} = useSessionData(tokenId as string, sessionId as string);
+    const [currentTab, setCurrentTab] = useState<string>(() => {
+        if (router.asPath.includes('#diagram')) return 'diagram';
+        if (router.asPath.includes('#func-calls')) return 'func-calls';
+        return 'overview';
+    });
+
+    useEffect(() => {
+        if (router.asPath.includes('#diagram')) {
+            setCurrentTab('diagram');
+        } else if (router.asPath.includes('#func-calls')) {
+            setCurrentTab('func-calls');
+        } else {
+            setCurrentTab('overview');
+        }
+    }, [router.asPath]);
 
     useEffect(() => {
         if (tokenId && sessionId) {
@@ -41,12 +57,28 @@ const Session: React.FC = () => {
                     </ul>
                 </div>
             </div>
-            <div className="divider"></div>
-            <div className="min-w-full">
+            <div role="tablist" className="tabs tabs-bordered">
+                <Link href={`/dashboard/${tokenId}/session/${sessionId}#overview`} role="tab" className={`tab ${currentTab === 'overview' ? 'tab-active' : ''}`}
+                      onClick={() => setCurrentTab('overview')}>
+                    <p>Overview</p>
+                </Link>
+                <Link href={`/dashboard/${tokenId}/session/${sessionId}#diagram`} role="tab" className={`tab ${currentTab === 'diagram' ? 'tab-active' : ''}`}
+                      onClick={() => setCurrentTab('diagram')}>
+                    <p>Call Diagram</p>
+                </Link>
+                <Link href={`/dashboard/${tokenId}/session/${sessionId}#func-calls`} role="tab" className={`tab ${currentTab === 'func-calls' ? 'tab-active' : ''}`}
+                      onClick={() => setCurrentTab('func-calls')}>
+                    <p>Func Calls</p>
+                </Link>
+            </div>
+            <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
                 <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
             </div>
-            <div className="h-[640px]">
+            <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
                 <ExecutionDiagram profilerData={functions}/>
+            </div>
+            <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
+                <FuncCalls profilerData={functions}/>
             </div>
         </>
     );

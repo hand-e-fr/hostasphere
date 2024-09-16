@@ -32,12 +32,21 @@ const Dashboard: React.FC = () => {
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {tokens && tokens.map((token, index) => (
                     <div key={index}>
-                        <Link href={`/dashboard/${token.id}`} passHref>
-                            <button
-                                className="btn btn-secondary w-[100%] p-4 rounded-lg shadow-lg cursor-pointer hover:bg-base-200 transition-colors duration-300">
-                                $ {token.name}
-                            </button>
-                        </Link>
+                        <div className="card bg-gray-50 shadow-xl">
+                            <div className="card-body">
+                                <h2 className="card-title">
+                                    $ {token.name}
+                                </h2>
+                                <p>
+                                    Owner: {token.owner}
+                                    <br/>
+                                    Value: {token.value}
+                                </p>
+                                <Link className="card-actions justify-end" href={`/dashboard/${token.id}`} passHref>
+                                    <button className="btn btn-secondary">See</button>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 ))}
             </div>
