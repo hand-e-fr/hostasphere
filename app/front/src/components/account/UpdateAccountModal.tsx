@@ -14,6 +14,7 @@ const UpdateAccountModal: React.FC<UpdateAccountModalProps> = ({isOpen, user, on
     const [email, setEmail] = useState(user?.email || '');
     const [password, setPassword] = useState('');
     const [needsPasswordChange, setNeedsPasswordChange] = useState(user?.needs_password_change || false);
+    const [isAdministrator, setIsAdministrator] = useState(user?.is_admin || false);
 
     useEffect(() => {
         if (user) {
@@ -31,7 +32,8 @@ const UpdateAccountModal: React.FC<UpdateAccountModalProps> = ({isOpen, user, on
             last_name: lastName,
             email,
             password,
-            needs_password_change: needsPasswordChange
+            needs_password_change: needsPasswordChange,
+            is_admin: isAdministrator
         });
     };
 
@@ -76,6 +78,13 @@ const UpdateAccountModal: React.FC<UpdateAccountModalProps> = ({isOpen, user, on
                             <span className="label-text">Needs Password Change</span>
                             <input type="checkbox" checked={needsPasswordChange}
                                    onChange={(e) => setNeedsPasswordChange(e.target.checked)} className="checkbox"/>
+                        </label>
+                    </div>
+                    <div className="form-control mb-4">
+                        <label className="cursor-pointer label">
+                            <span className="label-text">Is Administrator</span>
+                            <input type="checkbox" checked={isAdministrator}
+                                   onChange={(e) => setIsAdministrator(e.target.checked)} className="checkbox"/>
                         </label>
                     </div>
                     <div className="modal-action">
