@@ -4,7 +4,7 @@ from profiler.core import Profiler
 
 profiler = Profiler(
     address='california-a.tensordockmarketplace.com:20411',
-    token='hsp_48252dc11bd1b68c45a06f097eccb66c2b4b90b2fe55343d3f898252c3611be9',
+    token='hsp_329922bd8cc43eb3de686a54f14c1beb22cee405b0203ccfe5c901754046c334',
     session_tag='sleep'
 )
 

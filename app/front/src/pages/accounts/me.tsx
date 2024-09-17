@@ -2,6 +2,7 @@ import React from 'react';
 import {useRouter} from "next/router";
 import {useUserController} from "@/hooks/useUserController";
 import {User} from "@/types/UserData";
+import Loading from "@/components/Loading";
 
 const Account = () => {
     const {getUser, loading, error} = useUserController();
@@ -14,6 +15,10 @@ const Account = () => {
         });
     }, []);
 
+    if (loading) {
+        return <Loading />;
+    }
+
     return (
         <div className="w-full max-w-md">
             <h1 className="text-2xl font-bold mb-4 text-center">
@@ -23,7 +28,6 @@ const Account = () => {
 
             </p>
             {error && <p className="text-red-500 mb-4">{error}</p>}
-            {loading && <p className="text-center">Loading...</p>}
             {user && (
                 <div>
                     <p className="mb-4">

@@ -79,8 +79,7 @@ class Profiler:
                         start_date=start_date,
                         end_time=end_time,
                         end_date=end_date,
-                        execution_time=(end_time - start_time) * 1000,
-                        # in milliseconds
+                        execution_time=(end_time - start_time) * 1000, # in ms
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(copied_args, func),

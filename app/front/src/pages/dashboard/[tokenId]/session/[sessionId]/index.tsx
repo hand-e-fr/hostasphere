@@ -6,6 +6,8 @@ import ExecutionDiagram from "@/components/dashboard/diagram/ExecutionDiagram";
 import Link from "next/link";
 import {useTokenController} from "@/hooks/useTokenController";
 import FuncCalls from "@/components/dashboard/step/FuncCalls";
+import Loading from "@/components/Loading";
+import ExecutionTimeline from "@/components/dashboard/timeline/ExecutionTimeline";
 
 const Session: React.FC = () => {
     const router = useRouter();
@@ -38,7 +40,7 @@ const Session: React.FC = () => {
         }
     }, [tokenId, sessionId]);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <Loading/>;
     if (error) return <p>Error: {error}</p>;
     if (!session) return <p>No data available</p>;
 
@@ -80,7 +82,7 @@ const Session: React.FC = () => {
                         <ExecutionDiagram profilerData={functions}/>
                     </div>
                     <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
-                        <FuncCalls profilerData={functions}/>
+                        <FuncCalls profilerData={functions} session={session}/>
                     </div>
                 </>
             }

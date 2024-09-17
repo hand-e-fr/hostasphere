@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import useProfilerData from "@/hooks/profiler/useProfilerController";
 import {ApexOptions} from "apexcharts";
 import {FuncParam} from "@/types/ProfilerData";
+import Loading from "@/components/Loading";
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
@@ -14,7 +15,7 @@ interface ExecutionTimeAreaChartProps {
 const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({tokenId, sortFields = []}) => {
     const {data, loading, error} = useProfilerData(tokenId, sortFields);
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <Loading/>;
     if (error) return <p>Error: {error}</p>;
     if (!data) return <p>No data available</p>;
 
