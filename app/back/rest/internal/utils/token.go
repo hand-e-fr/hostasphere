@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GenerateToken() (string, error) {
@@ -24,11 +25,20 @@ func GenerateToken() (string, error) {
 
 func IsTokenOwner(tokenID string, ownerMail string) bool {
 	collection := config.GetCollection("tokens")
-	filter := bson.M{"value": tokenID}
-	var result bson.M
-	err := collection.FindOne(nil, filter).Decode(&result)
+
+	objID, err := primitive.ObjectIDFromHex(tokenID)
 	if err != nil {
 		return false
 	}
+
+	filter := bson.M{"_id": objID}
+
+	var result bson.M
+
+	err = collection.FindOne(nil, filter).Decode(&result)
+	if err != nil {
+		return false
+	}
+
 	return result["owner"] == ownerMail
 }

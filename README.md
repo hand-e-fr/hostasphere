@@ -75,7 +75,7 @@ docker rm rest datasource front
 - `MONGO_URI`: URI of the mongoDB, default is `mongodb://localhost:27017`
 - `MONGO_DB`: Name of the mongoDB database, default is `hostasphere`
 ##### FRONT:
-- `HS_REST_API_URL`: URL of the REST API, default is `http://localhost:8080`
+- `NEXT_PUBLIC_HS_REST_API_URL`: URL of the REST API, default is `http://localhost:8080`
 
 
 ### Push profiler data to the REST API

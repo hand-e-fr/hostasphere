@@ -151,6 +151,7 @@ export const useTokenController = () => {
 
     return {
         tokens,
+        setTokens,
         loading,
         error,
         createToken,

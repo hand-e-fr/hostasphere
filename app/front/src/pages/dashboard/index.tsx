@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const Dashboard: React.FC = () => {
     const {checkToken} = useAuthController();
-    const {getTokens, deleteToken, error, loading, tokens} = useTokenController();
+    const {getTokens, deleteToken, error, loading, tokens, setTokens} = useTokenController();
     const [authLoading, setAuthLoading] = useState(true);
     const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
 
@@ -30,7 +30,7 @@ const Dashboard: React.FC = () => {
                 </h1>
             </div>
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {tokens && tokens.map((token, index) => (
+                {tokens && tokens.map((token, index) => tokenInfo && tokenInfo.is_admin || token.owner === tokenInfo?.email && (
                     <div key={index}>
                         <div className="card bg-gray-50 shadow-xl">
                             <div className="card-body">
