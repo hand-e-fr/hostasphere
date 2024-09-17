@@ -31,7 +31,7 @@ const UpdateAccountModal: React.FC<UpdateAccountModalProps> = ({isOpen, user, on
             first_name: firstName,
             last_name: lastName,
             email,
-            password,
+            password : password === '' ? null : password,
             needs_password_change: needsPasswordChange,
             is_admin: isAdministrator
         });

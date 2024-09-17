@@ -165,14 +165,14 @@ func FetchSessionData(c *gin.Context) {
 		return
 	}
 
-	if !claim.IsAdmin {
-		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
-		return
-	}
-
 	tokenID := c.Query("tokenid")
 	if tokenID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
+		return
+	}
+
+	if !claim.IsAdmin && !utils.IsTokenOwner(tokenID, claim.Email) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
 		return
 	}
 

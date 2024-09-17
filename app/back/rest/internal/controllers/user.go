@@ -28,16 +28,27 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	if len(user.Password) > 0 {
-		hashedPassword, err := bcrypt.GenerateFromPassword(user.Password, bcrypt.DefaultCost)
+	collection := config.GetCollection("users")
+
+	if user.Password != nil && len(user.Password) != 0 {
+		if len(user.Password) > 0 {
+			hashedPassword, err := bcrypt.GenerateFromPassword(user.Password, bcrypt.DefaultCost)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+				return
+			}
+			user.Password = hashedPassword
+		}
+	} else {
+		currentPassword := models.User{}
+		err = collection.FindOne(c, bson.M{"_id": objID}).Decode(&currentPassword)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user"})
 			return
 		}
-		user.Password = hashedPassword
+		user.Password = currentPassword.Password
 	}
 
-	collection := config.GetCollection("users")
 	_, err = collection.UpdateOne(c, bson.M{"_id": objID}, bson.M{"$set": user})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user"})

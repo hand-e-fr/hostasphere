@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
                     Dashboard
                 </h1>
             </div>
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                 {tokens && tokens.map((token, index) => tokenInfo && (tokenInfo.is_admin || token.owner === tokenInfo?.email) && (
                     <div key={index}>
                         <div className="card bg-gray-50 shadow-xl">

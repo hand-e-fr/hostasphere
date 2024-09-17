@@ -42,3 +42,23 @@ func IsTokenOwner(tokenID string, ownerMail string) bool {
 
 	return result["owner"] == ownerMail
 }
+
+func isSessionOwner(sessionID string, ownerMail string) bool {
+	collection := config.GetCollection("sessions")
+
+	objID, err := primitive.ObjectIDFromHex(sessionID)
+	if err != nil {
+		return false
+	}
+
+	filter := bson.M{"_id": objID}
+
+	var result bson.M
+
+	err = collection.FindOne(nil, filter).Decode(&result)
+	if err != nil {
+		return false
+	}
+
+	return IsTokenOwner(result["tokenid"].(string), ownerMail)
+}
