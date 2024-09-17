@@ -53,7 +53,10 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                                     { targetFunction.funcparams && (
                                         <>
                                             <li className={`step step-accent`}>
-                                                <button className="btn" onClick={()=>document.getElementById('my_modal_2').showModal()}>
+                                                <button className="btn" onClick={() => {
+                                                    const modal = document.getElementById('my_modal_2') as HTMLDialogElement | null;
+                                                    if (modal) modal.showModal();
+                                                }}>
                                                     Show Params
                                                 </button>
                                                 <dialog id="my_modal_2" className="modal">
@@ -63,7 +66,8 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                                                         </h3>
                                                         {targetFunction.funcparams.map((param, index) => (
                                                             <div key={index}>
-                                                                <div className="bold">{param.argname} ({param.type}):</div>
+                                                                <div className="bold">{param.argname} ({param.type}):
+                                                                </div>
                                                                 <div className="ml-4 max-w-[50em] overflow-x-auto">
                                                                     <div>
                                                                         {param.arg}
@@ -80,15 +84,17 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                                         </>
                                     )}
                                     <li className={`step step-accent`}>
-                                        <div className="flex items-start justify-start flex-col">
+                                    <div className="flex items-start justify-start flex-col">
                                             <p>{targetFunction.functionname}</p>
                                             <p>t+ {targetFunction.starttime - start}ms</p>
                                         </div>
                                     </li>
                                     <li className={`step step-info`}>
                                         <div className="flex items-start justify-start flex-col">
-                                            <button className="btn"
-                                                    onClick={() => document.getElementById('my_modal_3').showModal()}>
+                                            <button className="btn" onClick={() => {
+                                                const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
+                                                if (modal) modal.showModal();
+                                            }}>
                                                 Show Returned Value
                                             </button>
                                             <dialog id="my_modal_3" className="modal">
@@ -96,7 +102,8 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                                                     <h3 className="font-bold text-lg">
                                                         {targetFunction.functionname} returned value
                                                     </h3>
-                                                    <div className="bold">type: {targetFunction.returnedvalue.type}</div>
+                                                    <div
+                                                        className="bold">type: {targetFunction.returnedvalue.type}</div>
                                                     <div className="ml-4 max-w-[50em] overflow-x-auto">
                                                         <div>
                                                             {targetFunction.returnedvalue.value}
