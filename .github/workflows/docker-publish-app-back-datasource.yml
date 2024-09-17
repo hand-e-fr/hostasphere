@@ -1,9 +1,12 @@
-name: Build and Publish Docker Images
+name: Build and Publish Docker Images (app/back/datasource)
 
 on:
   push:
     branches:
       - main
+    paths:
+      - 'app/back/datasource/**'
+      - '.github/workflows/docker-publish-app-back-datasource.yml'
 
 env:
   GITHUB_SHA: ${{ github.sha }}
@@ -41,23 +44,3 @@ jobs:
           tags: |
             handoe/hostasphere-datasource:sha-${{ env.SHORT_SHA }}
             handoe/hostasphere-datasource:latest
-
-      - name: Build and push rest image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          context: app/back/rest
-          file: app/back/rest/Dockerfile
-          tags: |
-            handoe/hostasphere-rest:sha-${{ env.SHORT_SHA }}
-            handoe/hostasphere-rest:latest
-
-      - name: Build and push front image
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          context: app/front
-          file: app/front/Dockerfile
-          tags: |
-            handoe/hostasphere-front:sha-${{ env.SHORT_SHA }}
-            handoe/hostasphere-front:latest
