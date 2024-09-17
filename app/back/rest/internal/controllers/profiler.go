@@ -20,12 +20,18 @@ func FetchProfilerData(c *gin.Context) {
 		return
 	}
 
-	if !claim.IsAdmin /* || todo check if he is the token owner*/ {
+	tokenID := c.Query("tokenid")
+
+	if tokenID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
+		return
+	}
+
+	if !claim.IsAdmin && !utils.IsTokenOwner(tokenID, claim.Email) {
 		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
 		return
 	}
 
-	tokenID := c.Query("tokenid")
 	sortFields := c.Query("sort")
 	name := c.Query("name")
 	id := c.Query("id")
@@ -86,7 +92,7 @@ func GetSessions(c *gin.Context) {
 		return
 	}
 
-	if !claim.IsAdmin /* || todo check if he is the token owner*/ {
+	if !claim.IsAdmin {
 		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
 		return
 	}
@@ -159,7 +165,7 @@ func FetchSessionData(c *gin.Context) {
 		return
 	}
 
-	if !claim.IsAdmin /* || todo check if he is the token owner*/ {
+	if !claim.IsAdmin {
 		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
 		return
 	}
@@ -232,14 +238,14 @@ func GroupSessions(c *gin.Context) {
 		return
 	}
 
-	if !claim.IsAdmin /* || todo check if he is the token owner*/ {
-		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
-		return
-	}
-
 	tokenID := c.Query("tokenid")
 	if tokenID == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
+		return
+	}
+
+	if !claim.IsAdmin && !utils.IsTokenOwner(tokenID, claim.Email) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
 		return
 	}
 
