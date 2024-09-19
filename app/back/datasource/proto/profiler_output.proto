@@ -40,6 +40,7 @@ message ProfilerOutput {
   repeated FuncParams func_params = 12;
   ReturnedValue returned_value = 13;
   string session_uuid = 14;
+  string source_code = 15;
 }
 
 message ProfilerOutputRequest {

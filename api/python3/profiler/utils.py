@@ -47,14 +47,17 @@ def deep_copy_args(args):
     return result
 
 
-def hash_function(func):
+def get_source_code(func):
     try:
         source_code = inspect.getsource(func)
-    except TypeError:
-        raise ValueError("The provided argument is not a function.")
+    except:
+        source_code = "No source code available"
+    return source_code
 
-    source_hash = hashlib.sha256(source_code.encode('utf-8')).hexdigest()
-    return source_hash
+
+def hash_function(func):
+    return hashlib.sha256(get_source_code(func).encode('utf-8')).hexdigest()
+
 
 def is_function_pure(source_code):
     try:

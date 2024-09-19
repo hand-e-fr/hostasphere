@@ -36,7 +36,7 @@ class Profiler:
             if not response.ok:
                 raise Exception(
                     f"Error sending profiler output: {response.message}")
-        except grpc.RpcError as e:
+        except grpc.RpcError:
             raise Exception("Impossible to send profiler output check address, or check if hostaspere is running")
 
     def sendProfilerOutputAsync(self, profiler_data: profiler_output.ProfilerOutput):
@@ -84,7 +84,8 @@ class Profiler:
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(copied_args, func),
                         returned_value=returned_value,
-                        session_uuid=self._session.metrics.session_uuid
+                        session_uuid=self._session.metrics.session_uuid,
+                        source_code=get_source_code(func)
                     )
                 )
                 self.sendProfilerOutputAsync(profiler_data)

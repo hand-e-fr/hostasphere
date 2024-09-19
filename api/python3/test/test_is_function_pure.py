@@ -1,8 +1,6 @@
 import unittest
-import ast
 
 from profiler.utils import is_function_pure
-
 
 class TestIsFunctionPure(unittest.TestCase):
     def test_normal(self):
