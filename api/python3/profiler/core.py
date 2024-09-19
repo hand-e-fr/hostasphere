@@ -69,10 +69,12 @@ class Profiler:
                     type=type(result).__name__
                 )
 
+                source_code = get_source_code(func)
+
                 profiler_data = profiler_output.ProfilerOutputRequest(
                     profiler_output=profiler_output.ProfilerOutput(
                         function_name=get_function_name(func),
-                        function_id=hash_function(func),
+                        function_id=hash_function(source_code),
                         function_callers=callers,
                         token_id=self._token_id,
                         start_time=start_time,
@@ -85,7 +87,8 @@ class Profiler:
                         func_params=get_func_params(copied_args, func),
                         returned_value=returned_value,
                         session_uuid=self._session.metrics.session_uuid,
-                        source_code=get_source_code(func)
+                        source_code=source_code,
+                        is_pure_function=is_function_pure(source_code),
                     )
                 )
                 self.sendProfilerOutputAsync(profiler_data)

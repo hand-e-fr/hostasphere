@@ -41,6 +41,7 @@ message ProfilerOutput {
   ReturnedValue returned_value = 13;
   string session_uuid = 14;
   string source_code = 15;
+  bool is_pure_function = 16;
 }
 
 message ProfilerOutputRequest {

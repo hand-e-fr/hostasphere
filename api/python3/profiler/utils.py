@@ -55,8 +55,8 @@ def get_source_code(func):
     return source_code
 
 
-def hash_function(func):
-    return hashlib.sha256(get_source_code(func).encode('utf-8')).hexdigest()
+def hash_function(source_code):
+    return hashlib.sha256(source_code.encode('utf-8')).hexdigest()
 
 
 def is_function_pure(source_code):
