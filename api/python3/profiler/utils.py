@@ -2,6 +2,7 @@ import copy
 import hashlib
 import inspect
 import os
+import ast
 
 import psutil
 
@@ -54,3 +55,30 @@ def hash_function(func):
 
     source_hash = hashlib.sha256(source_code.encode('utf-8')).hexdigest()
     return source_hash
+
+def is_function_pure(source_code):
+    try:
+        tree = ast.parse(source_code)
+
+        class PurityVisitor(ast.NodeVisitor):
+            def __init__(self):
+                self.is_pure = True
+
+            def visit_Assign(self, node):
+                for target in node.targets:
+                    if isinstance(target, ast.Name) and isinstance(target.ctx, ast.Store):
+                        pass
+                self.generic_visit(node)
+
+            def visit_Call(self, node):
+                if not (isinstance(node.func, ast.Name) and node.func.id == "emulate"):
+                    self.is_pure = False
+                self.generic_visit(node)
+
+        visitor = PurityVisitor()
+        visitor.visit(tree)
+
+        return visitor.is_pure
+
+    except SyntaxError:
+        return False
