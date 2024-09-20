@@ -4,13 +4,7 @@ import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface GroupedSessionResponse {
     _id: string | { week: number; year: number };
-    sessions: SessionData[];
-}
-
-interface UseGroupedSessionsResult {
-    groupedSessions: GroupedSessionResponse[] | null;
-    loading: boolean;
-    error: string | null;
+    // sessions: SessionData[];
 }
 
 const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10, page: number = 0): {
