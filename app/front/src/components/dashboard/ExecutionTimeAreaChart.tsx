@@ -76,6 +76,12 @@ const ExecutionTimeAreaChart: React.FC<ExecutionTimeAreaChartProps> = ({tokenId,
         chart: {
             type: 'area',
             height: 350,
+            toolbar: {
+                tools: {
+                    download: false,
+                    pan: false,
+                }
+            },
             zoom: {
                 enabled: true,
                 type: 'x',

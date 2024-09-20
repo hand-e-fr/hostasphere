@@ -83,6 +83,15 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
                 type: 'x',
                 autoScaleYaxis: true,
             },
+            toolbar: {
+                tools: {
+                    download: false,
+                    pan: false,
+                }
+            },
+            animations: {
+                enabled: false,
+            }
         },
         dataLabels: {
             enabled: false,
