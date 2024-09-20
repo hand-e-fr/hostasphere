@@ -7,7 +7,6 @@ import Link from "next/link";
 import {useTokenController} from "@/hooks/useTokenController";
 import FuncCalls from "@/components/dashboard/step/FuncCalls";
 import Loading from "@/components/Loading";
-import ExecutionTimeline from "@/components/dashboard/timeline/ExecutionTimeline";
 
 const Session: React.FC = () => {
     const router = useRouter();
@@ -54,7 +53,7 @@ const Session: React.FC = () => {
                     <ul>
                         <li><Link href={`/dashboard`}>Dashboard</Link></li>
                         <li><Link href={`/dashboard/${tokenId}`}>{tokenName && tokenName}</Link></li>
-                        <li><Link href={`/dashboard/${tokenId}/sessions`}>sessions</Link></li>
+                        <li><Link href={`/dashboard/${tokenId}#sessions`}>sessions</Link></li>
                         <li>{session && session.sessiontag}</li>
                     </ul>
                 </div>

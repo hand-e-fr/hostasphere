@@ -2,9 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 import {useRouter} from "next/router";
-import ExecutionTimeAreaChart from "@/components/dashboard/ExecutionTimeAreaChart";
 import Link from "next/link";
 import {useTokenController} from "@/hooks/useTokenController";
+import useGroupedSessions, {GroupedSessionResponse} from "@/hooks/profiler/useGroupedSessionsData";
+import FolderIcon from "@mui/icons-material/Folder";
+import {SessionData} from "@/types/SessionData";
+import DataArrayIcon from "@mui/icons-material/DataArray";
 
 const TokenDashboard: React.FC = () => {
     const {checkToken} = useAuthController();
@@ -13,12 +16,19 @@ const TokenDashboard: React.FC = () => {
     const [tokenName, setTokenName] = useState<string | null>(null);
     const {fetchTokenNameFromId} = useTokenController();
     const [authLoading, setAuthLoading] = useState(true);
-    const [loading, setLoading] = useState(true);
+    const [pageLoading, setPageLoading] = useState(true);
     const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
+    const [grouping, setGrouping] = React.useState<string>(localStorage.getItem('grouping') || 'hour');
+    const {
+        groupedSessions,
+        loading,
+        error,
+        fetchGroupedSessions
+    } = useGroupedSessions(tokenId as string, grouping, 100, 0);
 
     useEffect(() => {
         if (tokenId) {
-            setLoading(false);
+            setPageLoading(false);
             fetchTokenNameFromId(tokenId as string).then((response) => {
                 setTokenName(response);
             });
@@ -34,7 +44,7 @@ const TokenDashboard: React.FC = () => {
         });
     }, []);
 
-    if (authLoading || loading) return <Loading/>;
+    if (authLoading || pageLoading) return <Loading/>;
 
     return (
         <div>
@@ -49,15 +59,54 @@ const TokenDashboard: React.FC = () => {
                     </ul>
                 </div>
             </div>
-            <Link href={`/dashboard/${tokenId}/sessions`}>
-                <button className="btn btn-secondary">
-                    See sessions
-                </button>
-            </Link>
-            <div className="divider"></div>
-            <div>
-                <ExecutionTimeAreaChart tokenId={tokenId as string} sortFields={["starttime"]}/>
+            {/*<h2 className="text-xl font-bold mt-4" id="execution-time">Execution time</h2>*/}
+            {/*<div className="divider m-0"></div>*/}
+            {/*<ExecutionTimeline/>*/}
+            <h2 className="text-xl font-bold mt-8" id="sessions">Sessions list</h2>
+            <div className="divider m-0"></div>
+            <div className="mb-4">
+                <p className="text-gray-500">Grouped by:</p>
+                <select className="select select-bordered select-sm w-full max-w-xs" value={grouping}
+                        onChange={(e) => setGrouping(e.target.value)}>
+                    <option value="hour">Hour</option>
+                    <option value="day">Day</option>
+                    <option value="week">Week</option>
+                    <option value="tag">Tag</option>
+                </select>
             </div>
+            {
+                loading ? <Loading/> : (
+                    <div>
+                        <p className="text-gray-500">List of sessions</p>
+                        <ul className="menu rounded-box ">
+                            {groupedSessions && groupedSessions.map((group: GroupedSessionResponse, index) => (
+                                <li key={index}>
+                                    <details>
+                                        <summary>
+                                            <FolderIcon/>
+                                            {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}
+                                        </summary>
+                                        <ul>
+                                            {group.sessions.map((session: string) => (
+                                                <li key={session._id}>
+                                                    <summary>
+                                                        <Link
+                                                            href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
+                                                            <DataArrayIcon/>
+                                                            {new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
+                                                            ({session._id})
+                                                        </Link>
+                                                    </summary>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </details>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )
+            }
         </div>
     );
 };
