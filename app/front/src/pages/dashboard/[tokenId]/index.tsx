@@ -87,7 +87,7 @@ const TokenDashboard: React.FC = () => {
                                             {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}
                                         </summary>
                                         <ul>
-                                            {group.sessions.map((session: string) => (
+                                            {group.sessions.map((session: SessionData) => (
                                                 <li key={session._id}>
                                                     <summary>
                                                         <Link
