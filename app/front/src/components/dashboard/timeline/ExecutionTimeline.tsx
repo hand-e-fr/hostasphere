@@ -9,7 +9,7 @@ interface ExecutionTimelineProps {
     sessions: SessionData[];
 }
 
-const ExecutionTimeline: React.FC<> = ({}) => {
+const ExecutionTimeline: React.FC = ({}) => {
     const series = [
         {
             data: [
