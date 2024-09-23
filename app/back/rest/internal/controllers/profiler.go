@@ -284,6 +284,17 @@ func GroupSessions(c *gin.Context) {
 
 	var groupStage bson.D
 
+	projectStage := bson.D{
+		{"$project", bson.D{
+			{"_id", 1},
+			{"tokenid", 1},
+			{"sessionuuid", 1},
+			{"startdate", 1},
+			{"sessiontag", 1},
+			{"executiontime", 1},
+		}},
+	}
+
 	switch groupBy {
 	case "hour":
 		groupStage = bson.D{
@@ -336,6 +347,7 @@ func GroupSessions(c *gin.Context) {
 	// Create the aggregation pipeline
 	pipeline := mongo.Pipeline{
 		{{"$match", bson.M{"tokenid": tokenID}}},
+		projectStage,
 		groupStage,
 	}
 
