@@ -42,14 +42,6 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                             <div>
                                 <h1 className="text-center text-l bold">{targetFunction.functionname}:</h1>
                                 <ul className="steps steps-vertical">
-                                    {targetFunction.functioncallers && targetFunction.functioncallers.map((data, index) => (
-                                        <li key={index} className={`step step-warning`}>
-                                            <div className="flex items-start justify-start flex-col">
-                                                <p>{data.caller}</p>
-                                                <p>{data.callerfile}:{data.callerline}</p>
-                                            </div>
-                                        </li>
-                                    ))}
                                     { targetFunction.funcparams && (
                                         <>
                                             <li className={`step step-accent`}>
