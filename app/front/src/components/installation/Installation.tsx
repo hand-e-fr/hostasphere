@@ -1,16 +1,15 @@
 import React from 'react';
 import {RegisterAppRequest, RegisterAppResponse, useAppController} from "@/hooks/useAppController";
+import { useRouter } from 'next/router';
 
 type InstallationProps = {
     onInstalled: () => void;
 };
 
-const Installation: React.FC<InstallationProps> = ({onInstalled}) => {
+const Installation: React.FC = () => {
     const {registerApp, error} = useAppController();
 
-    const handleInstall = () => {
-        onInstalled();
-    };
+    const router = useRouter();
 
     return (
         <div className="flex flex-col items-center justify-center">
@@ -37,7 +36,7 @@ const Installation: React.FC<InstallationProps> = ({onInstalled}) => {
                     };
                     registerApp(appData).then((response: RegisterAppResponse) => {
                         if (response.ok) {
-                            handleInstall();
+                            router.push('/').then(() => window.location.reload());
                         }
                     });
                 }}>

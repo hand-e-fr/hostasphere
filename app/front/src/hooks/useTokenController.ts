@@ -1,5 +1,5 @@
 import {useContext, useState} from 'react';
-import { AppContext, AppContextType } from '@/context/AppContext';
+import { useAppContext } from '@/context/AppContext';
 import axios from 'axios';
 import {Token} from "@/types/TokenData";
 
@@ -25,7 +25,7 @@ export const useTokenController = () => {
     const [tokens, setTokens] = useState<Token[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useContext<AppContextType>(AppContext);
+    const {restUrl} = useAppContext();
 
     const createToken = async (data: CreateTokenRequest): Promise<TokenResponse | null> => {
         setLoading(true);

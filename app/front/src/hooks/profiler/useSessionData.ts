@@ -1,7 +1,7 @@
 import {useEffect, useState, useContext} from 'react';
 import {SessionData} from "@/types/SessionData";
 import {ProfilerData} from "@/types/ProfilerData";
-import { AppContext, AppContextType } from '@/context/AppContext';
+import { useAppContext } from '@/context/AppContext';
 
 const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: string | string[] | undefined, sessionTag: string = ''): {
     fetchData: () => Promise<void>;
@@ -14,7 +14,7 @@ const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: str
     const [functions, setFunctions] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useContext<AppContextType>(AppContext);
+    const {restUrl} = useAppContext();
 
     const fetchData = async () => {
         setLoading(true);

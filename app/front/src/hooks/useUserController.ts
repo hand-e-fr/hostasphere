@@ -1,7 +1,7 @@
 import {User} from '@/types/UserData';
 import axios from 'axios';
 import {useContext, useState} from 'react';
-import { AppContext, AppContextType } from '@/context/AppContext';
+import { useAppContext } from '@/context/AppContext';
 
 export interface Users {
     users: User[];
@@ -18,7 +18,7 @@ export interface CreateUserRequest {
 export const useUserController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useContext<AppContextType>(AppContext);
+    const {restUrl} = useAppContext();
 
     const updateUser = async (id: string, userData: Partial<User>): Promise<boolean> => {
         setLoading(true);

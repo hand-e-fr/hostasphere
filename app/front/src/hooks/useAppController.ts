@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useContext, useState} from 'react';
-import { AppContext, AppContextType } from '@/context/AppContext';
+import { useAppContext } from '@/context/AppContext';
 
 export interface RegisterAppRequest {
     name: string;
@@ -33,7 +33,7 @@ export interface RegisterAppResponse {
 export const useAppController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useContext<AppContextType>(AppContext);
+    const {restUrl} = useAppContext();
 
     const getApp = async (): Promise<App | null> => {
         setLoading(true);
@@ -81,13 +81,13 @@ export const useAppController = () => {
         }
     }
 
-    const fetchIsAppInitialized = async (): Promise<boolean> => {
+    const fetchIsAppInitialized = async (url: string): Promise<boolean> => {
         setLoading(true);
         setError(null);
         let isInit = false;
 
         try {
-            await axios.get(`${restUrl}/api/app/isInitialized`).then(
+            await axios.get(`${url}/api/app/isInitialized`).then(
                 response => {
                     isInit = response.data.initialized;
                 }

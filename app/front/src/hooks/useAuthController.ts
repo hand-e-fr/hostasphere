@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useContext, useState} from 'react';
-import { AppContext, AppContextType } from '@/context/AppContext';
+import { useAppContext } from '@/context/AppContext';
 
 interface LoginResponse {
     token: string;
@@ -17,7 +17,7 @@ interface CheckTokenResponse {
 export const useAuthController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useContext<AppContextType>(AppContext);
+    const {restUrl} = useAppContext();
 
     const login = async (email: string, password: string): Promise<LoginResponse | null> => {
         setLoading(true);

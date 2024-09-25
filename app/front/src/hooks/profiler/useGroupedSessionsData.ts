@@ -1,6 +1,6 @@
 import {useEffect, useState, useContext} from 'react';
 import {SessionData} from "@/types/SessionData";
-import { AppContext, AppContextType } from '@/context/AppContext';
+import { useAppContext } from '@/context/AppContext';
 
 export interface GroupedSessionResponse {
     _id: string | { week: number; year: number };
@@ -16,7 +16,7 @@ const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10
     const [groupedSessions, setGroupedSessions] = useState<GroupedSessionResponse[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useContext<AppContextType>(AppContext);
+    const {restUrl} = useAppContext();
 
     const fetchGroupedSessions = async () => {
         setLoading(true);

@@ -1,6 +1,6 @@
 import {useEffect, useState, useContext} from 'react';
 import {SessionData} from "@/types/SessionData";
-import { AppContext, AppContextType } from '@/context/AppContext';
+import { useAppContext } from '@/context/AppContext';
 
 interface UseSessionsResult {
     sessions: SessionData[] | null;
@@ -12,7 +12,7 @@ const useSessions = (tokenid: string, sortBy: string = '', limit: number = 10, p
     const [sessions, setSessions] = useState<SessionData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useContext<AppContextType>(AppContext);
+    const {restUrl} = useAppContext();
 
     useEffect(() => {
         const fetchSessions = async () => {

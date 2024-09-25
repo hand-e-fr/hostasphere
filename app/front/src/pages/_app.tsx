@@ -1,57 +1,48 @@
 import '../app/globals.css';
 import type {AppProps} from 'next/app';
-import React, {useEffect} from "react";
+import React from "react";
 import RootLayout from "@/components/Layout";
-import {useAppController} from "@/hooks/useAppController";
 import Installation from "@/components/installation/Installation";
 import Loading from "@/components/Loading";
-import {AppProvider} from "@/context/AppContext";
+import {AppProvider, AppStatus, useAppContext} from "@/context/AppContext";
 
-function MyApp({Component, pageProps}: AppProps) {
-    const {fetchIsAppInitialized, error} = useAppController();
-    const [isAppInitialized, setIsAppInitialized] = React.useState(false);
-    const [updateEffect, setUpdateEffect] = React.useState(false);
-    const [loading, setLoading] = React.useState(true);
+function MainContent({ Component, pageProps }: AppProps) {
+    const { status } = useAppContext();
 
-    useEffect(() => {
-        fetchIsAppInitialized().then((result) => {
-            setIsAppInitialized(result);
-            setLoading(false);
-        });
-    }, [updateEffect]);
-
-    const triggerUpdate = () => {
-        setUpdateEffect(prev => !prev);
-    };
-
-    if (loading) {
-        return <Loading/>;
-    } else if (!isAppInitialized) {
-        if (error) {
-            return (
-                <div className="flex h-screen bg-base-200">
-                    <main className={`flex-1 p-[2em]`}>
-                        <h1 className="text-2xl font-bold mb-4 text-center">Error</h1>
-                        <p className="text-red-500 mb-4 text-center">{error}</p>
-                        <p className="text-center">It could happen because the server is not running or the database is
-                            not connected.</p>
-                    </main>
-                </div>
-            );
-        }
+    if (status === AppStatus.NOT_INITIALIZED) {
+        return <Loading />;
+    } else if (status === AppStatus.ERROR) {
         return (
-            <div className="flex h-screen bg-base-200 overflow-y-auto">
-                <main className={`flex-1 p-[2em]`}>
-                    <Installation onInstalled={triggerUpdate}/>
+            <div className="flex h-screen bg-base-200">
+                <main className="flex-1 p-[2em]">
+                    <h1 className="text-2xl font-bold mb-4 text-center">Error</h1>
+                    <p className="text-center">
+                        It could happen because the server is not running or the database is not connected.
+                    </p>
                 </main>
             </div>
         );
-    }
-    return (
-        <AppProvider>
+    } else if (status === AppStatus.INSTALLATION) {
+        return (
+            <div className="flex h-screen bg-base-200 overflow-y-auto">
+                <main className="flex-1 p-[2em]">
+                    <Installation />
+                </main>
+            </div>
+        );
+    } else {
+        return (
             <RootLayout>
                 <Component {...pageProps} />
             </RootLayout>
+        );
+    }
+}
+
+function MyApp(props: AppProps) {
+    return (
+        <AppProvider>
+            <MainContent {...props} />
         </AppProvider>
     );
 }
