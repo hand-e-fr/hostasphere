@@ -2,10 +2,10 @@ import '../app/globals.css';
 import type {AppProps} from 'next/app';
 import React, {useEffect} from "react";
 import RootLayout from "@/components/Layout";
-import {SidebarProvider} from "@/context/SidebarContext";
 import {useAppController} from "@/hooks/useAppController";
 import Installation from "@/components/installation/Installation";
 import Loading from "@/components/Loading";
+import {AppProvider} from "@/context/AppContext";
 
 function MyApp({Component, pageProps}: AppProps) {
     const {fetchIsAppInitialized, error} = useAppController();
@@ -48,11 +48,11 @@ function MyApp({Component, pageProps}: AppProps) {
         );
     }
     return (
-        <SidebarProvider>
+        <AppProvider>
             <RootLayout>
                 <Component {...pageProps} />
             </RootLayout>
-        </SidebarProvider>
+        </AppProvider>
     );
 }
 

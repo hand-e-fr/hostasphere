@@ -1,7 +1,7 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
+import { AppContext, AppContextType } from '@/context/AppContext';
 import axios from 'axios';
 import {Token} from "@/types/TokenData";
-import {getRestApiUrl} from "@/utils/apiUrl";
 
 export interface CreateTokenRequest {
     name: string;
@@ -25,10 +25,9 @@ export const useTokenController = () => {
     const [tokens, setTokens] = useState<Token[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const {restUrl} = useContext<AppContextType>(AppContext);
 
     const createToken = async (data: CreateTokenRequest): Promise<TokenResponse | null> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
 
@@ -40,7 +39,7 @@ export const useTokenController = () => {
         }
 
         try {
-            const response = await axios.post<TokenResponse>(`${url}/api/token`, data, {
+            const response = await axios.post<TokenResponse>(`${restUrl}/api/token`, data, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -55,8 +54,6 @@ export const useTokenController = () => {
     };
 
     const getTokens = async (): Promise<void> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
 
@@ -68,7 +65,7 @@ export const useTokenController = () => {
         }
 
         try {
-            const response = await axios.get<TokensResponse>(`${url}/api/tokens`,
+            const response = await axios.get<TokensResponse>(`${restUrl}/api/tokens`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -83,13 +80,11 @@ export const useTokenController = () => {
     };
 
     const existsToken = async (tokenValue: string): Promise<ExistsTokenResponse | null> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
 
         try {
-            const response = await axios.get<ExistsTokenResponse>(`${url}/api/token/${tokenValue}`);
+            const response = await axios.get<ExistsTokenResponse>(`${restUrl}/api/token/${tokenValue}`);
             setLoading(false);
             return response.data;
         } catch (err: any) {
@@ -100,8 +95,6 @@ export const useTokenController = () => {
     };
 
     const deleteToken = async (tokenId: string): Promise<void> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
 
@@ -113,7 +106,7 @@ export const useTokenController = () => {
         }
 
         try {
-            await axios.delete(`${url}/api/token/${tokenId}`, {
+            await axios.delete(`${restUrl}/api/token/${tokenId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -127,10 +120,8 @@ export const useTokenController = () => {
     };
 
     const fetchTokenNameFromId = async (tokenId: string): Promise<string | null> => {
-        const url = await getRestApiUrl();
-
         try {
-            const response = await fetch(`${url}/api/token/${tokenId}/name`, {
+            const response = await fetch(`${restUrl}/api/token/${tokenId}/name`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

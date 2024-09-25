@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import {SessionData} from "@/types/SessionData";
 import {ProfilerData} from "@/types/ProfilerData";
-import {getRestApiUrl} from "@/utils/apiUrl";
+import { AppContext, AppContextType } from '@/context/AppContext';
 
 const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: string | string[] | undefined, sessionTag: string = ''): {
     fetchData: () => Promise<void>;
@@ -14,10 +14,9 @@ const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: str
     const [functions, setFunctions] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const {restUrl} = useContext<AppContextType>(AppContext);
 
     const fetchData = async () => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -41,7 +40,7 @@ const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: str
                 return;
             }
 
-            const response = await fetch(`${url}/api/profiler/session?${queryParams.toString()}`, {
+            const response = await fetch(`${restUrl}/api/profiler/session?${queryParams.toString()}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

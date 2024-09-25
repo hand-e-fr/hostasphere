@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import {SessionData} from "@/types/SessionData";
-import {getRestApiUrl} from "@/utils/apiUrl";
+import { AppContext, AppContextType } from '@/context/AppContext';
 
 interface UseSessionsResult {
     sessions: SessionData[] | null;
@@ -12,11 +12,10 @@ const useSessions = (tokenid: string, sortBy: string = '', limit: number = 10, p
     const [sessions, setSessions] = useState<SessionData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const {restUrl} = useContext<AppContextType>(AppContext);
 
     useEffect(() => {
         const fetchSessions = async () => {
-            const url = await getRestApiUrl();
-
             setLoading(true);
             const token = localStorage.getItem('token');
             if (!token) {
@@ -34,7 +33,7 @@ const useSessions = (tokenid: string, sortBy: string = '', limit: number = 10, p
                 queryParams.append('limit', limit.toString());
                 queryParams.append('page', page.toString());
 
-                const response = await fetch(`${url}/api/profiler/sessions?${queryParams.toString()}`, {
+                const response = await fetch(`${restUrl}/api/profiler/sessions?${queryParams.toString()}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

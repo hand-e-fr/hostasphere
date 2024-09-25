@@ -1,6 +1,6 @@
 import {ProfilerData} from '@/types/ProfilerData';
-import {useEffect, useState} from 'react';
-import {getRestApiUrl} from "@/utils/apiUrl";
+import {useEffect, useState, useContext} from 'react';
+import { AppContext, AppContextType } from '@/context/AppContext';
 
 export interface UseProfilerDataResult {
     data: ProfilerData[] | null;
@@ -12,11 +12,10 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
     const [data, setData] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const {restUrl} = useContext<AppContextType>(AppContext);
 
     useEffect(() => {
         const fetchData = async () => {
-            const url = await getRestApiUrl();
-
             setLoading(true);
             const token = localStorage.getItem('token');
             if (!token) {
@@ -32,7 +31,7 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
                     queryParams.append('sort', sortFields.join(','));
                 }
 
-                const response = await fetch(`${url}/api/profiler?${queryParams.toString()}`, {
+                const response = await fetch(`${restUrl}/api/profiler?${queryParams.toString()}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

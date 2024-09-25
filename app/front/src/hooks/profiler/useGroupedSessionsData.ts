@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import {SessionData} from "@/types/SessionData";
-import {getRestApiUrl} from "@/utils/apiUrl";
+import { AppContext, AppContextType } from '@/context/AppContext';
 
 export interface GroupedSessionResponse {
     _id: string | { week: number; year: number };
@@ -16,10 +16,9 @@ const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10
     const [groupedSessions, setGroupedSessions] = useState<GroupedSessionResponse[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const {restUrl} = useContext<AppContextType>(AppContext);
 
     const fetchGroupedSessions = async () => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -35,7 +34,7 @@ const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10
             queryParams.append('limit', limit.toString());
             queryParams.append('page', page.toString());
 
-            const response = await fetch(`${url}/api/profiler/group-sessions?${queryParams.toString()}`, {
+            const response = await fetch(`${restUrl}/api/profiler/group-sessions?${queryParams.toString()}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

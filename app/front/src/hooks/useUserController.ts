@@ -1,7 +1,7 @@
 import {User} from '@/types/UserData';
 import axios from 'axios';
-import {useState} from 'react';
-import {getRestApiUrl} from "@/utils/apiUrl";
+import {useContext, useState} from 'react';
+import { AppContext, AppContextType } from '@/context/AppContext';
 
 export interface Users {
     users: User[];
@@ -18,14 +18,13 @@ export interface CreateUserRequest {
 export const useUserController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const {restUrl} = useContext<AppContextType>(AppContext);
 
     const updateUser = async (id: string, userData: Partial<User>): Promise<boolean> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
         try {
-            await axios.put(`${url}/api/user/${id}`, userData, {
+            await axios.put(`${restUrl}/api/user/${id}`, userData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -40,12 +39,10 @@ export const useUserController = () => {
     };
 
     const deleteUser = async (id: string): Promise<boolean> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
         try {
-            await axios.delete(`${url}/api/user/${id}`, {
+            await axios.delete(`${restUrl}/api/user/${id}`, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -60,8 +57,6 @@ export const useUserController = () => {
     };
 
     const getUser = async (): Promise<User | null> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -73,7 +68,7 @@ export const useUserController = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get<User>(`${url}/api/user`, {
+            const response = await axios.get<User>(`${restUrl}/api/user`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -88,8 +83,6 @@ export const useUserController = () => {
     }
 
     const getUserById = async (id: string): Promise<User | null> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -101,7 +94,7 @@ export const useUserController = () => {
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.get<User>(`${url}/api/user/${id}`, {
+            const response = await axios.get<User>(`${restUrl}/api/user/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -116,8 +109,6 @@ export const useUserController = () => {
     };
 
     const getUsers = async (page: number, limit: number): Promise<Users | null> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -131,7 +122,7 @@ export const useUserController = () => {
         try {
             const response = await axios.request({
                 method: 'GET',
-                url: `${url}/api/users`,
+                url: `${restUrl}/api/users`,
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
@@ -151,8 +142,6 @@ export const useUserController = () => {
     }
 
     const createUser = async (userData: CreateUserRequest): Promise<boolean> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         const token = localStorage.getItem('token');
         if (!token) {
@@ -164,7 +153,7 @@ export const useUserController = () => {
         setLoading(true);
         setError(null);
         try {
-            await axios.post(`${url}/api/register/user`, userData, {
+            await axios.post(`${restUrl}/api/register/user`, userData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',

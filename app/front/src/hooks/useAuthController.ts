@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {useState} from 'react';
-import {getRestApiUrl} from "@/utils/apiUrl";
+import {useContext, useState} from 'react';
+import { AppContext, AppContextType } from '@/context/AppContext';
 
 interface LoginResponse {
     token: string;
@@ -17,14 +17,13 @@ interface CheckTokenResponse {
 export const useAuthController = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const {restUrl} = useContext<AppContextType>(AppContext);
 
     const login = async (email: string, password: string): Promise<LoginResponse | null> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
         try {
-            const response = await axios.post<LoginResponse>(`${url}/api/login`, {email, password});
+            const response = await axios.post<LoginResponse>(`${restUrl}/api/login`, {email, password});
             return response.data;
         } catch (err: any) {
             setError(err.response?.data?.error || 'An error occurred');
@@ -35,8 +34,6 @@ export const useAuthController = () => {
     };
 
     const firstConnect = async (new_password: string): Promise<LoginResponse | null> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
@@ -47,7 +44,7 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.post<LoginResponse>(`${url}/api/login/first-connect`, {new_password},
+            const response = await axios.post<LoginResponse>(`${restUrl}/api/login/first-connect`, {new_password},
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -64,8 +61,6 @@ export const useAuthController = () => {
     };
 
     const checkToken = async (): Promise<CheckTokenResponse> => {
-        const url = await getRestApiUrl();
-
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
@@ -76,7 +71,7 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.get<CheckTokenResponse>(`${url}/api/login/test`, {
+            const response = await axios.get<CheckTokenResponse>(`${restUrl}/api/login/test`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
