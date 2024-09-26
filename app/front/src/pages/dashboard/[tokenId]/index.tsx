@@ -9,22 +9,19 @@ import FolderIcon from "@mui/icons-material/Folder";
 import {SessionData} from "@/types/SessionData";
 import DataArrayIcon from "@mui/icons-material/DataArray";
 import ExecutionTimeline from '@/components/dashboard/timeline/ExecutionTimeline';
+import {useAppContext} from "@/context/AppContext";
 
 const TokenDashboard: React.FC = () => {
-    const {checkToken} = useAuthController();
+    const {authInfo} = useAppContext();
     const router = useRouter();
     const {tokenId} = router.query;
     const [tokenName, setTokenName] = useState<string | null>(null);
     const {fetchTokenNameFromId} = useTokenController();
-    const [authLoading, setAuthLoading] = useState(true);
     const [pageLoading, setPageLoading] = useState(true);
-    const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
     const [grouping, setGrouping] = React.useState<string>(localStorage.getItem('grouping') || 'hour');
     const {
         groupedSessions,
-        loading,
-        error,
-        fetchGroupedSessions
+        loading
     } = useGroupedSessions(tokenId as string, grouping, 100, 0);
 
     useEffect(() => {
@@ -36,16 +33,7 @@ const TokenDashboard: React.FC = () => {
         }
     }, [tokenId]);
 
-    useEffect(() => {
-        checkToken().then((response) => {
-            setTokenInfo(response);
-            if (response.ok) {
-                setAuthLoading(false);
-            }
-        });
-    }, []);
-
-    if (authLoading || pageLoading) return <Loading/>;
+    if (!authInfo || !authInfo.ok || pageLoading) return <Loading/>;
 
     return (
         <div>

@@ -5,23 +5,15 @@ import {useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 import RegisterAccountModal from '@/components/account/RegisterAccountModal';
 import {User} from "@/types/UserData";
+import {useAppContext} from "@/context/AppContext";
 
 const Accounts = () => {
-    const {checkToken} = useAuthController();
+    const {authInfo} = useAppContext();
     const {getUsers, createUser, loading, error} = useUserController();
-    const [authLoading, setAuthLoading] = useState(true);
     const [users, setUsers] = useState<Users | null>(null);
     const [page, setPage] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const limit = 8;
-
-    useEffect(() => {
-        checkToken().then((response) => {
-            if (response.ok && response.is_admin) {
-                setAuthLoading(false);
-            }
-        });
-    }, []);
 
     useEffect(() => {
         getUsers(page, limit).then((users) => {
@@ -42,7 +34,10 @@ const Accounts = () => {
         });
     };
 
-    if (authLoading) return <Loading/>;
+    if (loading || !authInfo?.ok) return <Loading/>;
+    if (!authInfo?.is_admin) {
+        return <div>You do not have permission to view this page</div>;
+    }
 
     const handlePage = (page: number) => {
         if (page < 0) {

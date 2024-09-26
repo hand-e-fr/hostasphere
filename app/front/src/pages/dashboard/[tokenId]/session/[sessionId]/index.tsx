@@ -7,8 +7,10 @@ import Link from "next/link";
 import {useTokenController} from "@/hooks/useTokenController";
 import FuncCalls from "@/components/dashboard/step/FuncCalls";
 import Loading from "@/components/Loading";
+import {useAppContext} from "@/context/AppContext";
 
 const Session: React.FC = () => {
+    const {authInfo} = useAppContext();
     const router = useRouter();
     const {tokenId, sessionId} = router.query;
     const [tokenName, setTokenName] = useState<string | null>(null);
@@ -39,7 +41,7 @@ const Session: React.FC = () => {
         }
     }, [tokenId, sessionId]);
 
-    if (loading) return <Loading/>;
+    if (!authInfo || !authInfo.ok || loading) return <Loading/>;
     if (error) return <p>Error: {error}</p>;
     if (!session) return <p>No data available</p>;
 

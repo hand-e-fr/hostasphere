@@ -75,6 +75,13 @@ class Profiler:
 
                 source_code = get_source_code(func)
 
+                custom_tracer_data_map = {}
+                for key, value_dict in custom_tracer_data.items():
+                    string_map = profiler_output.StringMap()
+                    for sub_key, sub_value in value_dict.items():
+                        string_map.data[sub_key] = str(sub_value)
+                    custom_tracer_data_map[key] = string_map
+
                 profiler_data = profiler_output.ProfilerOutputRequest(
                     profiler_output=profiler_output.ProfilerOutput(
                         function_name=get_function_name(func),
@@ -85,7 +92,7 @@ class Profiler:
                         start_date=start_date,
                         end_time=end_time,
                         end_date=end_date,
-                        execution_time=(end_time - start_time) * 1000, # in ms
+                        execution_time=(end_time - start_time) * 1000,  # in ms
                         memory_usage=get_memory_usage(),
                         cpu_usage=get_cpu_usage(),
                         func_params=get_func_params(copied_args, func),
@@ -93,7 +100,7 @@ class Profiler:
                         session_uuid=self._session.metrics.session_uuid,
                         source_code=source_code,
                         is_pure_function=is_function_pure(source_code),
-                        custom_tracer_data=custom_tracer_data
+                        custom_tracer_data=custom_tracer_data_map
                     )
                 )
                 self.sendProfilerOutputAsync(profiler_data)

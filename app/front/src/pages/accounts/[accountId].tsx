@@ -5,9 +5,11 @@ import Loading from '@/components/Loading';
 import UpdateAccountModal from '@/components/account/UpdateAccountModal';
 import Link from "next/link";
 import {User} from "@/types/UserData";
+import {useAppContext} from "@/context/AppContext";
 
 const AccountDetails = () => {
     const router = useRouter();
+    const {authInfo} = useAppContext();
     const {accountId} = router.query;
     const {getUserById, updateUser, deleteUser, loading, error} = useUserController();
     const [user, setUser] = useState<User | null>(null);
@@ -47,7 +49,10 @@ const AccountDetails = () => {
         }
     };
 
-    if (loading || !user) return <Loading/>;
+    if (loading || !user || !authInfo?.ok) return <Loading/>;
+    if (!authInfo?.is_admin) {
+        return <div>You do not have permission to view this page</div>;
+    }
 
     if (error) return <div>Error: {error}</div>;
 
@@ -69,6 +74,7 @@ const AccountDetails = () => {
             <div className="flex gap-4 mt-4">
                 <button className="btn btn-warning" onClick={() => setIsModalOpen(true)}>Update</button>
                 <button className="btn btn-error" onClick={handleDelete}>Delete</button>
+                <button className="btn btn-secondary" onClick={() => router.push('/accounts')}>Back</button>
             </div>
             <UpdateAccountModal
                 isOpen={isModalOpen}

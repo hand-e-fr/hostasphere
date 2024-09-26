@@ -22,5 +22,3 @@ def translate(text: str) -> str:
 
 if __name__ == '__main__':
     print(translate("Hello, how are you?"))
-    print(translate._last_request)
-    print(translate._last_response)

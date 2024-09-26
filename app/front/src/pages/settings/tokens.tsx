@@ -6,24 +6,17 @@ import {useTokenController} from "@/hooks/useTokenController";
 import RegisterTokenModal from '@/components/token/RegisterTokenModal';
 import ConfirmDeleteModal from '@/components/token/ConfirmDeleteModal';
 import {Token} from "@/types/TokenData";
+import {useAppContext} from "@/context/AppContext";
 
 const Tokens = () => {
-    const {checkToken} = useAuthController();
-    const {getTokens, deleteToken, error, loading, tokens} = useTokenController();
-    const [authLoading, setAuthLoading] = useState(true);
-    const [tokenInfo, setTokenInfo] = useState<CheckTokenResponse | null>(null);
+    const {authInfo} = useAppContext();
+    const {getTokens, deleteToken, loading, tokens} = useTokenController();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [tokenToDelete, setTokenToDelete] = useState<string | null>(null);
 
     React.useEffect(() => {
-        getTokens();
-        checkToken().then((response) => {
-            setTokenInfo(response);
-            if (response.ok) {
-                setAuthLoading(false);
-            }
-        });
+        getTokens().then()
     }, []);
 
     const handleDeleteClick = (tokenId: string) => {
@@ -34,13 +27,13 @@ const Tokens = () => {
     const handleConfirmDelete = () => {
         if (tokenToDelete) {
             deleteToken(tokenToDelete).then(() => {
-                getTokens(); // Refresh tokens after deletion
+                getTokens().then();
                 setIsConfirmOpen(false);
             });
         }
     };
 
-    if (authLoading || loading) return <Loading/>;
+    if (!authInfo || !authInfo?.ok || loading) return <Loading/>;
 
     return (
         <>
@@ -78,7 +71,7 @@ const Tokens = () => {
                                 <td>
                                     {token.owner}
                                 </td>
-                                {tokenInfo && (tokenInfo.is_admin || token.owner === tokenInfo.email) ? (
+                                {authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email) ? (
                                     <>
                                         <th className="w-0">
                                             <Link href={`/dashboard/${token.id}`}>
@@ -120,7 +113,7 @@ const Tokens = () => {
             <RegisterTokenModal
                 isOpen={isModalOpen}
                 onClose={() => {
-                    getTokens();
+                    getTokens().then();
                     setIsModalOpen(false);
                 }}
             />
