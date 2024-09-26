@@ -18,8 +18,6 @@ func (s *Server) SendProfilerOutput(ctx context.Context, in *proto.ProfilerOutpu
 		return &proto.Response{Ok: false, Message: "Invalid token"}, nil
 	}
 
-	in.ProfilerOutput.CustomTracerData
-
 	collection := config.GetCollection("profiler")
 	_, err := collection.InsertOne(context.Background(), in.ProfilerOutput)
 	if err != nil {
