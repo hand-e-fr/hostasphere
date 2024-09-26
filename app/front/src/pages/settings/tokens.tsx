@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import Link from "next/link";
-import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 import {useTokenController} from "@/hooks/useTokenController";
 import RegisterTokenModal from '@/components/token/RegisterTokenModal';

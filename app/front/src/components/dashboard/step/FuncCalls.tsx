@@ -1,6 +1,5 @@
 import React, {useState} from "react";
-import { ProfilerData } from "@/types/ProfilerData";
-import {CodeBlock, CopyBlock} from "react-code-blocks";
+import {ProfilerData} from "@/types/ProfilerData";
 import {SessionData} from "@/types/SessionData";
 
 interface ExecutionDiagramProps {

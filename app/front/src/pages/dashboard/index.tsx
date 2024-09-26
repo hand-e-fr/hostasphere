@@ -1,5 +1,4 @@
-import React, {useState} from 'react';
-import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
+import React from 'react';
 import {useTokenController} from "@/hooks/useTokenController";
 import Loading from "@/components/Loading";
 import Link from "next/link";

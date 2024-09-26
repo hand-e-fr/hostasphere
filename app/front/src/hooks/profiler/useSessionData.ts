@@ -1,7 +1,7 @@
-import {useEffect, useState, useContext} from 'react';
+import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
 import {ProfilerData} from "@/types/ProfilerData";
-import { useAppContext } from '@/context/AppContext';
+import {useAppContext} from '@/context/AppContext';
 
 const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: string | string[] | undefined, sessionTag: string = ''): {
     fetchData: () => Promise<void>;

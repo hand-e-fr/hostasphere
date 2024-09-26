@@ -1,10 +1,9 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import {SidebarProvider} from "@/context/SidebarContext";
 import {getRestApiUrl} from "@/utils/apiUrl";
-import { useAppController } from "@/hooks/useAppController";
-import {CheckTokenResponse} from "@/hooks/useAuthController";
+import {useAppController} from "@/hooks/useAppController";
+import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import {useRouter} from "next/router";
-import {useAuthController} from "@/hooks/useAuthController";
 
 enum AppStatus {
     NOT_INITIALIZED = 'NOT_INITIALIZED',

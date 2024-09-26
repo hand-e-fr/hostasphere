@@ -8,7 +8,6 @@ import DataArrayIcon from '@mui/icons-material/DataArray';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LoginIcon from '@mui/icons-material/Login';
-import {useAuthController} from "@/hooks/useAuthController";
 import LogoutIcon from '@mui/icons-material/Logout';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import {useAppContext} from "@/context/AppContext";

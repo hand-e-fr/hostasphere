@@ -1,6 +1,6 @@
-import {useEffect, useState, useContext} from 'react';
+import {useEffect, useState} from 'react';
 import {SessionData} from "@/types/SessionData";
-import { useAppContext } from '@/context/AppContext';
+import {useAppContext} from '@/context/AppContext';
 
 interface UseSessionsResult {
     sessions: SessionData[] | null;

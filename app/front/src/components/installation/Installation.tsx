@@ -1,6 +1,6 @@
 import React from 'react';
 import {RegisterAppRequest, RegisterAppResponse, useAppController} from "@/hooks/useAppController";
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
 type InstallationProps = {
     onInstalled: () => void;

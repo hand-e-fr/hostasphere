@@ -1,6 +1,6 @@
 import {ProfilerData} from '@/types/ProfilerData';
-import {useEffect, useState, useContext} from 'react';
-import { useAppContext } from '@/context/AppContext';
+import {useEffect, useState} from 'react';
+import {useAppContext} from '@/context/AppContext';
 
 export interface UseProfilerDataResult {
     data: ProfilerData[] | null;

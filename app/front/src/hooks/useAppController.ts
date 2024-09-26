@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {useContext, useState} from 'react';
-import { useAppContext } from '@/context/AppContext';
+import {useState} from 'react';
+import {useAppContext} from '@/context/AppContext';
 
 export interface RegisterAppRequest {
     name: string;

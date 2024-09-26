@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
 import Loading from "@/components/Loading";
 import {useRouter} from "next/router";
 import Link from "next/link";
@@ -50,7 +49,11 @@ const TokenDashboard: React.FC = () => {
             </div>
             <h2 className="text-xl font-bold mt-4" id="execution-time">Execution time</h2>
             <div className="divider m-0"></div>
-            <ExecutionTimeline/>
+            {
+                groupedSessions && (
+                    <ExecutionTimeline sessions={groupedSessions.flatMap(group => group.sessions)}/>
+                )
+            }
             <h2 className="text-xl font-bold mt-8" id="sessions">Sessions list</h2>
             <div className="divider m-0"></div>
             <div className="mb-4">
