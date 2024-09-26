@@ -9,7 +9,7 @@ interface ExecutionTimelineProps {
     sessions: SessionData[];
 }
 
-const ExecutionTimeline: React.FC = ({}) => {
+const ExecutionTimeline: React.FC<ExecutionTimelineProps> = ({sessions}) => {
     const series = [
         {
             data: [
@@ -47,7 +47,6 @@ const ExecutionTimeline: React.FC = ({}) => {
 
     const options: ApexOptions = {
         chart: {
-            height: 350,
             type: 'rangeBar',
             toolbar: {
                 tools: {
@@ -75,7 +74,7 @@ const ExecutionTimeline: React.FC = ({}) => {
     };
 
     return (
-        <ReactApexChart options={options} series={series} type="rangeBar" height={500}/>
+        <ReactApexChart options={options} series={series} type="rangeBar" height={200}/>
     );
 };
 
