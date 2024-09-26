@@ -1,5 +1,4 @@
 import atexit
-import functools
 import threading
 import time
 import traceback
@@ -7,6 +6,7 @@ import traceback
 import grpc
 
 from . import profiler_output_pb2_grpc as profiler_output_grpc, token_pb2
+from .integrations.custom_tracer import call_custom_tracers
 from .session import Session
 from .token import token_exists
 from .utils import *
@@ -45,7 +45,6 @@ class Profiler:
 
     def track(self):
         def decorator(func):
-            @functools.wraps(func)
             def wrapper(*args, **kwargs):
                 copied_args = deep_copy_args(args)
                 self._session.record_usage()
@@ -60,6 +59,11 @@ class Profiler:
                         caller=f[2]
                     ))
                 result = func(*args, **kwargs)
+                setattr(wrapper, "_last_response", func._last_response)
+                setattr(wrapper, "_last_request", func._last_request)
+
+                custom_tracer_data = call_custom_tracers(func)
+
                 self._session.record_usage()
                 end_time = time.time()
                 end_date = int(time.time() * 1000)
@@ -89,6 +93,7 @@ class Profiler:
                         session_uuid=self._session.metrics.session_uuid,
                         source_code=source_code,
                         is_pure_function=is_function_pure(source_code),
+                        custom_tracer_data=custom_tracer_data
                     )
                 )
                 self.sendProfilerOutputAsync(profiler_data)

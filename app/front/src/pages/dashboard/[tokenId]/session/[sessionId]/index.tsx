@@ -53,7 +53,6 @@ const Session: React.FC = () => {
                     <ul>
                         <li><Link href={`/dashboard`}>Dashboard</Link></li>
                         <li><Link href={`/dashboard/${tokenId}`}>{tokenName && tokenName}</Link></li>
-                        <li><Link href={`/dashboard/${tokenId}#sessions`}>sessions</Link></li>
                         <li>{session && session.sessiontag}</li>
                     </ul>
                 </div>

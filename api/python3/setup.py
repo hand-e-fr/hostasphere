@@ -9,7 +9,7 @@ setup(
         "psutil",
         "grpcio",
         "grpcio-tools",
-        "OpenHosta==1.0.2"
+        "OpenHosta==1.1.0rc3"
     ],
     author="William Jolivet",
     description="Hostasphere Profiler API",

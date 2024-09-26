@@ -1,13 +1,14 @@
-from OpenHosta import emulate, config
+import os
 
+from OpenHosta import emulate, config
 from profiler.core import Profiler
 
-config.set_default_apiKey("sk-proj-...")
+config.set_default_apiKey(os.getenv('OPENAI_API_KEY'))
 
 profiler = Profiler(
-    address='localhost:50051',  # required
-    token='hsp_d0946b91afbce72c107e51bfb60f52da352cfea16fba71f8232ac1bfe06e9ecb',
-    session_tag='uwu'  # required
+    address='california-a.tensordockmarketplace.com:20411',
+    token='hsp_3025e1ed24d554b4709f19fca36e9aa474567736793a8a6e1147185ba438f56f',
+    session_tag='openhosta-2'
 )
 
 
@@ -21,3 +22,5 @@ def translate(text: str) -> str:
 
 if __name__ == '__main__':
     print(translate("Hello, how are you?"))
+    print(translate._last_request)
+    print(translate._last_response)

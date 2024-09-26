@@ -8,6 +8,7 @@ import useGroupedSessions, {GroupedSessionResponse} from "@/hooks/profiler/useGr
 import FolderIcon from "@mui/icons-material/Folder";
 import {SessionData} from "@/types/SessionData";
 import DataArrayIcon from "@mui/icons-material/DataArray";
+import ExecutionTimeline from '@/components/dashboard/timeline/ExecutionTimeline';
 
 const TokenDashboard: React.FC = () => {
     const {checkToken} = useAuthController();
@@ -59,9 +60,9 @@ const TokenDashboard: React.FC = () => {
                     </ul>
                 </div>
             </div>
-            {/*<h2 className="text-xl font-bold mt-4" id="execution-time">Execution time</h2>*/}
-            {/*<div className="divider m-0"></div>*/}
-            {/*<ExecutionTimeline/>*/}
+            <h2 className="text-xl font-bold mt-4" id="execution-time">Execution time</h2>
+            <div className="divider m-0"></div>
+            <ExecutionTimeline/>
             <h2 className="text-xl font-bold mt-8" id="sessions">Sessions list</h2>
             <div className="divider m-0"></div>
             <div className="mb-4">

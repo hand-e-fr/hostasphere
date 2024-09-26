@@ -1,17 +1,17 @@
 import Link from "next/link";
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useRouter} from "next/router";
 import {SidebarContext, SidebarContextType} from "@/context/SidebarContext";
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 import DataArrayIcon from '@mui/icons-material/DataArray';
 import HomeIcon from '@mui/icons-material/Home';
-import Person2Icon from '@mui/icons-material/Person2';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LoginIcon from '@mui/icons-material/Login';
 import {useAuthController} from "@/hooks/useAuthController";
 import LogoutIcon from '@mui/icons-material/Logout';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import {useAppContext} from "@/context/AppContext";
 
 interface SidebarItem {
     name: string;
@@ -48,12 +48,6 @@ const sidebarItems: SidebarItem[] = [
         requireAdmin: true,
     },
     {
-        name: "My Account",
-        href: "/accounts/me",
-        icon: Person2Icon,
-        requiresAuth: true,
-    },
-    {
         name: "Tokens",
         href: "/settings/tokens",
         icon: VpnKeyIcon,
@@ -63,21 +57,28 @@ const sidebarItems: SidebarItem[] = [
 
 const Sidebar = () => {
     const router = useRouter();
+    const {authInfo} = useAppContext();
     const {isCollapsed, toggleSidebarcollapse} = useContext<SidebarContextType>(SidebarContext);
-    const [isAuth, setIsAuth] = React.useState(false);
-    const [isAdmin, setAdmin] = React.useState(false);
-    const {checkToken} = useAuthController();
+    const [isAuth, setIsAuth] = useState(false);
+    const [isAdmin, setAdmin] = useState(false);
 
     useEffect(() => {
-        checkToken().then((response) => {
-            setIsAuth(response.ok || false);
-            setAdmin(response.is_admin || false);
-        });
-    }, [router.asPath]);
+        if (authInfo) {
+            setIsAuth(authInfo.ok || false);
+            setAdmin(authInfo.is_admin || false);
+        }
+    }, [authInfo]);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         router.push("/auth/login").then();
+    }
+
+    const isCurrentPath = (href: string) => {
+        if (href === "/") {
+            return router.pathname === "/";
+        }
+        return router.pathname.startsWith(href);
     }
 
     return (
@@ -110,7 +111,7 @@ const Sidebar = () => {
                                     <Link
                                         href={href}
                                         className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em] ${
-                                            router.pathname === href ? "bg-secondary" : ""
+                                            isCurrentPath(href) ? "bg-secondary" : ""
                                         } ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}>
                                         <div className="flex justify-center items-center">
                                         <span className="mt-1 max-w-7">

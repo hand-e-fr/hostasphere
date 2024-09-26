@@ -60,7 +60,7 @@ export const useAuthController = () => {
         }
     };
 
-    const checkToken = async (): Promise<CheckTokenResponse> => {
+    const checkToken = async (url: string): Promise<CheckTokenResponse> => {
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
@@ -71,7 +71,7 @@ export const useAuthController = () => {
         }
 
         try {
-            const response = await axios.get<CheckTokenResponse>(`${restUrl}/api/login/test`, {
+            const response = await axios.get<CheckTokenResponse>(`${url}/api/login/test`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
