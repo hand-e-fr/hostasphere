@@ -23,6 +23,7 @@
     "react-apexcharts": "^1.4.1",
     "react-code-blocks": "^0.1.6",
     "react-d3-tree": "^3.6.2",
+    "react-datepicker": "^7.4.0",
     "react-dom": "^18",
     "react-toastify": "^10.0.5"
   },

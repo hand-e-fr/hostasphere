@@ -88,7 +88,7 @@ const Sidebar = () => {
                 {isCollapsed ? <ArrowCircleRightIcon/> : <ArrowCircleLeftIcon/>}
             </button>
             <aside
-                className={`min-h-screen bg-base-100 p-4 flex flex-col justify-between transition-all duration-400 ease-in-out overflow-hidden ${isCollapsed ? "w-20" : "w-64"}`}>
+                className={`min-h-screen bg-base-100 p-4 flex flex-col justify-between transition-all duration-400 ease-in-out overflow-hidden ${isCollapsed ? "w-20" : "w-44"}`}>
                 <div className="flex flex-col w-full">
                     {!isCollapsed ? (
                         <p className="text-xl font-semibold flex items-center">
@@ -111,7 +111,7 @@ const Sidebar = () => {
                                         href={href}
                                         className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em] ${
                                             isCurrentPath(href) ? "bg-secondary" : ""
-                                        } ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}>
+                                        } ${isCollapsed ? "justify-center" : "justify-start pl-2"}`}>
                                         <div className="flex justify-center items-center">
                                         <span className="mt-1 max-w-7">
                                             <Icon/>

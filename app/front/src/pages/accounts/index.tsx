@@ -33,7 +33,7 @@ const Accounts = () => {
         });
     };
 
-    if (loading || !authInfo?.ok) return <Loading/>;
+    if (!authInfo?.ok) return <Loading/>;
     if (!authInfo?.is_admin) {
         return <div>You do not have permission to view this page</div>;
     }
@@ -85,7 +85,21 @@ const Accounts = () => {
                                 </Link>
                             </th>
                         </tr>
-                    )) : null}
+                    )) : loading ?
+                        <tr>
+                            <td colSpan={5}>
+                                <main className={`flex-1 p-[2em]`}>
+                                    <div className="flex items-center justify-center h-full">
+                                        <span className="loading loading-ring loading-lg"></span>
+                                    </div>
+                                </main>
+                            </td>
+                        </tr>
+                        :
+                        <tr>
+                            <td colSpan={5}>No users found</td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>

@@ -118,7 +118,7 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
 
     return (
         <div className="h-full w-full flex flex-col" id="execution-diagram">
-            <div id="treeWrapper" className={`relative ${isSideBoardActive ? 'h-2/3' : 'h-full'}`}>
+            <div id="treeWrapper" className={`relative ${isSideBoardActive ? 'h-3/5' : 'h-full'}`}>
                 {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
                     <Tree
                         key={key}
@@ -143,16 +143,9 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
                                         return param.argname + (param.type ? ': ' + param.type : '');
                                     }).join(', ')
                                     || ''
-                                })${hoveredNode.attributes.customData.returnedvalue && ' -> ' + hoveredNode.attributes.customData.returnedvalue.type + ':' || ':'}\n    #...\n    return ${
-                                    hoveredNode.attributes.customData.returnedvalue &&
-                                    hoveredNode.attributes.customData.returnedvalue.value
-                                    || ''
-                                }`
+                                })${hoveredNode.attributes.customData.returnedvalue && ' -> ' + hoveredNode.attributes.customData.returnedvalue.type + ':' || ':'}\n    #...`
                             } language="Python" showLineNumbers={false}/>
                         </div>
-                        <p className="text-sm">Execution Time: {hoveredNode.attributes.customData.executiontime}ms</p>
-                        <p className="text-sm">Execution
-                            Timeline: {new Date(hoveredNode.attributes.customData.starttime * 1000).toLocaleString() + ' => ' + new Date(hoveredNode.attributes.customData.endtime * 1000).toLocaleString()}</p>
                     </>
                 )}
             </div>
