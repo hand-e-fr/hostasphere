@@ -8,6 +8,7 @@ import {useTokenController} from "@/hooks/useTokenController";
 import FuncCalls from "@/components/dashboard/step/FuncCalls";
 import Loading from "@/components/Loading";
 import {useAppContext} from "@/context/AppContext";
+import ScienceIcon from '@mui/icons-material/Science';
 
 const Session: React.FC = () => {
     const {authInfo} = useAppContext();
@@ -48,9 +49,13 @@ const Session: React.FC = () => {
     return (
         <>
             <div className="mb-4">
-                <h1 className="text-2xl font-bold">
-                    Dashboard
-                </h1>
+                <div className="flex justify-between items-center">
+                    <h1 className="text-2xl font-bold">Dashboard</h1>
+                    <button className="btn btn-info text-white" onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
+                        <ScienceIcon className="mr-2"/>
+                        Experiments
+                    </button>
+                </div>
                 <div className="breadcrumbs text-sm">
                     <ul>
                         <li><Link href={`/dashboard`}>Dashboard</Link></li>

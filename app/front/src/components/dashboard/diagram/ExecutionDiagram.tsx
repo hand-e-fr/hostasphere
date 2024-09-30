@@ -117,8 +117,8 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
     );
 
     return (
-        <div className="h-full w-full flex flex-col" id="execution-diagram">
-            <div id="treeWrapper" className={`relative ${isSideBoardActive ? 'h-3/5' : 'h-full'}`}>
+        <div id="execution-diagram" className="h-full w-full flex flex-col justify-between p-4 bg-white shadow rounded-lg mt-3">
+            <div id="treeWrapper" className={`h-full`}>
                 {Array.from(highestNodesMap.entries()).map(([key, treeData]) => (
                     <Tree
                         key={key}
@@ -130,7 +130,7 @@ const ExecutionDiagram: React.FC<ExecutionDiagramProps> = ({ profilerData }) => 
                     />
                 ))}
             </div>
-            <div className={`${isSideBoardActive ? 'h-1/3' : 'hidden'} overflow-y-auto border-t border-base-200 p-4`}>
+            <div className={`${isSideBoardActive ? 'h-52' : 'hidden'} overflow-y-auto border-t border-base-200`}>
                 {isSideBoardActive && hoveredNode && hoveredNode.attributes.customData && (
                     <>
                         <h2 className="text-lg font-bold">{hoveredNode.name}:</h2>
