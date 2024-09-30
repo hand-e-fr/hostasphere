@@ -1,8 +1,8 @@
 /*
- * Hand-e project, 2024
- * hostasphere python profiler api
- * File description:
- * session.proto
+** Hand-e project, 2024
+** hostasphere python profiler api
+** File description:
+** session.proto
 */
 
 syntax = "proto3";
@@ -52,6 +52,7 @@ message Session {
     double boot_time = 23;
     string current_user = 24;
     repeated TrackAnnotation track_annotations = 25;
+    int64 total_tokens = 26;
 }
 
 message SaveSessionRequest {
