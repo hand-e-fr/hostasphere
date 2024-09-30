@@ -1,5 +1,13 @@
+##
+## Hand-e project, 2024
+## hostasphere python profiler api
+## File description:
+## custom_tracer.py
+##
+
 from abc import ABC, abstractmethod
 from typing import Callable
+
 
 class CustomTracer(ABC):
     @abstractmethod
@@ -10,10 +18,8 @@ class CustomTracer(ABC):
 class OpenHostaTracer(CustomTracer):
     def inspect_func(self, func: Callable) -> dict[str, str]:
         result = {}
-        # check if func have attribute _last_response and add it to result
         if hasattr(func, "_last_response"):
             result["_last_response"] = getattr(func, "_last_response")
-        # check if func have attribute _last_request and add it to result
         if hasattr(func, "_last_request"):
             result["_last_request"] = getattr(func, "_last_request")
         return result
@@ -23,8 +29,10 @@ _tracer_registry = {
     "openhosta": OpenHostaTracer(),
 }
 
+
 def get_tracer(tracer_name: str) -> CustomTracer:
     return _tracer_registry[tracer_name]
+
 
 def call_custom_tracers(func: Callable) -> dict[str, dict[str, str]]:
     result = {}

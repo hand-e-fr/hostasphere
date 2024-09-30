@@ -1,3 +1,10 @@
+##
+## Hand-e project, 2024
+## hostasphere python profiler api
+## File description:
+## token.py
+##
+
 import grpc
 
 from . import token_pb2, token_pb2_grpc

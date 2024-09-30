@@ -1,3 +1,10 @@
+##
+## Hand-e project, 2024
+## hostasphere python profiler api
+## File description:
+## test_is_function_pure.py
+##
+
 import unittest
 
 from profiler.utils import is_function_pure

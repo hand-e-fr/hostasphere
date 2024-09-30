@@ -1,3 +1,10 @@
+##
+## Hand-e project, 2024
+## hostasphere python profiler api
+## File description:
+## Makefile
+##
+
 TOKEN_FILE = token.secret
 
 all: clean generate_grpc build upload

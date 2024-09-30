@@ -1,3 +1,10 @@
+##
+## Hand-e project, 2024
+## hostasphere python profiler api
+## File description:
+## session.py
+##
+
 import os
 import platform
 import threading
@@ -29,7 +36,8 @@ class Session:
 
         self._stop_event = threading.Event()  # Event to signal the thread to stop
 
-        self.save_thread = threading.Thread(target=self.save_metrics, daemon=True)
+        self.save_thread = threading.Thread(target=self.save_metrics,
+                                            daemon=True)
         self.save_thread.start()
 
     def collect_system_info(self):

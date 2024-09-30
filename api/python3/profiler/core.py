@@ -1,3 +1,10 @@
+##
+## Hand-e project, 2024
+## hostasphere python profiler api
+## File description:
+## core.py
+##
+
 import atexit
 import threading
 import time
@@ -6,7 +13,7 @@ import traceback
 import grpc
 
 from . import profiler_output_pb2_grpc as profiler_output_grpc, token_pb2
-from .integrations.custom_tracer import call_custom_tracers
+from .custom_tracer import call_custom_tracers
 from .session import Session
 from .token import token_exists
 from .utils import *
@@ -37,7 +44,8 @@ class Profiler:
                 raise Exception(
                     f"Error sending profiler output: {response.message}")
         except grpc.RpcError:
-            raise Exception("Impossible to send profiler output check address, or check if hostaspere is running")
+            raise Exception(
+                "Impossible to send profiler output check address, or check if hostaspere is running")
 
     def sendProfilerOutputAsync(self, profiler_data: profiler_output.ProfilerOutput):
         thread = threading.Thread(target=self.sendProfilerOutput, args=(profiler_data,))
