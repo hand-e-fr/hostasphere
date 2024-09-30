@@ -4,3 +4,22 @@
 ## File description:
 ## tokens_usage.py
 ##
+
+from . import session_pb2
+
+_token_usage: list[session_pb2.UsageAtTime] = []
+
+def record_usage(time: float, usage: float):
+    _token_usage.append(session_pb2.UsageAtTime(time=time, memory_usage=usage))
+
+def get_tokens_usage() -> list[session_pb2.UsageAtTime]:
+    return _token_usage
+
+def get_usage_at_time(time: float) -> session_pb2.UsageAtTime:
+    if len(_token_usage) == 0:
+        return None
+    closest_usage = _token_usage[0]
+    for usage in _token_usage:
+        if abs(usage.time - time) < abs(closest_usage.time - time):
+            closest_usage = usage
+    return closest_usage

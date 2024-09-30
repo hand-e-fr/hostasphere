@@ -5,6 +5,7 @@
 ## custom_tracer.py
 ##
 
+from .tokens_usage import record_usage
 from abc import ABC, abstractmethod
 from typing import Callable
 
@@ -18,10 +19,12 @@ class CustomTracer(ABC):
 class OpenHostaTracer(CustomTracer):
     def inspect_func(self, func: Callable) -> dict[str, str]:
         result = {}
-        if hasattr(func, "_last_response"):
-            result["_last_response"] = getattr(func, "_last_response")
         if hasattr(func, "_last_request"):
             result["_last_request"] = getattr(func, "_last_request")
+        if hasattr(func, "_last_response"):
+            _last_response = getattr(func, "_last_response")
+            result["_last_response"] = _last_response
+            record_usage(_last_response["created"], _last_response["usage"]["total_tokens"])
         return result
 
 

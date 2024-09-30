@@ -2,6 +2,7 @@ import os
 
 from OpenHosta import emulate, config
 from profiler.core import Profiler
+from profiler.tokens_usage import get_tokens_usage
 
 config.set_default_apiKey(os.getenv('OPENAI_API_KEY'))
 
@@ -22,3 +23,6 @@ def translate(text: str) -> str:
 
 if __name__ == '__main__':
     print(translate("Hello, how are you?"))
+    print(translate("How are you?"))
+    print(translate("I've been good, thank you for asking."))
+    print(get_tokens_usage())

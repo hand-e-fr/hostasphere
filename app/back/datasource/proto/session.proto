@@ -1,3 +1,10 @@
+/*
+ * Hand-e project, 2024
+ * hostasphere python profiler api
+ * File description:
+ * session.proto
+*/
+
 syntax = "proto3";
 
 package token;
@@ -31,19 +38,20 @@ message Session {
     repeated UsageAtTime cpu_usage = 9;
     repeated UsageAtTime disk_usage = 10;
     repeated UsageAtTime network_usage = 11;
-    string token_id = 12;
-    int64 pid = 13;
-    string hostname = 14;
-    string os = 15;
-    string os_version = 16;
-    string kernel_version = 17;
-    string architecture = 18;
-    string python_version = 19;
-    string processor = 20;
-    int32 cpu_count = 21;
-    double boot_time = 22;
-    string current_user = 23;
-    repeated TrackAnnotation track_annotations = 24;
+    repeated UsageAtTime tokens_usage = 12;
+    string token_id = 13;
+    int64 pid = 14;
+    string hostname = 15;
+    string os = 16;
+    string os_version = 17;
+    string kernel_version = 18;
+    string architecture = 19;
+    string python_version = 20;
+    string processor = 21;
+    int32 cpu_count = 22;
+    double boot_time = 23;
+    string current_user = 24;
+    repeated TrackAnnotation track_annotations = 25;
 }
 
 message SaveSessionRequest {
