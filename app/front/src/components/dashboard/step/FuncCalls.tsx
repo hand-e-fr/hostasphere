@@ -19,7 +19,7 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
 
     return (
         <>
-            <div className="flex justify-start mt-10 flex-col-reverse lg:flex-row">
+            <div className="flex justify-start flex-col-reverse lg:flex-row">
                 <div className="min-w-[30%] max-w-[50%] mt-6">
                     <ul className="steps steps-vertical">
                         {profilerData.map((data, index) => (

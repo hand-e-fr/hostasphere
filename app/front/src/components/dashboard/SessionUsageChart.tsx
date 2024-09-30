@@ -10,9 +10,10 @@ interface UsageChartProps {
     session: SessionData;
     functions: ProfilerData[];
     hideTrackAnnotations?: boolean;
+    targetUsages: string[];
 }
 
-const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnnotations}) => {
+const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnnotations, targetUsages}) => {
     const memoryUsageData = session.memoryusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const cpuUsageData = session.cpuusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const diskUsageData = session.diskusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
@@ -55,24 +56,17 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
         }
     }));
 
-    const series = [
-        {
-            name: 'Memory Usage',
-            data: memoryUsageData,
-        },
-        {
-            name: 'CPU Usage',
-            data: cpuUsageData,
-        },
-        {
-            name: 'Disk Usage',
-            data: diskUsageData,
-        },
-        {
-            name: 'Network Usage',
-            data: networkUsageData,
-        },
-    ];
+    const usageDataMap = {
+        'memory': memoryUsageData,
+        'cpu': cpuUsageData,
+        'disk': diskUsageData,
+        'network': networkUsageData,
+    };
+
+    const series = targetUsages.map(usageType => ({
+        name: usageType.charAt(0).toUpperCase() + usageType.slice(1) + ' Usage',
+        data: usageDataMap[usageType as keyof typeof usageDataMap],
+    }));
 
     const options: ApexOptions = {
         chart: {
@@ -155,7 +149,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
     };
 
     return (
-        <div className="p-4 bg-white shadow rounded-lg">
+        <div>
             <ReactApexChart options={options} series={series} type="line" height={500}/>
         </div>
     );

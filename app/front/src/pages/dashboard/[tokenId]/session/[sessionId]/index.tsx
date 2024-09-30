@@ -73,19 +73,36 @@ const Session: React.FC = () => {
                     <p>Func Calls</p>
                 </Link>
             </div>
-            {
-                functions && <>
-                    <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
-                        <SessionUsageChart session={session} functions={functions} hideTrackAnnotations={false}/>
-                    </div>
-                    <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
-                        <ExecutionDiagram profilerData={functions}/>
-                    </div>
-                    <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
-                        <FuncCalls profilerData={functions} session={session}/>
-                    </div>
-                </>
-            }
+            <div className="pt-5">
+                {
+                    functions && <>
+                        <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
+                            <div className="mr-2">
+                                <div className="p-4 bg-white shadow rounded-lg mt-3">
+                                    <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and
+                                        Network over
+                                        time:</h3>
+                                    <SessionUsageChart session={session} functions={functions}
+                                                       hideTrackAnnotations={false}
+                                                       targetUsages={['cpu', 'disk', 'memory']}/>
+                                </div>
+                                <div className="p-4 bg-white shadow rounded-lg mt-3">
+                                    <h3 className="mb-4">Chart showing the usage of Network over time.</h3>
+                                    <SessionUsageChart session={session} functions={functions}
+                                                       hideTrackAnnotations={false}
+                                                       targetUsages={['network']}/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
+                            <ExecutionDiagram profilerData={functions}/>
+                        </div>
+                        <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
+                            <FuncCalls profilerData={functions} session={session}/>
+                        </div>
+                    </>
+                }
+            </div>
         </>
     );
 };
