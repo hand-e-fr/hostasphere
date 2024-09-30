@@ -75,42 +75,44 @@ const TokenDashboard: React.FC = () => {
             }
             <h2 className="text-xl font-bold mt-8" id="sessions">Sessions list</h2>
             <div className="divider m-0"></div>
-            <div className="mb-4">
-                <p className="text-gray-500">Grouped by:</p>
-                <select className="select select-bordered select-sm w-full max-w-xs" value={grouping}
-                        onChange={(e) => setGrouping(e.target.value)}>
-                    <option value="hour">Hour</option>
-                    <option value="day">Day</option>
-                    <option value="week">Week</option>
-                    <option value="tag">Tag</option>
-                </select>
-            </div>
-            <div className="mb-4">
-                <p className="text-gray-500">Filter by Tag:</p>
-                <input
-                    type="text"
-                    className="input input-bordered input-sm w-full max-w-xs"
-                    value={tagFilter}
-                    onChange={(e) => setTagFilter(e.target.value)}
-                />
-            </div>
-            <div className="mb-4">
-                <p className="text-gray-500">Filter by Execution Time (ms):</p>
-                <input
-                    type="number"
-                    className="input input-bordered input-sm w-full max-w-xs"
-                    value={executionTimeFilter || ''}
-                    onChange={(e) => setExecutionTimeFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
-                />
-            </div>
-            <div className="mb-4">
-                <p className="text-gray-500">Sort by:</p>
-                <select className="select select-bordered select-sm w-full max-w-xs" value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}>
-                    <option value="">None</option>
-                    <option value="executionTime">Execution Time</option>
-                    <option value="startDate">Start Date</option>
-                </select>
+            <div className="flex flex-row justify-between">
+                <div className="mb-4">
+                    <p className="text-gray-500">Grouped by:</p>
+                    <select className="select select-bordered select-sm w-full max-w-xs" value={grouping}
+                            onChange={(e) => setGrouping(e.target.value)}>
+                        <option value="hour">Hour</option>
+                        <option value="day">Day</option>
+                        <option value="week">Week</option>
+                        <option value="tag">Tag</option>
+                    </select>
+                </div>
+                <div className="mb-4">
+                    <p className="text-gray-500">Filter by Tag:</p>
+                    <input
+                        type="text"
+                        className="input input-bordered input-sm w-full max-w-xs"
+                        value={tagFilter}
+                        onChange={(e) => setTagFilter(e.target.value)}
+                    />
+                </div>
+                <div className="mb-4">
+                    <p className="text-gray-500">Filter by Execution Time (ms):</p>
+                    <input
+                        type="number"
+                        className="input input-bordered input-sm w-full max-w-xs"
+                        value={executionTimeFilter || ''}
+                        onChange={(e) => setExecutionTimeFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
+                    />
+                </div>
+                <div className="mb-4">
+                    <p className="text-gray-500">Sort by:</p>
+                    <select className="select select-bordered select-sm w-full max-w-xs" value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value)}>
+                        <option value="">None</option>
+                        <option value="executionTime">Execution Time</option>
+                        <option value="startDate">Start Date</option>
+                    </select>
+                </div>
             </div>
             {
                 loading ? <Loading/> : (
