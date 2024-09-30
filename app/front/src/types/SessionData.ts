@@ -24,6 +24,7 @@ export interface SessionData {
     kernelversion: string
     memoryusage: UsageAtTime[]
     networkusage: UsageAtTime[]
+    tokensusage: UsageAtTime[]
     os: string
     osversion: string
     pid: number

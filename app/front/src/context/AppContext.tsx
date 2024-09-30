@@ -66,7 +66,6 @@ const AppProvider = ({ children }: AppProviderProps) => {
             return;
         checkToken(restUrl).then((response) => {
             setAuthInfo(response);
-            console.log('AuthInfo', response);
         });
     }, [router.pathname, urlLoaded]);
 

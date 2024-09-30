@@ -9,7 +9,7 @@ config.set_default_apiKey(os.getenv('OPENAI_API_KEY'))
 profiler = Profiler(
     address='california-a.tensordockmarketplace.com:20411',
     token='hsp_3025e1ed24d554b4709f19fca36e9aa474567736793a8a6e1147185ba438f56f',
-    session_tag='openhosta-2'
+    session_tag='openhosta-3'
 )
 
 
@@ -22,7 +22,11 @@ def translate(text: str) -> str:
 
 
 if __name__ == '__main__':
+    profiler.get_session().add_annotation("first prompt")
     print(translate("Hello, how are you?"))
+    profiler.get_session().add_annotation("second prompt")
     print(translate("How are you?"))
-    print(translate("I've been good, thank you for asking."))
+    profiler.get_session().add_annotation("third prompt")
+    print(translate("I've walked 10 miles today, and on my way I saw a cat. BUT!! It was not a cat, it was a giant beer, complete my story."))
+    profiler.get_session().add_annotation("end of session")
     print(get_tokens_usage())

@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps> = ({children}) => {
                             pauseOnHover={false}
                             theme="dark" transition={Bounce}
             />
-            <div className="flex h-screen bg-base-200 overflow-hidden">
+            <div className="flex h-screen bg-base-200">
                 <Sidebar/>
                 <main
                     className={`flex-1 p-4 pt-3 pb-3 min-h-[calc(100vh)]`}>

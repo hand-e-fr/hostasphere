@@ -17,7 +17,7 @@ import grpc
 import psutil
 
 from . import session_pb2_grpc, session_pb2
-from .tokens_usage import get_usage_at_time
+from .tokens_usage import get_tokens_usage
 
 
 class Session:
@@ -34,8 +34,6 @@ class Session:
         self.metrics.session_tag = session_tag
         self.metrics.token_id = token_id
         self.collect_system_info()
-
-        self._records_timecode = []
 
         self._stop_event = threading.Event()  # Event to signal the thread to stop
 
@@ -58,8 +56,6 @@ class Session:
 
     def record_usage(self):
         current_time = time.time()
-
-        self._records_timecode.append(current_time)
 
         # Record memory usage
         memory_usage = deepcopy(psutil.virtual_memory().percent)
@@ -94,10 +90,8 @@ class Session:
         self._stop_event.set()  # Signal the thread to stop
         self.save_thread.join()  # Wait for the thread to finish
         self.record_usage()
-
-        for i in range (len(self._records_timecode) - 1):
-            self.metrics.tokens_usage.append(get_usage_at_time(self._records_timecode[i]))
-
+        for record in get_tokens_usage():
+            self.metrics.tokens_usage.append(record)
         self.metrics.end_time = time.time()
         self.metrics.end_date = int(time.time() * 1000)
         self.metrics.execution_time = (self.metrics.end_time - self.metrics.start_time) * 1000  # milliseconds

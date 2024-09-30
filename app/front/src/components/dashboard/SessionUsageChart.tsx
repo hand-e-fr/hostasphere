@@ -18,6 +18,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
     const cpuUsageData = session.cpuusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const diskUsageData = session.diskusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const networkUsageData = session.networkusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
+    const tokensUsageData = session.tokensusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
 
     var trackAnnotations: { x: number; borderColor: string; label: { borderColor: string; style: { color: string; background: string; }; text: string; }; }[] = [];
 
@@ -61,6 +62,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
         'cpu': cpuUsageData,
         'disk': diskUsageData,
         'network': networkUsageData,
+        'tokens': tokensUsageData,
     };
 
     const series = targetUsages.map(usageType => ({
@@ -150,7 +152,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="line" height={500}/>
+            <ReactApexChart options={options} series={series} type="line" height={400}/>
         </div>
     );
 };
