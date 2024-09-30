@@ -79,15 +79,13 @@ const Session: React.FC = () => {
                         <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
                             <div className="mr-2 grid grid-cols-1 gap-4 xl:grid-cols-2">
                                 <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                    <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and
-                                        Network over
-                                        time:</h3>
+                                    <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and Network over time:</h3>
                                     <SessionUsageChart session={session} functions={functions}
                                                        hideTrackAnnotations={false}
                                                        targetUsages={['cpu', 'disk', 'memory']}/>
                                 </div>
                                 <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                    <h3 className="mb-4">Chart showing the usage of Network over time.</h3>
+                                    <h3 className="mb-4">Chart showing the usage of Network over time (in KB):</h3>
                                     <SessionUsageChart session={session} functions={functions}
                                                        hideTrackAnnotations={false}
                                                        targetUsages={['network']}/>

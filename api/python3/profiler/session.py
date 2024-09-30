@@ -74,7 +74,7 @@ class Session:
 
         # Record network usage
         net_io = deepcopy(psutil.net_io_counters())
-        network_usage = (net_io.bytes_sent + net_io.bytes_recv) / (1024 * 1024)  # Convert to MB
+        network_usage = (net_io.bytes_sent + net_io.bytes_recv) / 1024 # in KB
         self.metrics.network_usage.append(
             session_pb2.UsageAtTime(time=current_time, memory_usage=network_usage))
 
@@ -88,13 +88,13 @@ class Session:
 
     def end_session(self):
         self.record_usage()
-        self._stop_event.set()  # Signal the thread to stop
-        self.save_thread.join()  # Wait for the thread to finish
         for record in get_tokens_usage():
             self.metrics.tokens_usage.append(record)
         self.metrics.end_time = time.time()
         self.metrics.end_date = int(time.time() * 1000)
         self.metrics.execution_time = (self.metrics.end_time - self.metrics.start_time) * 1000  # milliseconds
+        self._stop_event.set()  # Signal the thread to stop
+        self.save_thread.join()  # Wait for the thread to finish
         self.metrics.track_annotations.extend(self._track_annotations)
         self.save_session()
 
