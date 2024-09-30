@@ -9,7 +9,7 @@ config.set_default_apiKey(os.getenv('OPENAI_API_KEY'))
 profiler = Profiler(
     address='california-a.tensordockmarketplace.com:20411',
     token='hsp_3025e1ed24d554b4709f19fca36e9aa474567736793a8a6e1147185ba438f56f',
-    session_tag='openhosta-3'
+    session_tag='openhosta-4'
 )
 
 

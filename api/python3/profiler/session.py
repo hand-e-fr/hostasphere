@@ -87,9 +87,9 @@ class Session:
             self.end_session()
 
     def end_session(self):
+        self.record_usage()
         self._stop_event.set()  # Signal the thread to stop
         self.save_thread.join()  # Wait for the thread to finish
-        self.record_usage()
         for record in get_tokens_usage():
             self.metrics.tokens_usage.append(record)
         self.metrics.end_time = time.time()

@@ -24,7 +24,7 @@ class OpenHostaTracer(CustomTracer):
         if hasattr(func, "_last_response"):
             _last_response = getattr(func, "_last_response")
             result["_last_response"] = _last_response
-            record_usage(_last_response["created"], _last_response["usage"]["total_tokens"])
+            record_usage(_last_response["usage"]["total_tokens"])
         return result
 
 

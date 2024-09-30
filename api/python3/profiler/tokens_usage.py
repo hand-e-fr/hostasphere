@@ -7,10 +7,15 @@
 
 from . import session_pb2
 
+import time
+
 _token_usage: list[session_pb2.UsageAtTime] = []
 
-def record_usage(time: float, usage: float):
-    _token_usage.append(session_pb2.UsageAtTime(time=time, memory_usage=usage))
+def record_usage(usage: float):
+    _token_usage.append(session_pb2.UsageAtTime(
+        time=time.time(),
+        memory_usage=usage
+    ))
 
 def get_tokens_usage() -> list[session_pb2.UsageAtTime]:
     return _token_usage
