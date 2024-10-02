@@ -339,6 +339,13 @@ func GroupSessions(c *gin.Context) {
 				{"sessions", bson.D{{"$push", "$$ROOT"}}},
 			}},
 		}
+	case "all":
+		groupStage = bson.D{
+			{"$group", bson.D{
+				{"_id", nil},
+				{"sessions", bson.D{{"$push", "$$ROOT"}}},
+			}},
+		}
 	default:
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid groupby parameter"})
 		return
@@ -372,4 +379,75 @@ func GroupSessions(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, results)
+}
+
+/*
+** CompareSessions compares two sessions based on the sessionuuids provided in the query parameters.
+ */
+func CompareSessions(c *gin.Context) {
+	claim, err := utils.GetTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	tokenID := c.Query("tokenid")
+	if tokenID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
+		return
+	}
+
+	if !claim.IsAdmin && !utils.IsTokenOwner(tokenID, claim.Email) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
+		return
+	}
+
+	sessionUUID1 := c.Query("sessionuuid1")
+	sessionUUID2 := c.Query("sessionuuid2")
+
+	if sessionUUID1 == "" || sessionUUID2 == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "sessionuuid1 and sessionuuid2 query parameters are required"})
+		return
+	}
+
+	// Initialize context from the request
+	ctx := c.Request.Context()
+
+	// Fetch the sessions from the "sessions" collection
+	sessionFilter := bson.M{"tokenid": tokenID, "sessionuuid": bson.M{"$in": []string{sessionUUID1, sessionUUID2}}}
+	cursor, err := config.GetCollection("sessions").Find(ctx, sessionFilter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer cursor.Close(ctx)
+
+	var sessions []bson.M
+	if err = cursor.All(ctx, &sessions); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Fetch the functions for each session from the "profiler" collection
+	profilerFilter := bson.M{"sessionuuid": bson.M{"$in": []string{sessionUUID1, sessionUUID2}}}
+	cursor, err = config.GetCollection("profiler").Find(ctx, profilerFilter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	defer cursor.Close(ctx)
+
+	var functions []bson.M
+	if err = cursor.All(ctx, &functions); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Combine sessions and functions into the response
+	response := gin.H{
+		"sessions":  sessions,
+		"functions": functions,
+	}
+
+	c.JSON(http.StatusOK, response)
 }

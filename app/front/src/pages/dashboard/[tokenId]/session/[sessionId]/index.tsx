@@ -84,17 +84,88 @@ const Session: React.FC = () => {
                         <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
                             <div className="mr-2 grid grid-cols-1 gap-4 xl:grid-cols-2">
                                 <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                    {
-                                        session.totaltokens && (
-                                            <div className="stats shadow">
-                                                <div className="stat">
-                                                    <div className="stat-title">Total tokens used</div>
-                                                    <div className="stat-value">{session.totaltokens}</div>
-                                                    <div className="stat-desc">21% more than last month</div>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
+                                    <h2 className="text-2xl font-bold">Session Overview</h2>
+                                    <div className="overflow-x-auto mt-3 shadow rounded-lg">
+                                        <table className="table table-xs p-4 bg-gray-50">
+                                            <tbody>
+                                            <tr>
+                                                <td>Session ID</td>
+                                                <td>{session.sessionuuid}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Session Tag</td>
+                                                <td>{session.sessiontag}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Start Date</td>
+                                                <td>{new Date(session.startdate).toLocaleDateString()}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>End Date</td>
+                                                <td>{new Date(session.enddate).toLocaleDateString()}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Execution Time</td>
+                                                <td>{session.executiontime} seconds</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Hostname</td>
+                                                <td>{session.hostname}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>OS</td>
+                                                <td>{session.os}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>OS Version</td>
+                                                <td>{session.osversion}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Processor</td>
+                                                <td>{session.processor}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Kernel Version</td>
+                                                <td>{session.kernelversion}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Python Version</td>
+                                                <td>{session.pythonversion}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Boot Time</td>
+                                                <td>{session.boottime}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>CPU Count</td>
+                                                <td>{session.cpucount}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Current User</td>
+                                                <td>{session.currentuser}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>PID</td>
+                                                <td>{session.pid}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Architecture</td>
+                                                <td>{session.architecture}</td>
+                                            </tr>
+                                            {
+                                                session.totaltokens && (
+                                                    <tr>
+                                                        <td>Total Used Tokens</td>
+                                                        <td className="flex gap-3 items-center">
+                                                            {session.totaltokens}
+                                                            <div className="badge badge-accent badge-outline">openhosta</div>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                                 <div className="p-4 bg-white shadow rounded-lg mt-3">
                                     <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and Network over

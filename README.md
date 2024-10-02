@@ -74,6 +74,7 @@ docker rm rest datasource front
 ##### DATASOURCE:
 - `MONGO_URI`: URI of the mongoDB, default is `mongodb://localhost:27017`
 - `MONGO_DB`: Name of the mongoDB database, default is `hostasphere`
+- `GRPC_MAX_MSG_SIZE`: Maximum size of the message, default is `16MB`
 ##### FRONT:
 - `NEXT_PUBLIC_HS_REST_API_URL`: URL of the REST API, default is `http://localhost:8080`
 

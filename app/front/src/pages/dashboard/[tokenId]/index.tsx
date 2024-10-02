@@ -19,8 +19,7 @@ const TokenDashboard: React.FC = () => {
     const [pageLoading, setPageLoading] = useState(true);
     const [grouping, setGrouping] = React.useState<string>(localStorage.getItem('grouping') || 'hour');
     const [tagFilter, setTagFilter] = useState<string>('');
-    const [executionTimeFilter, setExecutionTimeFilter] = useState<number | null>(null);
-    const [sortBy, setSortBy] = useState<string>('');
+    const [sortBy, setSortBy] = useState<string>(localStorage.getItem('sortBy') || 'startDateAscend');
     const {
         groupedSessions,
         loading
@@ -38,13 +37,15 @@ const TokenDashboard: React.FC = () => {
     const filteredSessions = groupedSessions && groupedSessions.map(group => ({
         ...group,
         sessions: group.sessions.filter(session => {
-            const tagMatch = !tagFilter || session.sessiontag.toLowerCase().includes(tagFilter.toLowerCase());
-            const executionTimeMatch = executionTimeFilter === null || session.executiontime <= executionTimeFilter;
-            return tagMatch && executionTimeMatch;
+            return !tagFilter || session.sessiontag.toLowerCase().includes(tagFilter.toLowerCase());
         }).sort((a, b) => {
-            if (sortBy === 'executionTime') {
+            if (sortBy === 'executionTimeDescend') {
                 return a.executiontime - b.executiontime;
-            } else if (sortBy === 'startDate') {
+            } else if (sortBy === 'executionTimeAscend') {
+                return b.executiontime - a.executiontime;
+            } else if (sortBy === 'startDateAscend') {
+                return new Date(b.startdate).getTime() - new Date(a.startdate).getTime();
+            } else if (sortBy === 'startDateDescend') {
                 return new Date(a.startdate).getTime() - new Date(b.startdate).getTime();
             }
             return 0;
@@ -79,7 +80,10 @@ const TokenDashboard: React.FC = () => {
                 <div className="mb-4">
                     <p className="text-gray-500">Grouped by:</p>
                     <select className="select select-bordered select-sm w-full max-w-xs" value={grouping}
-                            onChange={(e) => setGrouping(e.target.value)}>
+                            onChange={(e) => {
+                                setGrouping(e.target.value);
+                                localStorage.setItem('grouping', e.target.value);
+                            }}>
                         <option value="hour">Hour</option>
                         <option value="day">Day</option>
                         <option value="week">Week</option>
@@ -96,21 +100,24 @@ const TokenDashboard: React.FC = () => {
                     />
                 </div>
                 <div className="mb-4">
-                    <p className="text-gray-500">Filter by Execution Time (ms):</p>
-                    <input
-                        type="number"
-                        className="input input-bordered input-sm w-full max-w-xs"
-                        value={executionTimeFilter || ''}
-                        onChange={(e) => setExecutionTimeFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
-                    />
-                </div>
-                <div className="mb-4">
                     <p className="text-gray-500">Sort by:</p>
                     <select className="select select-bordered select-sm w-full max-w-xs" value={sortBy}
-                            onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="">None</option>
-                        <option value="executionTime">Execution Time</option>
-                        <option value="startDate">Start Date</option>
+                            onChange={(e) => {
+                                setSortBy(e.target.value);
+                                localStorage.setItem('sortBy', e.target.value);
+                            }} defaultValue={sortBy}>
+                        <option value="startDateAscend">
+                            Start Date ⭡ (lastest)
+                        </option>
+                        <option value="startDateDescend">
+                            Start Date ⭣ (oldest)
+                        </option>
+                        <option value="executionTimeAscend">
+                            Execution Time ⭡ (fastest)
+                        </option>
+                        <option value="executionTimeDescend">
+                            Execution Time ⭣ (slowest)
+                        </option>
                     </select>
                 </div>
             </div>
@@ -119,7 +126,7 @@ const TokenDashboard: React.FC = () => {
                     <div>
                         <p className="text-gray-500">List of sessions</p>
                         <ul className="menu rounded-box ">
-                            {filteredSessions && filteredSessions.map((group: GroupedSessionResponse, index) => (
+                        {filteredSessions && filteredSessions.map((group: GroupedSessionResponse, index) => (
                                 <li key={index}>
                                     <details>
                                         <summary>

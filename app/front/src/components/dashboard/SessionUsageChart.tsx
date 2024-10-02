@@ -152,7 +152,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
 
     return (
         <div>
-            <ReactApexChart options={options} series={series} type="line" height={400}/>
+            <ReactApexChart options={options} series={series} type="line" height={415}/>
         </div>
     );
 };
