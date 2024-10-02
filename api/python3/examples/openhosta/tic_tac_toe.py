@@ -51,7 +51,7 @@ if __name__ == '__main__':
         if check_winner(grid) != -1:
             break
         grid = tic_tac_toe(grid)
-        for *row in grid:
+        for row in grid:
             print(grid[row])
 
 
