@@ -84,7 +84,21 @@ const Session: React.FC = () => {
                         <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
                             <div className="mr-2 grid grid-cols-1 gap-4 xl:grid-cols-2">
                                 <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                    <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and Network over time:</h3>
+                                    {
+                                        session.totaltokens && (
+                                            <div className="stats shadow">
+                                                <div className="stat">
+                                                    <div className="stat-title">Total tokens used</div>
+                                                    <div className="stat-value">{session.totaltokens}</div>
+                                                    <div className="stat-desc">21% more than last month</div>
+                                                </div>
+                                            </div>
+                                        )
+                                    }
+                                </div>
+                                <div className="p-4 bg-white shadow rounded-lg mt-3">
+                                    <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and Network over
+                                        time:</h3>
                                     <SessionUsageChart session={session} functions={functions}
                                                        hideTrackAnnotations={false}
                                                        targetUsages={['cpu', 'disk', 'memory']}/>
@@ -95,12 +109,16 @@ const Session: React.FC = () => {
                                                        hideTrackAnnotations={false}
                                                        targetUsages={['network']}/>
                                 </div>
-                                <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                    <h3 className="mb-4">Token usage over time:</h3>
-                                    <SessionUsageChart session={session} functions={functions}
-                                                       hideTrackAnnotations={false}
-                                                       targetUsages={['tokens']}/>
-                                </div>
+                                {
+                                    session.tokensusage && (
+                                        <div className="p-4 bg-white shadow rounded-lg mt-3">
+                                            <h3 className="mb-4">Token usage over time:</h3>
+                                            <SessionUsageChart session={session} functions={functions}
+                                                               hideTrackAnnotations={false}
+                                                               targetUsages={['tokens']}/>
+                                        </div>
+                                    )
+                                }
                             </div>
                         </div>
                         <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>

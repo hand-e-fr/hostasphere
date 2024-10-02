@@ -36,4 +36,5 @@ export interface SessionData {
     starttime: number
     tokenid: string
     trackannotations: TrackAnnotation[]
+    totaltokens: number | undefined
 }

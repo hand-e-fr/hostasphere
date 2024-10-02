@@ -18,7 +18,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
     const cpuUsageData = session.cpuusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const diskUsageData = session.diskusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const networkUsageData = session.networkusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
-    const tokensUsageData = session.tokensusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
+    const tokensUsageData = session.tokensusage && session.tokensusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
 
     var trackAnnotations: { x: number; borderColor: string; label: { borderColor: string; style: { color: string; background: string; }; text: string; }; }[] = [];
 

@@ -17,7 +17,7 @@ import grpc
 import psutil
 
 from . import session_pb2_grpc, session_pb2
-from .tokens_usage import get_tokens_usage
+from .tokens_usage import get_tokens_usage, get_total_tokens
 
 
 class Session:
@@ -90,6 +90,7 @@ class Session:
         self.record_usage()
         for record in get_tokens_usage():
             self.metrics.tokens_usage.append(record)
+        self.metrics.total_tokens = get_total_tokens()
         self.metrics.end_time = time.time()
         self.metrics.end_date = int(time.time() * 1000)
         self.metrics.execution_time = (self.metrics.end_time - self.metrics.start_time) * 1000  # milliseconds
