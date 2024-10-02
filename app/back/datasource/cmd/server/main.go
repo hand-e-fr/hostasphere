@@ -17,6 +17,7 @@ import (
 	"openHostaLogs/internal/token"
 	"openHostaLogs/proto"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -35,7 +36,21 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	s := grpc.NewServer()
+	maxMsgSizeStr := os.Getenv("GRPC_MAX_MSG_SIZE")
+	if maxMsgSizeStr == "" {
+		log.Fatal("GRPC_MAX_MSG_SIZE environment variable not set")
+	}
+
+	maxMsgSize, err := strconv.Atoi(maxMsgSizeStr)
+	if err != nil {
+		log.Fatalf("Invalid GRPC_MAX_MSG_SIZE: %v", err)
+	}
+
+	// Create a new gRPC server with the specified max message size
+	s := grpc.NewServer(
+		grpc.MaxRecvMsgSize(maxMsgSize),
+		grpc.MaxSendMsgSize(maxMsgSize),
+	)
 	proto.RegisterProfilerServer(s, &profiler.Server{})
 	proto.RegisterTokenServiceServer(s, &token.Server{})
 	proto.RegisterSessionServiceServer(s, &session.Server{})

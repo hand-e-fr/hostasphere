@@ -96,10 +96,10 @@ const TokenDashboard: React.FC = () => {
                                 localStorage.setItem('grouping', e.target.value);
                             }}>
                         <option value="all">All</option>
-                        <option value="hour">Hour</option>
-                        <option value="day">Day</option>
-                        <option value="week">Week</option>
                         <option value="tag">Tag</option>
+                        <option value="week">Week</option>
+                        <option value="day">Day</option>
+                        <option value="hour">Hour</option>
                     </select>
                 </div>
                 <div className="mb-4">
@@ -146,11 +146,12 @@ const TokenDashboard: React.FC = () => {
                                         {group.sessions.map((session: SessionData) => (
                                             <li key={session._id}>
                                                 <summary>
-                                                    <Link
-                                                        href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
-                                                        <CodeIcon/>
-                                                        {new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
-                                                        ({session._id})
+                                                    <Link href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
+                                                        <div className="flex items-center space-x-2">
+                                                            <CodeIcon/>
+                                                            <p>{new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
+                                                                ({session._id})</p>
+                                                        </div>
                                                     </Link>
                                                 </summary>
                                             </li>
@@ -167,11 +168,12 @@ const TokenDashboard: React.FC = () => {
                                                 {group.sessions.map((session: SessionData) => (
                                                     <li key={session._id}>
                                                         <summary>
-                                                            <Link
-                                                                href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
-                                                                <CodeIcon/>
-                                                                {new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
-                                                                ({session._id})
+                                                            <Link href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
+                                                                <div className="flex items-center space-x-2">
+                                                                    <CodeIcon/>
+                                                                    <p>{new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
+                                                                        ({session._id})</p>
+                                                                </div>
                                                             </Link>
                                                         </summary>
                                                     </li>
