@@ -1,9 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {usePricingData} from "@/hooks/usePricingData";
 
-// Component to show the LLM Costs
 const LlmCosts = () => {
-    const { data, loading, error } = usePricingData();
+    const [modelName, setModelName] = useState<string>('');
+    const [sortBy, setSortBy] = useState<string>('');
+    const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+
+    const { data, loading, error } = usePricingData({
+        model_name: modelName || undefined,
+        sort_by: sortBy || undefined,
+        order: order || undefined,
+    });
+
+    const handleSort = (field: string) => {
+        if (sortBy === field) {
+            setOrder(order === 'asc' ? 'desc' : 'asc');
+        } else {
+            setSortBy(field);
+            setOrder('asc');
+        }
+    }
 
     if (loading) {
         return <div>Loading...</div>;
@@ -19,10 +35,19 @@ const LlmCosts = () => {
 
     return (
         <>
+            <div className="my-4">
+                <input
+                    type="text"
+                    placeholder="Filter by model name"
+                    value={modelName}
+                    onChange={(e) => setModelName(e.target.value)}
+                    className="input input-bordered input-primary w-full max-w-xs"
+                />
+            </div>
+
             <div className="overflow-x-auto">
                 <div className="min-w-[890px]">
                     <table className="table">
-                        {/* Table head */}
                         <thead>
                         <tr>
                             <th>
@@ -30,15 +55,15 @@ const LlmCosts = () => {
                                     <input type="checkbox" className="checkbox" />
                                 </label>
                             </th>
-                            <th>Provider</th>
-                            <th>Model</th>
-                            <th>Context</th>
-                            <th>1M input tokens</th>
-                            <th>1M output tokens</th>
-                            <th>Updated</th>
+                            <th onClick={() => handleSort('provider')}>Provider</th>
+                            <th onClick={() => handleSort('model')}>Model</th>
+                            <th onClick={() => handleSort('context')}>Context</th>
+                            <th onClick={() => handleSort('input_tokens_price')}>1M input tokens</th>
+                            <th onClick={() => handleSort('output_tokens_price')}>1M output tokens</th>
+                            <th onClick={() => handleSort('updated')}>Updated</th>
                         </tr>
                         </thead>
-                        {/* Table body */}
+
                         <tbody>
                         {data.pricing_data.map((item, index) => (
                             <tr key={index}>
@@ -50,13 +75,12 @@ const LlmCosts = () => {
                                 <td>{item.provider}</td>
                                 <td>{item.model}</td>
                                 <td>{item.context}</td>
-                                <th>${item.input_tokens_price}</th> {/* 1M input tokens */}
-                                <th>${item.output_tokens_price}</th> {/* 1M output tokens */}
+                                <th>${item.input_tokens_price}</th>
+                                <th>${item.output_tokens_price}</th>
                                 <th>{new Date(item.updated).toLocaleDateString()}</th>
                             </tr>
                         ))}
                         </tbody>
-                        {/* Table foot */}
                         <tfoot>
                         <tr>
                             <th></th>
@@ -73,6 +97,6 @@ const LlmCosts = () => {
             </div>
         </>
     );
-};
+}
 
 export default LlmCosts;

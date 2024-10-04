@@ -1,63 +1,72 @@
-import {useEffect, useState} from 'react';
-import {SessionData} from "@/types/SessionData";
-import {useAppContext} from '@/context/AppContext';
+import { useState, useEffect } from 'react';
 
-export interface GroupedSessionResponse {
-    _id: string | { week: number; year: number };
-    sessions: SessionData[];
+interface Model {
+    model: string;
+    provider: string;
+    input_tokens_price: number;
+    output_tokens_price: number;
+    context: string;
+    source: string;
+    updated: string;
 }
 
-const useGroupedSessions = (tokenid: string, groupBy: string, limit: number = 10, page: number = 0): {
-    groupedSessions: GroupedSessionResponse[] | null;
+interface PricingData {
+    pricing_data: Model[];
+}
+
+interface UsePricingDataParams {
+    model_name?: string;
+    sort_by?: string;
+    order?: 'asc' | 'desc';
+}
+
+interface UsePricingDataResult {
+    data: PricingData | null;
     loading: boolean;
     error: string | null;
-    fetchGroupedSessions: () => Promise<void>
-} => {
-    const [groupedSessions, setGroupedSessions] = useState<GroupedSessionResponse[] | null>(null);
+}
+
+export const usePricingData = (params: UsePricingDataParams = {}): UsePricingDataResult => {
+    const [data, setData] = useState<PricingData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const {restUrl} = useAppContext();
-
-    const fetchGroupedSessions = async () => {
-        setLoading(true);
-        const token = localStorage.getItem('token');
-        if (!token) {
-            setError('No token found');
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const queryParams = new URLSearchParams();
-            queryParams.append('tokenid', tokenid);
-            queryParams.append('groupby', groupBy);
-            queryParams.append('limit', limit.toString());
-            queryParams.append('page', page.toString());
-
-            const response = await fetch(`${restUrl}/api/profiler/group-sessions?${queryParams.toString()}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch grouped sessions');
-            }
-
-            const result: GroupedSessionResponse[] = await response.json();
-            setGroupedSessions(result);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     useEffect(() => {
-        fetchGroupedSessions().then();
-    }, [groupBy, limit, page]);
+        const fetchPricingData = async () => {
+            setLoading(true);
+            setError(null);
 
-    return {groupedSessions, loading, error, fetchGroupedSessions};
+            let queryParams = '';
+            const queryStrings = Object.entries(params)
+                .filter(([key, value]) => value !== undefined && value !== null)
+                .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+
+            if (queryStrings.length > 0) {
+                queryParams = `?${queryStrings.join('&')}`;
+            }
+
+            try {
+                const response = await fetch(`http://california-a.tensordockmarketplace.com:20426/api/pricing/${queryParams}`);
+
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                setData(result);
+            } catch (err: unknown) {
+                if (err instanceof Error) {
+                    setError(err.message);
+                } else {
+                    setError('Unknown error occurred');
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPricingData().then();
+    }, [params]);
+
+    return { data, loading, error };
 };
-
-export default useGroupedSessions;

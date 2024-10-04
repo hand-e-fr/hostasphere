@@ -20,7 +20,7 @@ interface UsePricingDataResult {
     error: string | null;
 }
 
-export const usePricingData = (): UsePricingDataResult => {
+export const usePricingData = (p0: { model_name: string | undefined; sort_by: string | undefined; order: "asc" | "desc"; }): UsePricingDataResult => {
     const [data, setData] = useState<PricingData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
