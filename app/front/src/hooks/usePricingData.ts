@@ -20,7 +20,13 @@ interface UsePricingDataResult {
     error: string | null;
 }
 
-export const usePricingData = (p0: { model_name: string | undefined; sort_by: string | undefined; order: "asc" | "desc"; }): UsePricingDataResult => {
+interface FetchParams {
+    model_name?: string;
+    sort_by?: string;
+    order: "asc" | "desc";
+}
+
+export const usePricingData = ({ model_name, sort_by, order }: FetchParams): UsePricingDataResult => {
     const [data, setData] = useState<PricingData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -29,14 +35,22 @@ export const usePricingData = (p0: { model_name: string | undefined; sort_by: st
         const fetchPricingData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://california-a.tensordockmarketplace.com:20426/api/pricing/');
 
-                console.log(response);
+                const params = new URLSearchParams();
+                if (model_name) params.append('model_name', model_name);
+                if (sort_by) params.append('sort_by', sort_by);
+                if (order) params.append('order', order);
+
+                const apiURL = `http://california-a.tensordockmarketplace.com:20426/api/pricing/?${params.toString()}`;
+
+                const response = await fetch(apiURL);
+
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
 
-                const result = await response.json();
+                const result: PricingData = await response.json();
+
                 setData(result);
             } catch (err: unknown) {
                 if (err instanceof Error) {
@@ -49,8 +63,8 @@ export const usePricingData = (p0: { model_name: string | undefined; sort_by: st
             }
         };
 
-        fetchPricingData().then();
-    }, []);
+        fetchPricingData();
+    }, [model_name, sort_by, order]);
 
     return { data, loading, error };
 };
