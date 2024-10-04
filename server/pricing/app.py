@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from llm_price_scraper.enums import DataSources
 from llm_price_scraper.scrapers import LlmPricingScraper
 
 app = Flask(__name__)
 
+CORS(app)
 
 @app.route('/api/pricing/', methods=['GET'])
 def get_pricing():

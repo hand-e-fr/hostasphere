@@ -1,2 +1,3 @@
 llm-price-scraper==1.0.2
 Flask==3.0.3
+flask-cors
