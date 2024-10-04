@@ -58,5 +58,13 @@ type Token struct {
 	Owner          string             `bson:"owner" json:"owner"`
 }
 
+type LLMPrice struct {
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Model       string             `bson:"model" json:"model"`
+	InputPrice  float64            `bson:"input_price" json:"input_price"`
+	OutputPrice float64            `bson:"output_price" json:"output_price"`
+	UpdateAt    int64              `bson:"update_at" json:"update_at"`
+}
+
 var ErrUserExists = errors.New("user already exists")
 var ErrInvalidInput = errors.New("invalid input")

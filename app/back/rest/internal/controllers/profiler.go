@@ -381,9 +381,6 @@ func GroupSessions(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
-/*
-** CompareSessions compares two sessions based on the sessionuuids provided in the query parameters.
- */
 func CompareSessions(c *gin.Context) {
 	claim, err := utils.GetTokenValue(c)
 	if err != nil {
@@ -428,6 +425,16 @@ func CompareSessions(c *gin.Context) {
 		return
 	}
 
+	// Separate sessions by sessionUUID
+	sessionMap := map[string][]bson.M{
+		sessionUUID1: {},
+		sessionUUID2: {},
+	}
+	for _, session := range sessions {
+		sessionUUID := session["sessionuuid"].(string)
+		sessionMap[sessionUUID] = append(sessionMap[sessionUUID], session)
+	}
+
 	// Fetch the functions for each session from the "profiler" collection
 	profilerFilter := bson.M{"sessionuuid": bson.M{"$in": []string{sessionUUID1, sessionUUID2}}}
 	cursor, err = config.GetCollection("profiler").Find(ctx, profilerFilter)
@@ -443,10 +450,26 @@ func CompareSessions(c *gin.Context) {
 		return
 	}
 
+	// Separate functions by sessionUUID
+	functionMap := map[string][]bson.M{
+		sessionUUID1: {},
+		sessionUUID2: {},
+	}
+	for _, function := range functions {
+		sessionUUID := function["sessionuuid"].(string)
+		functionMap[sessionUUID] = append(functionMap[sessionUUID], function)
+	}
+
 	// Combine sessions and functions into the response
 	response := gin.H{
-		"sessions":  sessions,
-		"functions": functions,
+		"session1": gin.H{
+			"sessions":  sessionMap[sessionUUID1],
+			"functions": functionMap[sessionUUID1],
+		},
+		"session2": gin.H{
+			"sessions":  sessionMap[sessionUUID2],
+			"functions": functionMap[sessionUUID2],
+		},
 	}
 
 	c.JSON(http.StatusOK, response)

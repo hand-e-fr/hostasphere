@@ -13,7 +13,7 @@ interface UsageChartProps {
     targetUsages: string[];
 }
 
-const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnnotations, targetUsages}) => {
+const UsageChart: React.FC<UsageChartProps> = ({session, functions = null, hideTrackAnnotations, targetUsages}) => {
     const memoryUsageData = session.memoryusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const cpuUsageData = session.cpuusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
     const diskUsageData = session.diskusage.map(({time, memoryusage}) => ({x: time * 1000, y: memoryusage}));
@@ -37,7 +37,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
         }));
     }
 
-    const functionAnnotations = functions.map((func) => ({
+    const functionAnnotations = functions && functions.map((func) => ({
         x: func.starttime * 1000,
         y: func.memoryusage,
         marker: {
@@ -146,7 +146,7 @@ const UsageChart: React.FC<UsageChartProps> = ({session, functions, hideTrackAnn
                 },
                 ...trackAnnotations,
             ],
-            points: functionAnnotations,
+            points: functions && functionAnnotations || [],
         },
     };
 
