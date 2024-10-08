@@ -9,6 +9,7 @@ import {SessionData} from "@/types/SessionData";
 import CodeIcon from '@mui/icons-material/Code';
 import ExecutionTimeline from '@/components/dashboard/timeline/ExecutionTimeline';
 import {useAppContext} from "@/context/AppContext";
+import DifferenceIcon from '@mui/icons-material/Difference';
 
 const TokenDashboard: React.FC = () => {
     const {authInfo} = useAppContext();
@@ -24,6 +25,7 @@ const TokenDashboard: React.FC = () => {
         groupedSessions,
         loading
     } = useGroupedSessions(tokenId as string, grouping, 100, 0);
+    const [selectedSessions, setSelectedSessions] = useState<string[]>([]);
 
     useEffect(() => {
         if (tokenId) {
@@ -33,6 +35,14 @@ const TokenDashboard: React.FC = () => {
             });
         }
     }, [tokenId]);
+
+    const addSelectedSession = (sessionId: string) => {
+        setSelectedSessions([...selectedSessions, sessionId]);
+    }
+
+    const removeSelectedSession = (sessionId: string) => {
+        setSelectedSessions(selectedSessions.filter(id => id !== sessionId));
+    }
 
     const filteredSessions = groupedSessions && groupedSessions.map(group => ({
         ...group,
@@ -133,42 +143,35 @@ const TokenDashboard: React.FC = () => {
                     </select>
                 </div>
             </div>
+            <p className="text-gray-500">List of sessions</p>
+            <button className="btn btn-active btn-sm text-white"
+                    onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
+                <DifferenceIcon/>
+                Comparer
+            </button>
             {
                 loading ? <Loading/> : (
-                    <div>
-                        <p className="text-gray-500">List of sessions</p>
+                    <>
                         <ul className="menu rounded-box pl-0">
-                        {filteredSessions && filteredSessions.map((group: GroupedSessionResponse, index) => (
-                            <>
-                            {
-                                grouping === 'all' || !group._id ? (
-                                    <>
-                                        {group.sessions.map((session: SessionData) => (
-                                            <li key={session._id}>
-                                                <summary>
-                                                    <Link href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
-                                                        <div className="flex items-center space-x-2">
-                                                            <CodeIcon/>
-                                                            <p>{new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
-                                                                ({session._id})</p>
-                                                        </div>
-                                                    </Link>
-                                                </summary>
-                                            </li>
-                                        ))}
-                                    </>
-                                ) : (
-                                    <li key={index}>
-                                        <details>
-                                            <summary>
-                                                <FolderIcon/>
-                                                {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}
-                                            </summary>
-                                            <ul>
+                            {filteredSessions && filteredSessions.map((group: GroupedSessionResponse, index) => (
+                                <>
+                                    {
+                                        grouping === 'all' || !group._id ? (
+                                            <>
                                                 {group.sessions.map((session: SessionData) => (
                                                     <li key={session._id}>
-                                                        <summary>
-                                                            <Link href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
+                                                        <summary
+                                                            className={`${selectedSessions.includes(session._id) ? 'bg-gray-200' : ''}`}>
+                                                            <input type="checkbox" className="checkbox checkbox-xs"
+                                                                   onChange={(e) => {
+                                                                       if (e.target.checked) {
+                                                                           addSelectedSession(session._id);
+                                                                       } else {
+                                                                           removeSelectedSession(session._id);
+                                                                       }
+                                                                   }}/>
+                                                            <Link
+                                                                href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
                                                                 <div className="flex items-center space-x-2">
                                                                     <CodeIcon/>
                                                                     <p>{new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
@@ -178,15 +181,38 @@ const TokenDashboard: React.FC = () => {
                                                         </summary>
                                                     </li>
                                                 ))}
-                                            </ul>
-                                        </details>
-                                    </li>
-                                )
-                            }
-                            </>
-                        ))}
+                                            </>
+                                        ) : (
+                                            <li key={index}>
+                                                <details>
+                                                    <summary>
+                                                        <FolderIcon/>
+                                                        {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}
+                                                    </summary>
+                                                    <ul>
+                                                        {group.sessions.map((session: SessionData) => (
+                                                            <li key={session._id}>
+                                                                <summary>
+                                                                    <Link
+                                                                        href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
+                                                                        <div className="flex items-center space-x-2">
+                                                                            <CodeIcon/>
+                                                                            <p>{new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
+                                                                                ({session._id})</p>
+                                                                        </div>
+                                                                    </Link>
+                                                                </summary>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </details>
+                                            </li>
+                                        )
+                                    }
+                                </>
+                            ))}
                         </ul>
-                    </div>
+                    </>
                 )
             }
         </div>
