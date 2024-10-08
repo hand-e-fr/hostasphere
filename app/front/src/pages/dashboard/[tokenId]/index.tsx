@@ -145,7 +145,7 @@ const TokenDashboard: React.FC = () => {
             </div>
             <p className="text-gray-500">List of sessions</p>
             <button className="btn btn-active btn-sm text-white"
-                    onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
+                    onClick={() => router.push(`/dashboard`)}>
                 <DifferenceIcon/>
                 Comparer
             </button>
