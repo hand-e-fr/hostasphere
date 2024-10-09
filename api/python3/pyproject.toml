@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=40.0", "wheel"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -11,19 +11,17 @@ authors = [
     {name = "William Jolivet", email = "william.jolivet@epitech.eu"}
 ]
 readme = "README.md"
-readme-content-type = "text/markdown"
-homepage = "https://github.com/hand-e-fr/hostasphere"
 keywords = ["profiler", "API", "gRPC", "system", "monitoring"]
+dependencies = [
+    "requests",
+    "psutil",
+    "grpcio",
+    "grpcio-tools",
+    "OpenHosta==1.1.1"
+]
 
 [project.urls]
-"Source Code" = "https://github.com/hand-e-fr/hostasphere"
-
-[project.dependencies]
-requests = "*"
-psutil = "*"
-grpcio = "*"
-grpcio-tools = "*"
-OpenHosta = "==1.1.1"
+Homepage = "https://github.com/hand-e-fr/hostasphere"
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["profiler"]
