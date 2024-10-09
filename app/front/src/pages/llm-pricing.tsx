@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {Model, usePricingData} from '@/hooks/usePricingData';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import Link from "next/link";
 
-interface SortType {
-    key: string | null;
-    direction: string;
-}
+type SortType = {
+    key: keyof Model | null;
+    direction: 'ascending' | 'descending';
+};
 
 const LlmCosts = () => {
     const { data, loading, error } = usePricingData();
@@ -52,10 +51,11 @@ const LlmCosts = () => {
 
             if (sortConfig.key) {
                 updatedData.sort((a, b) => {
-                    if (a[sortConfig.key] < b[sortConfig.key]) {
+                    const key = sortConfig.key as keyof Model;
+                    if (a[key] < b[key]) {
                         return sortConfig.direction === 'ascending' ? -1 : 1;
                     }
-                    if (a[sortConfig.key] > b[sortConfig.key]) {
+                    if (a[key] > b[key]) {
                         return sortConfig.direction === 'ascending' ? 1 : -1;
                     }
                     return 0;
@@ -66,8 +66,8 @@ const LlmCosts = () => {
         }
     };
 
-    const handleSort = (key: null | string) => {
-        let direction = 'ascending';
+    const handleSort = (key: keyof Model | null) => {
+        let direction: 'ascending' | 'descending' = 'ascending';
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
         }
@@ -201,6 +201,6 @@ const LlmCosts = () => {
             </div>
         </>
     );
-};
+}
 
 export default LlmCosts;
