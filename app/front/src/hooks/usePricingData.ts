@@ -20,7 +20,12 @@ interface UsePricingDataResult {
     error: string | null;
 }
 
-export const usePricingData = (): UsePricingDataResult => {
+export const usePricingData = (source: string = 'docsbot'): {
+    data: PricingData | null;
+    setData: (value: (((prevState: (PricingData | null)) => (PricingData | null)) | PricingData | null)) => void;
+    loading: boolean;
+    error: string | null
+} => {
     const [data, setData] = useState<PricingData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -29,9 +34,11 @@ export const usePricingData = (): UsePricingDataResult => {
         const fetchPricingData = async () => {
             try {
                 setLoading(true);
-                const response = await fetch('http://california-a.tensordockmarketplace.com:20426/api/pricing/');
 
-                console.log(response);
+                const response = await fetch(
+                    `http://california-a.tensordockmarketplace.com:20426/api/pricing/?source=${encodeURIComponent(source)}`
+                );
+
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
@@ -50,9 +57,9 @@ export const usePricingData = (): UsePricingDataResult => {
         };
 
         fetchPricingData().then();
-    }, []);
+    }, [source]);
 
-    return { data, loading, error };
+    return { data, setData, loading, error };
 };
 
 export type { Model, PricingData, UsePricingDataResult };

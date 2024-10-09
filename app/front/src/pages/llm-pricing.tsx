@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Model, usePricingData} from '@/hooks/usePricingData';
+import { Model, usePricingData } from '@/hooks/usePricingData';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
@@ -8,8 +8,11 @@ type SortType = {
     direction: 'ascending' | 'descending';
 };
 
+const sources = ['docsbot', 'botgenuity', 'huggingface', 'huhuhang'];
+
 const LlmCosts = () => {
-    const { data, loading, error } = usePricingData();
+    const [selectedSource, setSelectedSource] = useState<string>('docsbot');
+    const { data, setData, loading, error } = usePricingData(selectedSource);
 
     const [filteredData, setFilteredData] = useState<Model[] | null>([]);
     const [sortConfig, setSortConfig] = useState<SortType>({ key: null, direction: 'ascending' });
@@ -74,24 +77,38 @@ const LlmCosts = () => {
         setSortConfig({ key, direction });
     };
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
     if (error) {
         return <div>Error: {error}</div>;
-    }
-
-    if (!data || data.pricing_data.length === 0) {
-        return <div>No pricing data available</div>;
     }
 
     return (
         <>
             <div className="mb-4">
-                <h1 className="text-2xl font-bold">
-                    LLM Pricing
-                </h1>
+                <h1 className="text-2xl font-bold">LLM Pricing</h1>
+            </div>
+
+            {/* Source Filter */}
+            <div className="mb-4 flex flex-col items-start">
+                <label className="mr-2">Select Source: </label>
+                <select
+                    value={selectedSource}
+                    onChange={(e) => {
+                        setSelectedSource(e.target.value);
+                        setProviderFilter('');
+                        setModelFilter('');
+                        setContextFilter('');
+                        setSortConfig({ key: null, direction: 'ascending' });
+                        setFilteredData([]);
+                        setData(null);
+                    }}
+                    className="select select-bordered w-44 select-sm"
+                >
+                    {sources.map((source) => (
+                        <option key={source} value={source}>
+                            {source.charAt(0).toUpperCase() + source.slice(1)}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             {/* Table */}
@@ -192,7 +209,9 @@ const LlmCosts = () => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={7}>No matching entries found.</td>
+                                <td colSpan={7}>
+                                    Loading...
+                                </td>
                             </tr>
                         )}
                         </tbody>
@@ -201,6 +220,6 @@ const LlmCosts = () => {
             </div>
         </>
     );
-}
+};
 
 export default LlmCosts;
