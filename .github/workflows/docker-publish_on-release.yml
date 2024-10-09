@@ -3,7 +3,6 @@ name: Build and Publish Docker Images on Release
 on:
   release:
     types:
-      - published
       - released
       - prereleased
 
@@ -38,7 +37,7 @@ jobs:
           context: app/back/datasource
           file: app/back/datasource/Dockerfile
           tags: |
-            handoe/hostasphere-datasource:release-${{ env.RELEASE_VERSION }}
+            handoe/hostasphere-datasource:${{ env.RELEASE_VERSION }}
             handoe/hostasphere-datasource:latest
 
   build-and-push-rest:
@@ -67,7 +66,7 @@ jobs:
           context: app/back/rest
           file: app/back/rest/Dockerfile
           tags: |
-            handoe/hostasphere-rest:release-${{ env.RELEASE_VERSION }}
+            handoe/hostasphere-rest:${{ env.RELEASE_VERSION }}
             handoe/hostasphere-rest:latest
 
   build-and-push-front:
@@ -96,7 +95,7 @@ jobs:
           context: app/front
           file: app/front/Dockerfile
           tags: |
-            handoe/hostasphere-front:release-${{ env.RELEASE_VERSION }}
+            handoe/hostasphere-front:${{ env.RELEASE_VERSION }}
             handoe/hostasphere-front:latest
 
   build-and-push-server-pricing:
@@ -125,5 +124,5 @@ jobs:
           context: server/pricing
           file: server/pricing/Dockerfile
           tags: |
-            handoe/hostasphere-server-pricing:release-${{ env.RELEASE_VERSION }}
+            handoe/hostasphere-server-pricing:${{ env.RELEASE_VERSION }}
             handoe/hostasphere-server-pricing:latest

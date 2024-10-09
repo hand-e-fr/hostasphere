@@ -10,7 +10,7 @@ TOKEN_FILE = token.secret
 all: clean generate_grpc build upload
 
 build:
-	python setup.py sdist bdist_wheel
+	python -m build
 
 upload:
 	@echo "Uploading to PyPI..."
