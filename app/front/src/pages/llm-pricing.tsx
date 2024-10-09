@@ -134,11 +134,6 @@ const LlmCosts = () => {
                         {/* Table head with Sortable Columns */}
                         <thead>
                         <tr className="bg-gray-100">
-                            <th>
-                                <label>
-                                    <input type="checkbox" className="checkbox"/>
-                                </label>
-                            </th>
                             <th onClick={() => handleSort('provider')} className="cursor-pointer">
                                 Provider {sortConfig.key === 'provider' && (sortConfig.direction === 'ascending' ?
                                 <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
@@ -171,8 +166,7 @@ const LlmCosts = () => {
                             </th>
                         </tr>
                         <tr className="bg-gray-50">
-                            <th></th>
-                            <th>
+                            <th className="p-3">
                                 <div>
                                     <input
                                         type="text"
@@ -183,7 +177,7 @@ const LlmCosts = () => {
                                     />
                                 </div>
                             </th>
-                            <th>
+                            <th className="p-3">
                                 <input
                                     type="text"
                                     placeholder="Search by Model"
@@ -192,7 +186,7 @@ const LlmCosts = () => {
                                     className="input input-bordered w-40 input-sm"
                                 />
                             </th>
-                            <th>
+                            <th className="p-3">
                                 <div>
                                     <input
                                         type="text"
@@ -218,11 +212,6 @@ const LlmCosts = () => {
 
                                 return (
                                     <tr key={index}>
-                                        <th>
-                                            <label>
-                                                <input type="checkbox" className="checkbox"/>
-                                            </label>
-                                        </th>
                                         <td>{item.provider}</td>
                                         <td>{item.model}</td>
                                         <td>{item.context}</td>

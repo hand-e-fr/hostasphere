@@ -145,21 +145,20 @@ const TokenDashboard: React.FC = () => {
                 </div>
             </div>
             <p className="text-gray-500">List of sessions</p>
-            <div className="dropdown dropdown-right dropdown-end">
-                <div tabIndex={0} role="button" className="btn m-1">Click</div>
-                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                    <li><a>
-                        <UnfoldMoreIcon/>
-                        Comparer
-                    </a></li>
-                    <li><a>Item 2</a></li>
-                </ul>
+            <div className="flex flex-row mb-4 space-x-2">
+                {/* compare button */}
+                <button className={`btn btn-info btn-sm ${selectedSessions.length !== 2 ? 'btn-disabled' : ''}`}
+                        onClick={() => router.push(`/dashboard`)}>
+                    <DifferenceIcon/>
+                    Compare 2 sessions
+                </button>
+                {/* cancel selection button */}
+                <button className={`btn btn-warning btn-sm ${selectedSessions.length === 0 ? 'btn-disabled' : ''}`}
+                        onClick={() => setSelectedSessions([])}>
+                    <UnfoldMoreIcon/>
+                    Cancel selection
+                </button>
             </div>
-            <button className="btn btn-active btn-sm text-white"
-                    onClick={() => router.push(`/dashboard`)}>
-                <DifferenceIcon/>
-                Comparer
-            </button>
             {
                 loading ? <Loading/> : (
                     <>
@@ -173,10 +172,12 @@ const TokenDashboard: React.FC = () => {
                                                     <li key={session._id}>
                                                         <summary
                                                             className={`${selectedSessions.includes(session._id) ? 'bg-gray-200' : ''}`}>
-                                                            <input type="checkbox" className="checkbox checkbox-xs"
+                                                            <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session._id)}
                                                                    onChange={(e) => {
                                                                        if (e.target.checked) {
-                                                                           addSelectedSession(session._id);
+                                                                            if (selectedSessions.length < 2) {
+                                                                                addSelectedSession(session._id);
+                                                                            }
                                                                        } else {
                                                                            removeSelectedSession(session._id);
                                                                        }
@@ -203,7 +204,18 @@ const TokenDashboard: React.FC = () => {
                                                     <ul>
                                                         {group.sessions.map((session: SessionData) => (
                                                             <li key={session._id}>
-                                                                <summary>
+                                                                <summary
+                                                                    className={`${selectedSessions.includes(session._id) ? 'bg-gray-200' : ''}`}>
+                                                                    <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session._id)}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.checked) {
+                                                                                 if (selectedSessions.length < 2) {
+                                                                                     addSelectedSession(session._id);
+                                                                                 }
+                                                                            } else {
+                                                                                removeSelectedSession(session._id);
+                                                                            }
+                                                                        }}/>
                                                                     <Link
                                                                         href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
                                                                         <div className="flex items-center space-x-2">
