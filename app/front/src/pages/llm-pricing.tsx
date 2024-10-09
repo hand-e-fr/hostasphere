@@ -4,7 +4,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 type SortType = {
-    key: keyof Model | null;
+    key: keyof Model | 'average_price' | null;
     direction: 'ascending' | 'descending';
 };
 
@@ -53,23 +53,38 @@ const LlmCosts = () => {
             }
 
             if (sortConfig.key) {
-                updatedData.sort((a, b) => {
-                    const key = sortConfig.key as keyof Model;
-                    if (a[key] < b[key]) {
-                        return sortConfig.direction === 'ascending' ? -1 : 1;
-                    }
-                    if (a[key] > b[key]) {
-                        return sortConfig.direction === 'ascending' ? 1 : -1;
-                    }
-                    return 0;
-                });
+                if (sortConfig.key === 'average_price') {
+                    updatedData.sort((a, b) => {
+                        const avgA = (a.input_tokens_price + a.output_tokens_price) / 2;
+                        const avgB = (b.input_tokens_price + b.output_tokens_price) / 2;
+
+                        if (avgA < avgB) {
+                            return sortConfig.direction === 'ascending' ? -1 : 1;
+                        }
+                        if (avgA > avgB) {
+                            return sortConfig.direction === 'ascending' ? 1 : -1;
+                        }
+                        return 0;
+                    });
+                } else {
+                    updatedData.sort((a, b) => {
+                        const key = sortConfig.key as keyof Model;
+                        if (a[key] < b[key]) {
+                            return sortConfig.direction === 'ascending' ? -1 : 1;
+                        }
+                        if (a[key] > b[key]) {
+                            return sortConfig.direction === 'ascending' ? 1 : -1;
+                        }
+                        return 0;
+                    });
+                }
             }
 
             setFilteredData(updatedData);
         }
     };
 
-    const handleSort = (key: keyof Model | null) => {
+    const handleSort = (key: keyof Model | 'average_price' | null) => {
         let direction: 'ascending' | 'descending' = 'ascending';
         if (sortConfig.key === key && sortConfig.direction === 'ascending') {
             direction = 'descending';
@@ -107,6 +122,11 @@ const LlmCosts = () => {
                 </select>
             </div>
 
+            {/* Total */}
+            <div className="mb-4">
+                <p>Total: {filteredData ? filteredData.length : 0}</p>
+            </div>
+
             {/* Table */}
             <div className="overflow-x-auto">
                 <div className="min-w-[890px]">
@@ -139,6 +159,10 @@ const LlmCosts = () => {
                             <th onClick={() => handleSort('output_tokens_price')} className="cursor-pointer">
                                 1M output
                                 tokens {sortConfig.key === 'output_tokens_price' && (sortConfig.direction === 'ascending' ?
+                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                            </th>
+                            <th onClick={() => handleSort('average_price')} className="cursor-pointer">
+                                Average Price {sortConfig.key === 'average_price' && (sortConfig.direction === 'ascending' ?
                                 <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
                             </th>
                             <th onClick={() => handleSort('updated')} className="cursor-pointer">
@@ -182,30 +206,36 @@ const LlmCosts = () => {
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                         </thead>
 
                         {/* Table body */}
                         <tbody>
                         {filteredData && filteredData.length > 0 ? (
-                            filteredData.map((item: Model, index) => (
-                                <tr key={index}>
-                                    <th>
-                                        <label>
-                                            <input type="checkbox" className="checkbox"/>
-                                        </label>
-                                    </th>
-                                    <td>{item.provider}</td>
-                                    <td>{item.model}</td>
-                                    <td>{item.context}</td>
-                                    <td>${item.input_tokens_price}</td>
-                                    <td>${item.output_tokens_price}</td>
-                                    <td>{new Date(item.updated).toLocaleDateString()}</td>
-                                </tr>
-                            ))
+                            filteredData.map((item: Model, index) => {
+                                const avgPrice = (item.input_tokens_price + item.output_tokens_price) / 2;
+
+                                return (
+                                    <tr key={index}>
+                                        <th>
+                                            <label>
+                                                <input type="checkbox" className="checkbox"/>
+                                            </label>
+                                        </th>
+                                        <td>{item.provider}</td>
+                                        <td>{item.model}</td>
+                                        <td>{item.context}</td>
+                                        <td>${item.input_tokens_price}</td>
+                                        <td>${item.output_tokens_price}</td>
+                                        <td>${avgPrice.toFixed(2)}</td>
+                                        <td>{new Date(item.updated).toLocaleDateString()}</td>
+                                    </tr>
+                                );
+                            })
                         ) : (
                             <tr>
-                                <td colSpan={7}>
+                                <td colSpan={8}>
                                     Loading...
                                 </td>
                             </tr>
