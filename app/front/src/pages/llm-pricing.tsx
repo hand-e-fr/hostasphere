@@ -12,7 +12,7 @@ const sources = ['docsbot', 'botgenuity', 'huggingface', 'huhuhang'];
 
 const LlmCosts = () => {
     const [selectedSource, setSelectedSource] = useState<string>('docsbot');
-    const { data, setData, loading, error } = usePricingData(selectedSource);
+    const { data, setData, error } = usePricingData(selectedSource);
 
     const [filteredData, setFilteredData] = useState<Model[] | null>([]);
     const [sortConfig, setSortConfig] = useState<SortType>({ key: null, direction: 'ascending' });
@@ -94,10 +94,6 @@ const LlmCosts = () => {
                     value={selectedSource}
                     onChange={(e) => {
                         setSelectedSource(e.target.value);
-                        setProviderFilter('');
-                        setModelFilter('');
-                        setContextFilter('');
-                        setSortConfig({ key: null, direction: 'ascending' });
                         setFilteredData([]);
                         setData(null);
                     }}
@@ -117,7 +113,40 @@ const LlmCosts = () => {
                     <table className="table">
                         {/* Table head with Sortable Columns */}
                         <thead>
-                        <tr>
+                        <tr className="bg-gray-100">
+                            <th>
+                                <label>
+                                    <input type="checkbox" className="checkbox"/>
+                                </label>
+                            </th>
+                            <th onClick={() => handleSort('provider')} className="cursor-pointer">
+                                Provider {sortConfig.key === 'provider' && (sortConfig.direction === 'ascending' ?
+                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                            </th>
+                            <th onClick={() => handleSort('model')} className="cursor-pointer">
+                                Model {sortConfig.key === 'model' && (sortConfig.direction === 'ascending' ?
+                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                            </th>
+                            <th onClick={() => handleSort('context')} className="cursor-pointer">
+                                Context {sortConfig.key === 'context' && (sortConfig.direction === 'ascending' ?
+                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                            </th>
+                            <th onClick={() => handleSort('input_tokens_price')} className="cursor-pointer">
+                                1M input
+                                tokens {sortConfig.key === 'input_tokens_price' && (sortConfig.direction === 'ascending' ?
+                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                            </th>
+                            <th onClick={() => handleSort('output_tokens_price')} className="cursor-pointer">
+                                1M output
+                                tokens {sortConfig.key === 'output_tokens_price' && (sortConfig.direction === 'ascending' ?
+                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                            </th>
+                            <th onClick={() => handleSort('updated')} className="cursor-pointer">
+                                Updated {sortConfig.key === 'updated' && (sortConfig.direction === 'ascending' ?
+                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                            </th>
+                        </tr>
+                        <tr className="bg-gray-50">
                             <th></th>
                             <th>
                                 <div>
@@ -153,39 +182,6 @@ const LlmCosts = () => {
                             <th></th>
                             <th></th>
                             <th></th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label>
-                                    <input type="checkbox" className="checkbox"/>
-                                </label>
-                            </th>
-                            <th onClick={() => handleSort('provider')} className="cursor-pointer">
-                                Provider {sortConfig.key === 'provider' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('model')} className="cursor-pointer">
-                                Model {sortConfig.key === 'model' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('context')} className="cursor-pointer">
-                                Context {sortConfig.key === 'context' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('input_tokens_price')} className="cursor-pointer">
-                                1M input
-                                tokens {sortConfig.key === 'input_tokens_price' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('output_tokens_price')} className="cursor-pointer">
-                                1M output
-                                tokens {sortConfig.key === 'output_tokens_price' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('updated')} className="cursor-pointer">
-                                Updated {sortConfig.key === 'updated' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
                         </tr>
                         </thead>
 
