@@ -20,13 +20,7 @@ interface UsePricingDataResult {
     error: string | null;
 }
 
-interface FetchParams {
-    model_name?: string;
-    sort_by?: string;
-    order: "asc" | "desc";
-}
-
-export const usePricingData = ({ model_name, sort_by, order }: FetchParams): UsePricingDataResult => {
+export const usePricingData = (): UsePricingDataResult => {
     const [data, setData] = useState<PricingData | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -35,22 +29,14 @@ export const usePricingData = ({ model_name, sort_by, order }: FetchParams): Use
         const fetchPricingData = async () => {
             try {
                 setLoading(true);
+                const response = await fetch('http://california-a.tensordockmarketplace.com:20426/api/pricing/');
 
-                const params = new URLSearchParams();
-                if (model_name) params.append('model_name', model_name);
-                if (sort_by) params.append('sort_by', sort_by);
-                if (order) params.append('order', order);
-
-                const apiURL = `http://california-a.tensordockmarketplace.com:20426/api/pricing/?${params.toString()}`;
-
-                const response = await fetch(apiURL);
-
+                console.log(response);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.statusText}`);
                 }
 
-                const result: PricingData = await response.json();
-
+                const result = await response.json();
                 setData(result);
             } catch (err: unknown) {
                 if (err instanceof Error) {
@@ -63,8 +49,10 @@ export const usePricingData = ({ model_name, sort_by, order }: FetchParams): Use
             }
         };
 
-        fetchPricingData();
-    }, [model_name, sort_by, order]);
+        fetchPricingData().then();
+    }, []);
 
     return { data, loading, error };
 };
+
+export type { Model, PricingData, UsePricingDataResult };

@@ -10,6 +10,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import {useAppContext} from "@/context/AppContext";
 
 interface SidebarItem {
@@ -50,6 +51,12 @@ const sidebarItems: SidebarItem[] = [
         name: "Tokens",
         href: "/settings/tokens",
         icon: VpnKeyIcon,
+        requiresAuth: true,
+    },
+    {
+        name: "Pricing",
+        href: "/llm-pricing",
+        icon: AttachMoneyIcon,
         requiresAuth: true,
     }
 ];

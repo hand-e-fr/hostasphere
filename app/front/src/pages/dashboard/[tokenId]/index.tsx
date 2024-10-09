@@ -10,6 +10,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import ExecutionTimeline from '@/components/dashboard/timeline/ExecutionTimeline';
 import {useAppContext} from "@/context/AppContext";
 import DifferenceIcon from '@mui/icons-material/Difference';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 
 const TokenDashboard: React.FC = () => {
     const {authInfo} = useAppContext();
@@ -144,6 +145,16 @@ const TokenDashboard: React.FC = () => {
                 </div>
             </div>
             <p className="text-gray-500">List of sessions</p>
+            <div className="dropdown dropdown-right dropdown-end">
+                <div tabIndex={0} role="button" className="btn m-1">Click</div>
+                <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                    <li><a>
+                        <UnfoldMoreIcon/>
+                        Comparer
+                    </a></li>
+                    <li><a>Item 2</a></li>
+                </ul>
+            </div>
             <button className="btn btn-active btn-sm text-white"
                     onClick={() => router.push(`/dashboard`)}>
                 <DifferenceIcon/>
