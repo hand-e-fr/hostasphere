@@ -32,11 +32,11 @@ const SessionCharts: React.FC<SessionChartsProps> = ({ session1Data, session2Dat
         series: [
             {
                 name: 'Session 1',
-                data: session1Data.map((point) => [point.time, point.memoryusage]),
+                data: session1Data.map((point) => [point.time - session1Data[0].time, point.memoryusage]),
             },
             {
                 name: 'Session 2',
-                data: session2Data.map((point) => [point.time, point.memoryusage]),
+                data: session2Data.map((point) => [point.time - session2Data[0].time, point.memoryusage]),
             },
         ],
     }

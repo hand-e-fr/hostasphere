@@ -14,7 +14,6 @@ export interface SessionData {
     architecture: string
     boottime: number
     cpucount: number
-    cpuusage: UsageAtTime[]
     currentuser: string
     diskusage: UsageAtTime[]
     enddate: number
@@ -22,9 +21,11 @@ export interface SessionData {
     executiontime: number
     hostname: string
     kernelversion: string
+    cpuusage: UsageAtTime[]
     memoryusage: UsageAtTime[]
     networkusage: UsageAtTime[]
     tokensusage: UsageAtTime[]
+    trackannotations: TrackAnnotation[]
     os: string
     osversion: string
     pid: number
@@ -35,6 +36,5 @@ export interface SessionData {
     startdate: number
     starttime: number
     tokenid: string
-    trackannotations: TrackAnnotation[]
     totaltokens: number | undefined
 }
