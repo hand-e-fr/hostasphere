@@ -36,18 +36,11 @@ const CompareSessionsPage = () => {
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <SessionInfo session={sessionData1} sessionTitle="Session 1 Information"/>
-                            <SessionInfo session={sessionData1} sessionTitle="Session 2 Information"/>
+                            <SessionInfo session={sessionData2} sessionTitle="Session 2 Information"/>
                         </div>
 
                         <div>
-                            <h2 className="card-title">Difference between Session 1 and Session 2</h2>
-                            {
-                                sessionData1.tokensusage && sessionData2.tokensusage && (
-                                    <p>
-                                        Total Tokens: {(sessionData1.totaltokens as number) - (sessionData2.totaltokens as number)}
-                                    </p>
-                                )
-                            }
+                            <h2 className="card-title">Diff</h2>
                         </div>
 
                         <CompareSessionsChart

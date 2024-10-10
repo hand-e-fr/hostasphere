@@ -7,9 +7,6 @@ interface SessionInfoProps {
 }
 
 const SessionInfo: React.FC<SessionInfoProps> = ({ session, sessionTitle }) => {
-
-    console.log(session);
-
     return (
         <div className="card bg-base-100 shadow-lg mb-6">
             <div className="card-body">
