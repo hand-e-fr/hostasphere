@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import {useAppContext} from "@/context/AppContext";
 import {SessionData} from "@/types/SessionData";
+import {ProfilerData} from "@/types/ProfilerData";
+
+export interface ComparedSession {
+  sessions: SessionData[],
+  functions: ProfilerData[]
+}
 
 export interface CompareSessionsData {
-  session1: SessionData,
-  session2: SessionData
+  session1: ComparedSession,
+  session2: ComparedSession
 }
 
 const useCompareSessions = (

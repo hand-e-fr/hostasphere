@@ -148,7 +148,10 @@ const TokenDashboard: React.FC = () => {
             <div className="flex flex-row mb-4 space-x-2">
                 {/* compare button */}
                 <button className={`btn btn-info btn-sm ${selectedSessions.length !== 2 ? 'btn-disabled' : ''}`}
-                        onClick={() => router.push(`/dashboard`)}>
+                        onClick={() => {
+                            if (selectedSessions.length === 2)
+                                router.push(`/dashboard/${tokenId}/compare/${selectedSessions[0]}/${selectedSessions[1]}`);
+                        }}>
                     <DifferenceIcon/>
                     Compare 2 sessions
                 </button>
@@ -171,15 +174,15 @@ const TokenDashboard: React.FC = () => {
                                                 {group.sessions.map((session: SessionData) => (
                                                     <li key={session._id}>
                                                         <summary
-                                                            className={`${selectedSessions.includes(session._id) ? 'bg-gray-200' : ''}`}>
-                                                            <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session._id)}
+                                                            className={`${selectedSessions.includes(session.sessionuuid) ? 'bg-gray-200' : ''}`}>
+                                                            <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session.sessionuuid)}
                                                                    onChange={(e) => {
                                                                        if (e.target.checked) {
                                                                             if (selectedSessions.length < 2) {
-                                                                                addSelectedSession(session._id);
+                                                                                addSelectedSession(session.sessionuuid);
                                                                             }
                                                                        } else {
-                                                                           removeSelectedSession(session._id);
+                                                                           removeSelectedSession(session.sessionuuid);
                                                                        }
                                                                    }}/>
                                                             <Link
@@ -205,15 +208,15 @@ const TokenDashboard: React.FC = () => {
                                                         {group.sessions.map((session: SessionData) => (
                                                             <li key={session._id}>
                                                                 <summary
-                                                                    className={`${selectedSessions.includes(session._id) ? 'bg-gray-200' : ''}`}>
-                                                                    <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session._id)}
+                                                                    className={`${selectedSessions.includes(session.sessionuuid) ? 'bg-gray-200' : ''}`}>
+                                                                    <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session.sessionuuid)}
                                                                         onChange={(e) => {
                                                                             if (e.target.checked) {
                                                                                  if (selectedSessions.length < 2) {
-                                                                                     addSelectedSession(session._id);
+                                                                                     addSelectedSession(session.sessionuuid);
                                                                                  }
                                                                             } else {
-                                                                                removeSelectedSession(session._id);
+                                                                                removeSelectedSession(session.sessionuuid);
                                                                             }
                                                                         }}/>
                                                                     <Link
