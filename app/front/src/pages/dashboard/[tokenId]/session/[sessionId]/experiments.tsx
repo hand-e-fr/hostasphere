@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {useAppContext} from "@/context/AppContext";
 import {useRouter} from "next/router";
-import {useTokenController} from "@/hooks/useTokenController";
-import useSessionData from "@/hooks/profiler/useSessionData";
+import {useTokenController} from "@/hooks/app/useTokenController";
+import useSessionData from "@/hooks/session/useSessionData";
 import Loading from "@/components/Loading";
 
 const Session: React.FC = () => {

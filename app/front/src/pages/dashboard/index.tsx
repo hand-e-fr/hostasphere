@@ -1,5 +1,5 @@
 import React from 'react';
-import {useTokenController} from "@/hooks/useTokenController";
+import {useTokenController} from "@/hooks/app/useTokenController";
 import Loading from "@/components/Loading";
 import Link from "next/link";
 import {useAppContext} from "@/context/AppContext";

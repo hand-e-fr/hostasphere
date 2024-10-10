@@ -1,10 +1,10 @@
 import {useRouter} from "next/router";
-import useSessionData from "@/hooks/profiler/useSessionData";
+import useSessionData from "@/hooks/session/useSessionData";
 import SessionUsageChart from "@/components/dashboard/SessionUsageChart";
 import React, {useEffect, useState} from "react";
 import ExecutionDiagram from "@/components/dashboard/diagram/ExecutionDiagram";
 import Link from "next/link";
-import {useTokenController} from "@/hooks/useTokenController";
+import {useTokenController} from "@/hooks/app/useTokenController";
 import FuncCalls from "@/components/dashboard/step/FuncCalls";
 import Loading from "@/components/Loading";
 import {useAppContext} from "@/context/AppContext";

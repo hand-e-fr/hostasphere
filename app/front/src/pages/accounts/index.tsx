@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import useUserController, {CreateUserRequest, Users} from "@/hooks/useUserController";
+import useUserController, {CreateUserRequest, Users} from "@/hooks/user/useUserController";
 import Link from "next/link";
 import Loading from "@/components/Loading";
 import RegisterAccountModal from '@/components/account/RegisterAccountModal';

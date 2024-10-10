@@ -1,5 +1,5 @@
 import React from 'react';
-import {useAuthController} from "@/hooks/useAuthController";
+import {useAuthController} from "@/hooks/auth/useAuthController";
 import {useRouter} from "next/router";
 
 const Login = () => {

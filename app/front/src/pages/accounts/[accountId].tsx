@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useRouter} from 'next/router';
-import useUserController from '@/hooks/useUserController';
+import useUserController from '@/hooks/user/useUserController';
 import Loading from '@/components/Loading';
 import UpdateAccountModal from '@/components/account/UpdateAccountModal';
 import Link from "next/link";

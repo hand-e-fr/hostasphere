@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Link from "next/link";
 import Loading from "@/components/Loading";
-import {useTokenController} from "@/hooks/useTokenController";
+import {useTokenController} from "@/hooks/app/useTokenController";
 import RegisterTokenModal from '@/components/token/RegisterTokenModal';
 import ConfirmDeleteModal from '@/components/token/ConfirmDeleteModal';
 import {Token} from "@/types/TokenData";

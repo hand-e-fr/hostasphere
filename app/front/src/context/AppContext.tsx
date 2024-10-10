@@ -1,8 +1,8 @@
 import {createContext, ReactNode, useContext, useEffect, useState} from "react";
 import {SidebarProvider} from "@/context/SidebarContext";
 import {getRestApiUrl} from "@/utils/apiUrl";
-import {useAppController} from "@/hooks/useAppController";
-import {CheckTokenResponse, useAuthController} from "@/hooks/useAuthController";
+import {useAppController} from "@/hooks/app/useAppController";
+import {CheckTokenResponse, useAuthController} from "@/hooks/auth/useAuthController";
 import {useRouter} from "next/router";
 
 enum AppStatus {

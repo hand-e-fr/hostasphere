@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {TokenResponse, useTokenController} from '@/hooks/useTokenController';
+import {TokenResponse, useTokenController} from '@/hooks/app/useTokenController';
 import {toast} from "react-toastify";
 
 interface RegisterTokenModalProps {
