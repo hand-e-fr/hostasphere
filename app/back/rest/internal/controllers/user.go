@@ -2,6 +2,9 @@ package controllers
 
 import (
 	"app/internal/utils"
+	"context"
+	"errors"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
 	"strconv"
@@ -14,7 +17,41 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func UpdateUser(c *gin.Context) {
+func GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
+	collection := config.GetCollection("users")
+
+	err := collection.FindOne(nil, bson.M{"email": email}).Decode(&user)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func GetUserByID(id string) (*models.User, error) {
+	objID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	var user models.User
+	collection := config.GetCollection("users")
+	err = collection.FindOne(nil, bson.M{"_id": objID}).Decode(&user)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func UpdateUserRoute(c *gin.Context) {
 	userID := c.Param("id")
 	objID, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
@@ -58,7 +95,7 @@ func UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully"})
 }
 
-func DeleteUser(c *gin.Context) {
+func DeleteUserRoute(c *gin.Context) {
 	userID := c.Param("id")
 	objID, err := primitive.ObjectIDFromHex(userID)
 	if err != nil {
@@ -67,6 +104,15 @@ func DeleteUser(c *gin.Context) {
 	}
 
 	collection := config.GetCollection("users")
+	user, err := GetUserByID(userID)
+	if user == nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+	if user.SuperAdmin {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
 	_, err = collection.DeleteOne(c, bson.M{"_id": objID})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
@@ -76,7 +122,7 @@ func DeleteUser(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
 
-func ChangePassword(c *gin.Context) {
+func ChangePasswordRoute(c *gin.Context) {
 	var input struct {
 		UserID      string `json:"user_id"`
 		NewPassword string `json:"new_password"`
@@ -111,7 +157,7 @@ func ChangePassword(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Password updated successfully"})
 }
 
-func GetUser(c *gin.Context) {
+func GetUserByEmailRoute(c *gin.Context) {
 	claims, err := utils.GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
@@ -120,25 +166,29 @@ func GetUser(c *gin.Context) {
 
 	email := claims.Email
 
-	var user models.User
-	collection := config.GetCollection("users")
-	err = collection.FindOne(c, bson.M{"email": email}).Decode(&user)
+	user, err := GetUserByEmail(email)
 	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
+		return
+	}
+
+	if user == nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id":         user.ID.Hex(),
-		"email":      user.Email,
-		"first_name": user.FirstName,
-		"last_name":  user.LastName,
-		"is_admin":   user.IsAdmin,
-		"created_at": user.CreatedAt,
+		"id":             user.ID.Hex(),
+		"email":          user.Email,
+		"first_name":     user.FirstName,
+		"last_name":      user.LastName,
+		"is_admin":       user.IsAdmin,
+		"is_super_admin": user.SuperAdmin,
+		"created_at":     user.CreatedAt,
 	})
 }
 
-func GetUserByID(c *gin.Context) {
+func GetUserByIDRoute(c *gin.Context) {
 	claims, err := utils.GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
@@ -149,33 +199,31 @@ func GetUserByID(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
-
 	userID := c.Param("id")
-	objID, err := primitive.ObjectIDFromHex(userID)
+
+	user, err := GetUserByID(userID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	var user models.User
-	collection := config.GetCollection("users")
-	err = collection.FindOne(c, bson.M{"_id": objID}).Decode(&user)
-	if err != nil {
+	if user == nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"id":         user.ID.Hex(),
-		"email":      user.Email,
-		"first_name": user.FirstName,
-		"last_name":  user.LastName,
-		"is_admin":   user.IsAdmin,
-		"created_at": user.CreatedAt,
+		"id":             user.ID.Hex(),
+		"email":          user.Email,
+		"first_name":     user.FirstName,
+		"last_name":      user.LastName,
+		"is_admin":       user.IsAdmin,
+		"is_super_admin": user.SuperAdmin,
+		"created_at":     user.CreatedAt,
 	})
 }
 
-func GetUsers(c *gin.Context) {
+func GetUsersRoute(c *gin.Context) {
 	claims, err := utils.GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
@@ -225,10 +273,19 @@ func GetUsers(c *gin.Context) {
 		return
 	}
 
-	defer cursor.Close(c)
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err := cursor.Close(ctx)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to close cursor"})
+		}
+	}(cursor, c)
 	for cursor.Next(c) {
 		var user models.User
-		cursor.Decode(&user)
+		err := cursor.Decode(&user)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to decode user"})
+			return
+		}
 		users = append(users, user)
 	}
 

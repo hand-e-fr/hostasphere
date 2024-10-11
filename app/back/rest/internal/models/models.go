@@ -24,6 +24,7 @@ type User struct {
 	LastName            string             `bson:"last_name" json:"last_name"`
 	Password            []byte             `bson:"password" json:"-"`
 	IsAdmin             bool               `bson:"is_admin" json:"is_admin"`
+	SuperAdmin          bool               `bson:"super_admin" json:"super_admin"`
 	NeedsPasswordChange bool               `bson:"needs_password_change" json:"needs_password_change"`
 	CreatedAt           int64              `bson:"created_at" json:"created_at"`
 }

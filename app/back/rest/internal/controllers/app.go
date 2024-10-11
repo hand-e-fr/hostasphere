@@ -47,7 +47,7 @@ func RegisterApp(c *gin.Context) {
 	}
 
 	// Register the admin user
-	err = SaveUser(appRequest.AdminUser, false, true)
+	err = SaveUser(appRequest.AdminUser, false, true, true)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

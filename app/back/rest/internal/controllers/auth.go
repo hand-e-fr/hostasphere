@@ -36,7 +36,7 @@ func isCorrectInputs(input models.RegisterUserRequest) error {
 	return nil
 }
 
-func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAdmin bool) error {
+func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAdmin bool, isSuperAdmin bool) error {
 	err := isCorrectInputs(request)
 	if err != nil {
 		return err
@@ -60,6 +60,7 @@ func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAd
 		LastName:            request.LastName,
 		Password:            hashedPassword,
 		IsAdmin:             isAdmin,
+		SuperAdmin:          isSuperAdmin,
 		NeedsPasswordChange: needsPasswordChange,
 		CreatedAt:           time.Now().UnixMilli(),
 	}
@@ -89,7 +90,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	if err := SaveUser(input, true, false); err != nil {
+	if err := SaveUser(input, true, false, false); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
