@@ -67,8 +67,10 @@ class Profiler:
                         caller=f[2]
                     ))
                 result = func(*args, **kwargs)
-                setattr(wrapper, "_last_response", func._last_response)
-                setattr(wrapper, "_last_request", func._last_request)
+                if hasattr(func, "_last_response"):
+                    setattr(wrapper, "_last_response", func._last_response)
+                if hasattr(func, "_last_request"):
+                    setattr(wrapper, "_last_request", func._last_request)
 
                 custom_tracer_data = call_custom_tracers(func)
 

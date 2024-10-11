@@ -5,7 +5,7 @@ import warnings
 
 from profiler import token_pb2 as profiler_dot_token__pb2
 
-GRPC_GENERATED_VERSION = '1.66.1'
+GRPC_GENERATED_VERSION = '1.66.2'
 GRPC_VERSION = grpc.__version__
 _version_not_supported = False
 
