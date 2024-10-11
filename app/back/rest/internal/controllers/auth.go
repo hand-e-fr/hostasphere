@@ -140,7 +140,7 @@ func FirstConnection(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(claims.Id, claims.Email, claims.IsAdmin, time.Now().Add(5*time.Minute))
+	token, err := utils.GenerateJWT(claims.Id, claims.Email, claims.IsAdmin, time.Now().Add(time.Hour*24), false)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
@@ -176,7 +176,7 @@ func Login(c *gin.Context) {
 	}
 
 	if user.NeedsPasswordChange {
-		token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute))
+		token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute), true)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 			return
@@ -186,7 +186,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour))
+	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour), false)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
@@ -202,5 +202,5 @@ func CheckToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"ok": true, "email": claims.Email, "is_admin": claims.IsAdmin})
+	c.JSON(http.StatusOK, gin.H{"ok": true, "email": claims.Email, "is_admin": claims.IsAdmin, "needs_password_change": claims.NeedsPasswordChange})
 }

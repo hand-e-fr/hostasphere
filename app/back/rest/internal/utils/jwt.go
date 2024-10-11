@@ -11,11 +11,12 @@ import (
 
 var jwtKey = []byte(os.Getenv("JWT_SECRET"))
 
-func GenerateJWT(id string, email string, isAdmin bool, expirationTime time.Time) (string, error) {
+func GenerateJWT(id string, email string, isAdmin bool, expirationTime time.Time, NeedsPasswordChange bool) (string, error) {
 	claims := &models.Claims{
-		Id:      id,
-		Email:   email,
-		IsAdmin: isAdmin,
+		Id:                  id,
+		Email:               email,
+		IsAdmin:             isAdmin,
+		NeedsPasswordChange: NeedsPasswordChange,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

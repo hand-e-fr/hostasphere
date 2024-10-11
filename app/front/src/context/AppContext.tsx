@@ -66,6 +66,10 @@ const AppProvider = ({ children }: AppProviderProps) => {
             return;
         checkToken(restUrl).then((response) => {
             setAuthInfo(response);
+            if (!response.ok && router.pathname !== '/auth/login')
+                router.push('/auth/login').then();
+            else if (response.needs_password_change && router.pathname !== '/auth/login/first-connection')
+                router.push('/auth/login/first-connection').then();
         });
     }, [router.pathname, urlLoaded]);
 

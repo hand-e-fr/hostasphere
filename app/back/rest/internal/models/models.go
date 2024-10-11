@@ -43,9 +43,10 @@ type RegisterAppRequest struct {
 }
 
 type Claims struct {
-	Id      string `json:"id"`
-	Email   string `json:"email"`
-	IsAdmin bool   `json:"is_admin"`
+	Id                  string `json:"id"`
+	Email               string `json:"email"`
+	IsAdmin             bool   `json:"is_admin"`
+	NeedsPasswordChange bool   `json:"needs_password_change"`
 	jwt.StandardClaims
 }
 

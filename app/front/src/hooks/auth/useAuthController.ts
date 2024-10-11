@@ -11,6 +11,7 @@ interface CheckTokenResponse {
     ok: boolean;
     email?: string;
     is_admin?: boolean;
+    needs_password_change?: boolean;
     error?: string;
 }
 

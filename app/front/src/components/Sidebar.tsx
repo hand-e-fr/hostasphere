@@ -27,6 +27,7 @@ const sidebarItems: SidebarItem[] = [
         name: "Home",
         href: "/",
         icon: HomeIcon,
+        requiresAuth: true,
     },
     {
         name: "Login",
@@ -70,7 +71,10 @@ const Sidebar = () => {
 
     useEffect(() => {
         if (authInfo) {
-            setIsAuth(authInfo.ok || false);
+            if (authInfo.needs_password_change)
+                setIsAuth(false);
+            else
+                setIsAuth(authInfo.ok || false);
             setAdmin(authInfo.is_admin || false);
         }
     }, [authInfo]);
