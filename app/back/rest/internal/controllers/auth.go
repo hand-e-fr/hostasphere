@@ -36,22 +36,22 @@ func isCorrectInputs(input models.RegisterUserRequest) error {
 	return nil
 }
 
-func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAdmin bool, isSuperAdmin bool) error {
+func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAdmin bool, isSuperAdmin bool) (models.User, error) {
 	err := isCorrectInputs(request)
 	if err != nil {
-		return err
+		return models.User{}, err
 	}
 
 	collection := config.GetCollection("users")
 	var user models.User
 	err = collection.FindOne(context.Background(), bson.M{"email": request.Email}).Decode(&user)
 	if err == nil {
-		return models.ErrUserExists
+		return models.User{}, errors.New("user already exists")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return models.User{}, errors.New("could not hash password")
 	}
 
 	user = models.User{
@@ -67,9 +67,9 @@ func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAd
 
 	_, err = collection.InsertOne(context.Background(), user)
 	if err != nil {
-		return err
+		return models.User{}, errors.New("could not save user")
 	}
-	return nil
+	return user, nil
 }
 
 func RegisterUser(c *gin.Context) {
@@ -90,7 +90,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	if err := SaveUser(input, true, false, false); err != nil {
+	if _, err := SaveUser(input, true, false, false); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

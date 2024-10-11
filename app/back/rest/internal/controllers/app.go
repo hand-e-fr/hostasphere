@@ -1,7 +1,9 @@
 package controllers
 
 import (
+	"app/internal/utils"
 	"net/http"
+	"time"
 
 	"app/internal/config"
 	"app/internal/models"
@@ -12,7 +14,7 @@ import (
 func RegisterApp(c *gin.Context) {
 	var appRequest models.RegisterAppRequest
 	if err := c.ShouldBindJSON(&appRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"ok": false, "error": err.Error()})
 		return
 	}
 
@@ -20,13 +22,13 @@ func RegisterApp(c *gin.Context) {
 	collection := config.GetCollection("apps")
 	count, err := collection.CountDocuments(c, bson.M{})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check if app is already registered"})
+		c.JSON(http.StatusInternalServerError, gin.H{"ok": false, "error": "Failed to check if app is already registered"})
 		return
 	}
 	if count > 0 {
 		err = collection.Drop(c)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to drop existing app"})
+			c.JSON(http.StatusInternalServerError, gin.H{"ok": false, "error": "Failed to drop existing app"})
 			return
 		}
 	}
@@ -42,18 +44,24 @@ func RegisterApp(c *gin.Context) {
 	collection = config.GetCollection("apps")
 	_, err = collection.InsertOne(c, app)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to register app"})
+		c.JSON(http.StatusInternalServerError, gin.H{"ok": false, "error": "Failed to register app"})
 		return
 	}
 
 	// Register the admin user
-	err = SaveUser(appRequest.AdminUser, false, true, true)
+	user, err := SaveUser(appRequest.AdminUser, false, true, true)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"ok": false, "error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "App registered successfully"})
+	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour), false)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"ok": false, "error": "Could not generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"ok": true, "message": "App registered successfully", "token": token})
 }
 
 func GetApp(c *gin.Context) {

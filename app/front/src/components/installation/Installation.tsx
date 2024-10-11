@@ -36,6 +36,7 @@ const Installation: React.FC = () => {
                     };
                     registerApp(appData).then((response: RegisterAppResponse) => {
                         if (response.ok) {
+                            localStorage.setItem('token', response.token as string);
                             router.push('/').then(() => window.location.reload());
                         }
                     });

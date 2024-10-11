@@ -28,6 +28,8 @@ export interface App {
 export interface RegisterAppResponse {
     ok: boolean;
     error: string | null;
+    token?: string;
+    message?: string;
 }
 
 export const useAppController = () => {

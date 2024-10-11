@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"app/internal/controllers"
 	"app/internal/models"
 	"fmt"
 	"os"
@@ -37,6 +38,19 @@ func ValidateJWT(tokenString string) (*models.Claims, error) {
 	}
 
 	if !token.Valid {
+		return nil, fmt.Errorf("invalid token")
+	}
+
+	if claims.ExpiresAt < time.Now().Unix() {
+		return nil, fmt.Errorf("token expired")
+	}
+
+	user, err := controllers.GetUserByID(claims.Id)
+	if err != nil {
+		return nil, fmt.Errorf("could not find user")
+	}
+
+	if user.IsAdmin != claims.IsAdmin || user.NeedsPasswordChange != claims.NeedsPasswordChange || user.Email != claims.Email {
 		return nil, fmt.Errorf("invalid token")
 	}
 
