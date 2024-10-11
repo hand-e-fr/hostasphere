@@ -22,7 +22,23 @@ const Dashboard: React.FC = () => {
                 </h1>
             </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-                {tokens && tokens.map((token, index) => authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email) && (
+                {!tokens ? (
+                        <div className="card bg-gray-50 shadow-xl">
+                            <div className="card-body">
+                                <h2 className="card-title">
+                                    No tokens
+                                </h2>
+                                <p>
+                                    Create a new token
+                                </p>
+                                <Link className="card-actions justify-end" href={`/settings/tokens`} passHref>
+                                    <button className="btn btn-secondary">
+                                        Create
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+                ) : (tokens.map((token, index) => authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email) && (
                     <div key={index}>
                         <div className="card bg-gray-50 shadow-xl">
                             <div className="card-body">
@@ -40,7 +56,7 @@ const Dashboard: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                ))}
+                )))}
             </div>
         </>
     );
