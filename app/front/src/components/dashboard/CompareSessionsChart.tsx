@@ -6,11 +6,12 @@ import {ApexOptions} from "apexcharts";
 const ApexChart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 interface SessionChartsProps {
+    title: string;
     session1Data: UsageAtTime[];
     session2Data: UsageAtTime[];
 }
 
-const SessionCharts: React.FC<SessionChartsProps> = ({ session1Data, session2Data }) => {
+const SessionCharts: React.FC<SessionChartsProps> = ({ title, session1Data, session2Data }) => {
     const chartOptions: ApexOptions = {
         chart: {
             type: 'line',
@@ -19,9 +20,10 @@ const SessionCharts: React.FC<SessionChartsProps> = ({ session1Data, session2Dat
                 enabled: true
             }
         },
+        colors: ['#008FFB', '#e30000'],
         title: {
-            text: 'Session Comparison - CPU & Memory Usage',
-            align: 'left'
+            text: title || 'Chart',
+            align: 'center'
         },
         xaxis: {
             type: 'numeric',
@@ -42,9 +44,8 @@ const SessionCharts: React.FC<SessionChartsProps> = ({ session1Data, session2Dat
     }
 
     return (
-        <div className="card bg-base-100 shadow-lg">
+        <div className="bg-base-100 shadow rounded-lg mt-3">
             <div className="card-body">
-                <h2 className="card-title">Session Comparison Chart</h2>
                 <ApexChart options={chartOptions} series={chartOptions.series} type="line" height={500} />
             </div>
         </div>

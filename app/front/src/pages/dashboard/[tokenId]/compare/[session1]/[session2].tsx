@@ -35,33 +35,38 @@ const CompareSessionsPage = () => {
                 !loading && !error && sessionData1 && sessionData2 && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <SessionInfo session={sessionData1} sessionTitle="Session 1 Information"/>
-                            <SessionInfo session={sessionData2} sessionTitle="Session 2 Information"/>
+                            <SessionInfo session={sessionData1} sessionTitle="Session 1 Information" color="blue"/>
+                            <SessionInfo session={sessionData2} sessionTitle="Session 2 Information" color="red"/>
                         </div>
 
                         <div>
-                            <h2 className="card-title">Diff</h2>
                         </div>
 
-                        <CompareSessionsChart
-                            session1Data={sessionData1.cpuusage}
-                            session2Data={sessionData2.cpuusage}
-                        />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <CompareSessionsChart
+                                title="CPU Usage"
+                                session1Data={sessionData1.cpuusage}
+                                session2Data={sessionData2.cpuusage}
+                            />
 
-                        <CompareSessionsChart
-                            session1Data={sessionData1.memoryusage}
-                            session2Data={sessionData2.memoryusage}
-                        />
+                            <CompareSessionsChart
+                                title="Memory Usage"
+                                session1Data={sessionData1.memoryusage}
+                                session2Data={sessionData2.memoryusage}
+                            />
 
-                        <CompareSessionsChart
-                            session1Data={sessionData1.tokensusage}
-                            session2Data={sessionData2.tokensusage}
-                        />
+                            <CompareSessionsChart
+                                title="Tokens Usage"
+                                session1Data={sessionData1.tokensusage}
+                                session2Data={sessionData2.tokensusage}
+                            />
 
-                        <CompareSessionsChart
-                            session1Data={sessionData1.networkusage}
-                            session2Data={sessionData2.networkusage}
-                        />
+                            <CompareSessionsChart
+                                title="Network Usage"
+                                session1Data={sessionData1.networkusage}
+                                session2Data={sessionData2.networkusage}
+                            />
+                        </div>
                     </>
                 )
             }
