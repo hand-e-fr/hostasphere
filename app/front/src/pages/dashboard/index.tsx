@@ -79,7 +79,7 @@ const Dashboard: React.FC = () => {
                                             <br/>
                                             Owner: {token.owner}
                                         </p>
-                                    </div>
+                                    </div>w
                                     <div className="flex flex-col gap-2">
                                         {authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email) && (
                                             <>

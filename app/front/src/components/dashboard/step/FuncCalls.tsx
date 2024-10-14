@@ -23,7 +23,7 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                 <div className="min-w-[30%] max-w-[50%] mt-6">
                     <ul className="steps steps-vertical">
                         {profilerData.map((data, index) => (
-                            <li key={index}
+                            <li key={index} data-content=""
                                 className={`step cursor-pointer hover:bg-gray-100 p-2 ${targetFunction?._id === data._id ? 'step-error bg-gray-100' : 'step-accent'}`}
                                 onClick={() => setTargetFunction(data)}>
                                 <div className="flex items-start justify-start flex-col">
@@ -43,7 +43,7 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                                 <ul className="steps steps-vertical">
                                     { targetFunction.funcparams && (
                                         <>
-                                            <li className={`step step-accent`}>
+                                            <li className={`step step-accent`} data-content="">
                                                 <button className="btn" onClick={() => {
                                                     const modal = document.getElementById('my_modal_2') as HTMLDialogElement | null;
                                                     if (modal) modal.showModal();
@@ -74,13 +74,13 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                                             </li>
                                         </>
                                     )}
-                                    <li className={`step step-accent`}>
+                                    <li className={`step step-accent`} data-content="">
                                     <div className="flex items-start justify-start flex-col">
                                             <p>{targetFunction.functionname}</p>
                                             <p>t+ {targetFunction.starttime - start}ms</p>
                                         </div>
                                     </li>
-                                    <li className={`step step-info`}>
+                                    <li className={`step step-info`} data-content="">
                                         <div className="flex items-start justify-start flex-col">
                                             <button className="btn" onClick={() => {
                                                 const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
