@@ -49,12 +49,6 @@ const sidebarItems: SidebarItem[] = [
         requireAdmin: true,
     },
     {
-        name: "Tokens",
-        href: "/settings/tokens",
-        icon: VpnKeyIcon,
-        requiresAuth: true,
-    },
-    {
         name: "Pricing",
         href: "/llm-pricing",
         icon: AttachMoneyIcon,
@@ -121,7 +115,7 @@ const Sidebar = () => {
                                     <Link
                                         href={href}
                                         className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em] ${
-                                            isCurrentPath(href) ? "bg-secondary" : ""
+                                            isCurrentPath(href) ? "bg-primary" : ""
                                         } ${isCollapsed ? "justify-center" : "justify-start pl-2"}`}>
                                         <div className="flex justify-center items-center">
                                         <span className="mt-1 max-w-7">

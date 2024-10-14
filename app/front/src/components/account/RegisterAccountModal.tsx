@@ -62,7 +62,7 @@ const RegisterAccountModal: React.FC<RegisterAccountModalProps> = ({isOpen, onCl
                     </div>
                     <div className="modal-action">
                         <button type="button" className="btn" onClick={onClose}>Cancel</button>
-                        <button type="submit" className="btn btn-secondary">Register</button>
+                        <button type="submit" className="btn btn-primary">Register</button>
                     </div>
                 </form>
             </div>

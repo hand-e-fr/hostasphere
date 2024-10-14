@@ -18,7 +18,7 @@ const Error = ({statusCode}: ErrorProps) => {
             <h1 className="text-4xl font-bold text-primary">
                 {statusCode ? `Error ${statusCode}` : 'An error occurred'}
             </h1>
-            <p className="mt-4 text-lg text-secondary">An error occurred on client</p>
+            <p className="mt-4 text-lg text-primary">An error occurred on client</p>
             <button className="btn btn-link mt-6 text-blue-500" onClick={goBackHome}>Go back home</button>
         </div>
     );

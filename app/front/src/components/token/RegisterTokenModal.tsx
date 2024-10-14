@@ -55,7 +55,7 @@ const RegisterTokenModal: React.FC<RegisterTokenModalProps> = ({isOpen, onClose}
                         </div>
                         <button
                             onClick={close}
-                            className="btn btn-secondary"
+                            className="btn btn-primary"
                         >
                             Close
                         </button>
@@ -88,7 +88,7 @@ const RegisterTokenModal: React.FC<RegisterTokenModalProps> = ({isOpen, onClose}
                         </button>
                         <button
                             type="submit"
-                            className="btn btn-secondary"
+                            className="btn btn-primary"
                             disabled={loading}
                         >
                             {loading ? 'Creating...' : 'Create'}

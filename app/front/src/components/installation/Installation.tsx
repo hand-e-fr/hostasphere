@@ -93,7 +93,7 @@ const Installation: React.FC = () => {
                                    className="input input-bordered w-full mt-1"/>
                         </div>
                     </div>
-                    <button type="submit" className="mt-3 btn btn-secondary w-full">Install</button>
+                    <button type="submit" className="mt-3 btn btn-primary w-full">Install</button>
                 </form>
             </div>
         </div>
