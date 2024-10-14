@@ -55,11 +55,15 @@ const CompareSessionsPage = () => {
                                 session2Data={sessionData2.memoryusage}
                             />
 
-                            <CompareSessionsChart
-                                title="Tokens Usage"
-                                session1Data={sessionData1.tokensusage}
-                                session2Data={sessionData2.tokensusage}
-                            />
+                            {
+                                sessionData1.tokensusage && sessionData2.tokensusage && (
+                                    <CompareSessionsChart
+                                        title="Tokens Usage"
+                                        session1Data={sessionData1.tokensusage}
+                                        session2Data={sessionData2.tokensusage}
+                                    />
+                                )
+                            }
 
                             <CompareSessionsChart
                                 title="Network Usage"

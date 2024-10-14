@@ -11,10 +11,10 @@ interface ContributionHeatmapProps {
 
 const shades = [
     'bg-gray-100',      // 0 sessions
-    'bg-blue-100',   // 1-5 sessions
-    'bg-blue-300',   // 6-10 sessions
-    'bg-blue-500',   // 11-20 sessions
-    'bg-blue-700',   // 21+ sessions
+    'bg-green-100',   // 1-5 sessions
+    'bg-green-300',   // 6-10 sessions
+    'bg-green-500',   // 11-20 sessions
+    'bg-green-700',   // 21+ sessions
 ];
 
 const getShade = (count: number) => {
