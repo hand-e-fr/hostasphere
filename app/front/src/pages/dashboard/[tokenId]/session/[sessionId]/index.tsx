@@ -51,10 +51,10 @@ const Session: React.FC = () => {
             <div className="mb-4">
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold">Dashboard</h1>
-                    <button className="btn btn-info text-white" onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
+                    {/*<button className="btn btn-info text-white" onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
                         <ScienceIcon className="mr-2"/>
                         Experiments
-                    </button>
+                    </button>*/}
                 </div>
                 <div className="breadcrumbs text-sm">
                     <ul>

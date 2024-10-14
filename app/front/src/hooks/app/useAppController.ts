@@ -69,12 +69,13 @@ export const useAppController = () => {
         setLoading(true);
         setError(null);
         try {
-            await axios.request({
+            const response = await axios.request({
                 url: `${restUrl}/api/register/app`,
                 method: 'POST',
                 data: appData,
             });
-            return {ok: true, error: null};
+            const token = response.data.token;
+            return {ok: true, error: null, token};
         } catch (err: any) {
             setError(err.response?.data?.message || err.response?.data?.error || 'An error occurred');
             return {ok: false, error: err.response?.data?.message || 'An error occurred'};
