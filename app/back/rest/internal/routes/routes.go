@@ -29,12 +29,12 @@ func SetupRouter() *gin.Engine {
 		api.GET("/login/test", controllers.CheckToken)
 		api.POST("/register/user", controllers.RegisterUser)
 
-		api.PUT("/user/change-password", controllers.ChangePassword)
-		api.PUT("/user/:id", controllers.UpdateUser)
-		api.DELETE("/user/:id", controllers.DeleteUser)
-		api.GET("/user", controllers.GetUser)
-		api.GET("/user/:id", controllers.GetUserByID)
-		api.GET("/users", controllers.GetUsers)
+		api.PUT("/user/change-password", controllers.ChangePasswordRoute)
+		api.PUT("/user/:id", controllers.UpdateUserRoute)
+		api.DELETE("/user/:id", controllers.DeleteUserRoute)
+		api.GET("/user", controllers.GetUserByEmailRoute)
+		api.GET("/user/:id", controllers.GetUserByIDRoute)
+		api.GET("/users", controllers.GetUsersRoute)
 		api.PUT("/app/:id/license", controllers.UpdateLicense)
 
 		api.POST("/token", controllers.CreateToken)

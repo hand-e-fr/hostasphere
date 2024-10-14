@@ -36,22 +36,22 @@ func isCorrectInputs(input models.RegisterUserRequest) error {
 	return nil
 }
 
-func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAdmin bool) error {
+func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAdmin bool, isSuperAdmin bool) (models.User, error) {
 	err := isCorrectInputs(request)
 	if err != nil {
-		return err
+		return models.User{}, err
 	}
 
 	collection := config.GetCollection("users")
 	var user models.User
 	err = collection.FindOne(context.Background(), bson.M{"email": request.Email}).Decode(&user)
 	if err == nil {
-		return models.ErrUserExists
+		return models.User{}, errors.New("user already exists")
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return models.User{}, errors.New("could not hash password")
 	}
 
 	user = models.User{
@@ -60,19 +60,20 @@ func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAd
 		LastName:            request.LastName,
 		Password:            hashedPassword,
 		IsAdmin:             isAdmin,
+		SuperAdmin:          isSuperAdmin,
 		NeedsPasswordChange: needsPasswordChange,
 		CreatedAt:           time.Now().UnixMilli(),
 	}
 
 	_, err = collection.InsertOne(context.Background(), user)
 	if err != nil {
-		return err
+		return models.User{}, errors.New("could not save user")
 	}
-	return nil
+	return user, nil
 }
 
 func RegisterUser(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -89,7 +90,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	if err := SaveUser(input, true, false); err != nil {
+	if _, err := SaveUser(input, true, false, false); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -108,7 +109,7 @@ func FirstConnection(c *gin.Context) {
 		return
 	}
 
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -139,7 +140,7 @@ func FirstConnection(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(claims.Id, claims.Email, claims.IsAdmin, time.Now().Add(5*time.Minute))
+	token, err := GenerateJWT(claims.Id, claims.Email, claims.IsAdmin, time.Now().Add(24*time.Hour), false)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
@@ -175,7 +176,7 @@ func Login(c *gin.Context) {
 	}
 
 	if user.NeedsPasswordChange {
-		token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute))
+		token, err := GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute), true)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 			return
@@ -185,7 +186,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour))
+	token, err := GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour), false)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
@@ -195,11 +196,11 @@ func Login(c *gin.Context) {
 }
 
 func CheckToken(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"ok": false, "error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"ok": true, "email": claims.Email, "is_admin": claims.IsAdmin})
+	c.JSON(http.StatusOK, gin.H{"ok": true, "email": claims.Email, "is_admin": claims.IsAdmin, "needs_password_change": claims.NeedsPasswordChange})
 }

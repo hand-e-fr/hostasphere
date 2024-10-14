@@ -20,7 +20,7 @@ const SessionCharts: React.FC<SessionChartsProps> = ({ title, session1Data, sess
                 enabled: true
             }
         },
-        colors: ['#008FFB', '#e30000'],
+        colors: ['#008FFB', '#14ab00'],
         title: {
             text: title || 'Chart',
             align: 'center'

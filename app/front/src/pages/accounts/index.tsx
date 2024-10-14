@@ -105,7 +105,7 @@ const Accounts = () => {
             </div>
             <div className="flex justify-between items-center mt-4">
                 <div className="flex gap-2">
-                    <button className="btn btn-secondary" onClick={() => setIsModalOpen(true)}>Register new Account
+                    <button className="btn btn-primary" onClick={() => setIsModalOpen(true)}>Register new Account
                     </button>
                 </div>
                 <div className="join">

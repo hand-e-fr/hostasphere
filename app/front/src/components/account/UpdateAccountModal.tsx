@@ -88,7 +88,7 @@ const UpdateAccountModal: React.FC<UpdateAccountModalProps> = ({isOpen, user, on
                         </label>
                     </div>
                     <div className="modal-action">
-                        <button type="submit" className="btn btn-secondary">Update</button>
+                        <button type="submit" className="btn btn-primary">Update</button>
                         <button type="button" className="btn" onClick={onClose}>Cancel</button>
                     </div>
                 </form>

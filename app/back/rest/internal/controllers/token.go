@@ -17,7 +17,7 @@ type CreateTokenRequest struct {
 }
 
 func CreateToken(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -60,7 +60,7 @@ func CreateToken(c *gin.Context) {
 }
 
 func GetTokens(c *gin.Context) {
-	_, err := utils.GetTokenValue(c)
+	_, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -108,7 +108,7 @@ func ExistsToken(c *gin.Context) {
 }
 
 func DeleteToken(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return

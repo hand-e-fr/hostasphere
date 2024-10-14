@@ -36,6 +36,7 @@ const Installation: React.FC = () => {
                     };
                     registerApp(appData).then((response: RegisterAppResponse) => {
                         if (response.ok) {
+                            localStorage.setItem('token', response.token as string);
                             router.push('/').then(() => window.location.reload());
                         }
                     });
@@ -51,13 +52,13 @@ const Installation: React.FC = () => {
                         <h2 className="text-lg font-semibold mb-1.5">License details</h2>
                         <div className="mb-4">
                             <label htmlFor="licenseId" className="block text-sm font-medium">License ID</label>
-                            <input type="text" name="licenseId" required className="input input-bordered w-full mt-1"/>
+                            <input type="text" name="licenseId" required className="input input-bordered w-full mt-1" defaultValue="66fb96f99736fc7c937c5890" readOnly/>
                         </div>
                         <div className="mb-4">
                             <label htmlFor="licenseSecretId" className="block text-sm font-medium">License Secret
                                 ID</label>
                             <input type="text" name="licenseSecretId" required
-                                   className="input input-bordered w-full mt-1"/>
+                                   className="input input-bordered w-full mt-1" defaultValue="66fb96f99736fc7c937c5890" readOnly/>
                         </div>
                     </div>
                     <div>
@@ -92,7 +93,7 @@ const Installation: React.FC = () => {
                                    className="input input-bordered w-full mt-1"/>
                         </div>
                     </div>
-                    <button type="submit" className="mt-3 btn btn-secondary w-full">Install</button>
+                    <button type="submit" className="mt-3 btn btn-primary w-full">Install</button>
                 </form>
             </div>
         </div>

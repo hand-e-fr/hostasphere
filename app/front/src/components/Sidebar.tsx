@@ -27,6 +27,7 @@ const sidebarItems: SidebarItem[] = [
         name: "Home",
         href: "/",
         icon: HomeIcon,
+        requiresAuth: true,
     },
     {
         name: "Login",
@@ -48,12 +49,6 @@ const sidebarItems: SidebarItem[] = [
         requireAdmin: true,
     },
     {
-        name: "Tokens",
-        href: "/settings/tokens",
-        icon: VpnKeyIcon,
-        requiresAuth: true,
-    },
-    {
         name: "Pricing",
         href: "/llm-pricing",
         icon: AttachMoneyIcon,
@@ -70,7 +65,10 @@ const Sidebar = () => {
 
     useEffect(() => {
         if (authInfo) {
-            setIsAuth(authInfo.ok || false);
+            if (authInfo.needs_password_change)
+                setIsAuth(false);
+            else
+                setIsAuth(authInfo.ok || false);
             setAdmin(authInfo.is_admin || false);
         }
     }, [authInfo]);
@@ -117,7 +115,7 @@ const Sidebar = () => {
                                     <Link
                                         href={href}
                                         className={`btn btn-ghost p-0 rounded-btn flex items-center h-[3em] ${
-                                            isCurrentPath(href) ? "bg-secondary" : ""
+                                            isCurrentPath(href) ? "bg-primary" : ""
                                         } ${isCollapsed ? "justify-center" : "justify-start pl-2"}`}>
                                         <div className="flex justify-center items-center">
                                         <span className="mt-1 max-w-7">

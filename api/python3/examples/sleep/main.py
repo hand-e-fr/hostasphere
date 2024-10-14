@@ -3,8 +3,8 @@ from time import sleep
 from profiler.core import Profiler
 
 profiler = Profiler(
-    address='california-a.tensordockmarketplace.com:20411',
-    token='hsp_329922bd8cc43eb3de686a54f14c1beb22cee405b0203ccfe5c901754046c334',
+    address='localhost:50051',
+    token='hsp_47c0d15c5782c47f6c4c0b9e6768613de9565f6656b1e65e6830db7595b57fef',
     session_tag='sleep'
 )
 
