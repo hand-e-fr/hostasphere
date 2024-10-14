@@ -15,7 +15,7 @@ _total_tokens: int = 0
 def record_usage(usage: int):
     global _total_tokens
     _total_tokens += usage
-    _token_usage.append(session_pb2.UsageAtTime(
+    _token_usage    .append(session_pb2.UsageAtTime(
         time=time.time(),
         memory_usage=usage
     ))
