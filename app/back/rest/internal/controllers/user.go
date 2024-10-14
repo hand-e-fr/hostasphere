@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"app/internal/utils"
 	"context"
 	"errors"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -158,7 +157,7 @@ func ChangePasswordRoute(c *gin.Context) {
 }
 
 func GetUserByEmailRoute(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -189,7 +188,7 @@ func GetUserByEmailRoute(c *gin.Context) {
 }
 
 func GetUserByIDRoute(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -224,7 +223,7 @@ func GetUserByIDRoute(c *gin.Context) {
 }
 
 func GetUsersRoute(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return

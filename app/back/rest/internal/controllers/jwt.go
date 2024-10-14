@@ -1,9 +1,10 @@
-package utils
+package controllers
 
 import (
-	"app/internal/controllers"
 	"app/internal/models"
+	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"os"
 	"time"
 
@@ -37,7 +38,7 @@ func ValidateJWT(tokenString string) (*models.Claims, error) {
 		return nil, err
 	}
 
-	if !token.Valid {
+	if claims == nil || !token.Valid {
 		return nil, fmt.Errorf("invalid token")
 	}
 
@@ -45,13 +46,30 @@ func ValidateJWT(tokenString string) (*models.Claims, error) {
 		return nil, fmt.Errorf("token expired")
 	}
 
-	user, err := controllers.GetUserByID(claims.Id)
-	if err != nil {
+	user, err := GetUserByID(claims.Id)
+	if err != nil || user == nil {
 		return nil, fmt.Errorf("could not find user")
 	}
 
-	if user.IsAdmin != claims.IsAdmin || user.NeedsPasswordChange != claims.NeedsPasswordChange || user.Email != claims.Email {
+	if user.IsAdmin != claims.IsAdmin ||
+		user.NeedsPasswordChange != claims.NeedsPasswordChange ||
+		user.Email != claims.Email {
 		return nil, fmt.Errorf("invalid token")
+	}
+
+	return claims, nil
+}
+
+func GetTokenValue(c *gin.Context) (*models.Claims, error) {
+	tokenString := c.GetHeader("Authorization")
+	if len(tokenString) < 8 {
+		return nil, errors.New("invalid token")
+	}
+	tokenString = tokenString[7:]
+
+	claims, err := ValidateJWT(tokenString)
+	if err != nil {
+		return nil, errors.New("invalid token")
 	}
 
 	return claims, nil

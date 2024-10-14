@@ -14,7 +14,7 @@ import (
 )
 
 func FetchProfilerData(c *gin.Context) {
-	claim, err := utils.GetTokenValue(c)
+	claim, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -86,7 +86,7 @@ func FetchProfilerData(c *gin.Context) {
 }
 
 func GetSessions(c *gin.Context) {
-	claim, err := utils.GetTokenValue(c)
+	claim, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -159,7 +159,7 @@ func GetSessions(c *gin.Context) {
 }
 
 func FetchSessionData(c *gin.Context) {
-	claim, err := utils.GetTokenValue(c)
+	claim, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -232,7 +232,7 @@ func FetchSessionData(c *gin.Context) {
 }
 
 func GroupSessions(c *gin.Context) {
-	claim, err := utils.GetTokenValue(c)
+	claim, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -382,7 +382,7 @@ func GroupSessions(c *gin.Context) {
 }
 
 func CompareSessions(c *gin.Context) {
-	claim, err := utils.GetTokenValue(c)
+	claim, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return

@@ -73,7 +73,7 @@ func SaveUser(request models.RegisterUserRequest, needsPasswordChange bool, isAd
 }
 
 func RegisterUser(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -109,7 +109,7 @@ func FirstConnection(c *gin.Context) {
 		return
 	}
 
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
@@ -140,7 +140,7 @@ func FirstConnection(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(claims.Id, claims.Email, claims.IsAdmin, time.Now().Add(time.Hour*24), false)
+	token, err := GenerateJWT(claims.Id, claims.Email, claims.IsAdmin, time.Now().Add(24*time.Hour), false)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
@@ -176,7 +176,7 @@ func Login(c *gin.Context) {
 	}
 
 	if user.NeedsPasswordChange {
-		token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute), true)
+		token, err := GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(5*time.Minute), true)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 			return
@@ -186,7 +186,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour), false)
+	token, err := GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour), false)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
@@ -196,7 +196,7 @@ func Login(c *gin.Context) {
 }
 
 func CheckToken(c *gin.Context) {
-	claims, err := utils.GetTokenValue(c)
+	claims, err := GetTokenValue(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"ok": false, "error": err.Error()})
 		return

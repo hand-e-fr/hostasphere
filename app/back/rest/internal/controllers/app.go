@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"app/internal/utils"
 	"net/http"
 	"time"
 
@@ -55,13 +54,13 @@ func RegisterApp(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour), false)
+	token, err := GenerateJWT(user.ID.Hex(), user.Email, user.IsAdmin, time.Now().Add(24*time.Hour), false)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"ok": false, "error": "Could not generate token"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"ok": true, "message": "App registered successfully", "token": token})
+	c.JSON(http.StatusOK, gin.H{"ok": true, "token": token})
 }
 
 func GetApp(c *gin.Context) {
