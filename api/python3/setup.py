@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="hostasphere_profiler",
-    version="v1.0-rc4",
+    version="v1.0",
     packages=find_packages(),
     install_requires=[
         "requests>=2.32.3",

@@ -13,7 +13,7 @@ The collected data is sent to your Hostasphere monitoring interface.
 Install the required dependencies with pip :
 
 ```schell
-pip install hostasphere-profiler==v1.0-rc4
+pip install hostasphere-profiler==v1.0
 ```
 
 ### Usage
