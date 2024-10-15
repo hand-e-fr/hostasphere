@@ -51,7 +51,7 @@ const Session: React.FC = () => {
             <div className="mb-4">
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold">Dashboard</h1>
-                    {/*<button className="btn btn-info text-white" onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
+                    {/*<button className="btn btn-secondary text-white" onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
                         <ScienceIcon className="mr-2"/>
                         Experiments
                     </button>*/}
@@ -104,7 +104,7 @@ const Session: React.FC = () => {
                                             <tr><td>PID</td><td>{session.pid}</td></tr>
                                             <tr><td>Architecture</td><td>{session.architecture}</td></tr>
                                             {
-                                                session.totaltokens && (
+                                                session.totaltokens ? (
                                                     <tr>
                                                         <td>Total Used Tokens</td>
                                                         <td className="flex gap-3 items-center">
@@ -112,7 +112,7 @@ const Session: React.FC = () => {
                                                             <div className="badge badge-accent badge-outline">openhosta</div>
                                                         </td>
                                                     </tr>
-                                                )
+                                                ) : (<></>)
                                             }
                                             </tbody>
                                         </table>

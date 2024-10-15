@@ -65,21 +65,23 @@ const Dashboard: React.FC = () => {
                 ) : tokens.map((token, index) => authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email) &&
                     (
                         <div key={index}>
-                            <Link className="card shadow-md" href={`/dashboard/${token.id}`} passHref>
+                            <div className="card shadow-md">
                                 <div className="card-body flex justify-between flex-row">
-                                    <div className="flex flex-col justify-start">
-                                        <h2 className="card-title">
-                                            $ {token.name}
-                                        </h2>
-                                        <p>
-                                            Token: {token.value}
-                                            <br/>
-                                            Created
-                                            at: {token.created_at === 0 ? 'Never' : new Date(token.created_at).toLocaleDateString()}
-                                            <br/>
-                                            Owner: {token.owner}
-                                        </p>
-                                    </div>w
+                                    <Link href={`/dashboard/${token.id}`} passHref>
+                                        <div className="flex flex-col justify-start">
+                                            <h2 className="card-title">
+                                                $ {token.name}
+                                            </h2>
+                                            <p>
+                                                Token: {token.value}
+                                                <br/>
+                                                Created
+                                                at: {token.created_at === 0 ? 'Never' : new Date(token.created_at).toLocaleDateString()}
+                                                <br/>
+                                                Owner: {token.owner}
+                                            </p>
+                                        </div>
+                                    </Link>
                                     <div className="flex flex-col gap-2">
                                         {authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email) && (
                                             <>
@@ -99,7 +101,7 @@ const Dashboard: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         </div>
                     )
                 )}

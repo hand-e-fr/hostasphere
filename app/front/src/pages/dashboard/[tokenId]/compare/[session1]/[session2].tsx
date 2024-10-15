@@ -35,8 +35,8 @@ const CompareSessionsPage = () => {
                 !loading && !error && sessionData1 && sessionData2 && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <SessionInfo session={sessionData1} sessionTitle="Session 1 Information" color="blue"/>
-                            <SessionInfo session={sessionData2} sessionTitle="Session 2 Information" color="red"/>
+                            <SessionInfo session={sessionData1} comparedSession={sessionData2} sessionTitle="Session 1 Information" color="blue"/>
+                            <SessionInfo session={sessionData2} comparedSession={sessionData1   } sessionTitle="Session 2 Information" color="red"/>
                         </div>
 
                         <div>
