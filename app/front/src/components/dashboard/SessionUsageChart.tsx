@@ -8,7 +8,7 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {ssr: false});
 
 interface UsageChartProps {
     session: SessionData;
-    functions: ProfilerData[];
+    functions: ProfilerData[] | null;
     hideTrackAnnotations?: boolean;
     targetUsages: string[];
 }

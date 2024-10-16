@@ -23,7 +23,6 @@ const Session: React.FC = () => {
         if (router.asPath.includes('#func-calls')) return 'func-calls';
         return 'overview';
     });
-    const [usedModels, setUsedModels] = useState<string[]>([]);
 
     useEffect(() => {
         if (router.asPath.includes('#diagram')) {
@@ -39,18 +38,7 @@ const Session: React.FC = () => {
         if (tokenId && sessionId) {
             fetchData().then(() => {
                 if (!functions) return;
-                const models = new Set<string>();
-                functions.forEach((func) => {
-                    if (func.customtracerdata && func.customtracerdata.OpenHostaTracer) {
-                        const data = func.customtracerdata.OpenHostaTracer.data;
-                        if (data && data._last_response) {
-                            data._last_response = data._last_response.replaceAll('\'', '"');
-                            data._last_response = data._last_response.replaceAll('None', 'null');
-                            const response = decodeOpenAIResponse(JSON.parse(data._last_response));
-                            console.log(JSON.parse(response.model));
-                        }
-                    }
-                });
+                //todo
             });
             fetchTokenNameFromId(tokenId as string).then((response) => {
                 setTokenName(response);
@@ -91,78 +79,86 @@ const Session: React.FC = () => {
                 </Link>
             </div>
             <div className="pt-5">
-                {
-                    functions && <>
-                        <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
-                            <div className="mr-2 grid grid-cols-1 gap-4 xl:grid-cols-2">
-                                <div className="bg-white shadow rounded-lg mt-3">
-                                    <div className="overflow-auto mt-3">
-                                        <table className="table table-xs">
-                                            <tbody>
-                                            <tr><td>Session ID</td><td>{session.sessionuuid}</td></tr>
-                                            <tr><td>Session Tag</td><td>{session.sessiontag}</td></tr>
-                                            <tr><td>Start Date</td><td>{new Date(session.startdate).toLocaleDateString()}</td></tr>
-                                            <tr><td>End Date</td><td>{new Date(session.enddate).toLocaleDateString()}</td></tr>
-                                            <tr><td>Execution Time</td><td>{session.executiontime} seconds</td></tr>
-                                            <tr><td>Hostname</td><td>{session.hostname}</td></tr>
-                                            <tr><td>OS</td><td>{session.os}</td></tr>
-                                            <tr><td>OS Version</td><td>{session.osversion}</td></tr>
-                                            <tr><td>Processor</td><td>{session.processor}</td></tr>
-                                            <tr><td>Kernel Version</td><td>{session.kernelversion}</td></tr>
-                                            <tr><td>Python Version</td><td>{session.pythonversion}</td></tr>
-                                            <tr><td>Boot Time</td><td>{session.boottime}</td></tr>
-                                            <tr><td>CPU Count</td><td>{session.cpucount}</td></tr>
-                                            <tr><td>Current User</td><td>{session.currentuser}</td></tr>
-                                            <tr><td>PID</td><td>{session.pid}</td></tr>
-                                            <tr><td>Architecture</td><td>{session.architecture}</td></tr>
-                                            {
-                                                session.totaltokens ? (
-                                                    <tr>
-                                                        <td>Total Used Tokens</td>
-                                                        <td className="flex gap-3 items-center">
-                                                            {session.totaltokens}
-                                                            <div className="badge badge-accent badge-outline">openhosta</div>
-                                                        </td>
-                                                    </tr>
-                                                ) : (<></>)
-                                            }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                    <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and Network over
-                                        time:</h3>
-                                    <SessionUsageChart session={session} functions={functions}
-                                                       hideTrackAnnotations={false}
-                                                       targetUsages={['cpu', 'disk', 'memory']}/>
-                                </div>
-                                <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                    <h3 className="mb-4">Chart showing the usage of Network over time (in KB):</h3>
-                                    <SessionUsageChart session={session} functions={functions}
-                                                       hideTrackAnnotations={false}
-                                                       targetUsages={['network']}/>
-                                </div>
-                                {
-                                    session.tokensusage && (
-                                        <div className="p-4 bg-white shadow rounded-lg mt-3">
-                                            <h3 className="mb-4">Token usage over time:</h3>
-                                            <SessionUsageChart session={session} functions={functions}
-                                                               hideTrackAnnotations={false}
-                                                               targetUsages={['tokens']}/>
-                                        </div>
-                                    )
-                                }
+                <div className={`min-w-full ${currentTab !== 'overview' && 'hidden'}`}>
+                    <div className="mr-2 grid grid-cols-1 gap-4 xl:grid-cols-2">
+                        <div className="bg-white shadow rounded-lg mt-3">
+                            <div className="overflow-auto mt-3">
+                                <table className="table table-xs">
+                                    <tbody>
+                                    <tr><td>Session ID</td><td>{session.sessionuuid}</td></tr>
+                                    <tr><td>Session Tag</td><td>{session.sessiontag}</td></tr>
+                                    <tr><td>Start Date</td><td>{new Date(session.startdate).toLocaleDateString()}</td></tr>
+                                    <tr><td>End Date</td><td>{new Date(session.enddate).toLocaleDateString()}</td></tr>
+                                    <tr><td>Execution Time</td><td>{session.executiontime} seconds</td></tr>
+                                    <tr><td>Hostname</td><td>{session.hostname}</td></tr>
+                                    <tr><td>OS</td><td>{session.os}</td></tr>
+                                    <tr><td>OS Version</td><td>{session.osversion}</td></tr>
+                                    <tr><td>Processor</td><td>{session.processor}</td></tr>
+                                    <tr><td>Kernel Version</td><td>{session.kernelversion}</td></tr>
+                                    <tr><td>Python Version</td><td>{session.pythonversion}</td></tr>
+                                    <tr><td>Boot Time</td><td>{session.boottime}</td></tr>
+                                    <tr><td>CPU Count</td><td>{session.cpucount}</td></tr>
+                                    <tr><td>Current User</td><td>{session.currentuser}</td></tr>
+                                    <tr><td>PID</td><td>{session.pid}</td></tr>
+                                    <tr><td>Architecture</td><td>{session.architecture}</td></tr>
+                                    {
+                                        session.totaltokens ? (
+                                            <tr>
+                                                <td>Total Used Tokens</td>
+                                                <td className="flex gap-3 items-center">
+                                                    {session.totaltokens}
+                                                    <div className="badge badge-accent badge-outline">openhosta</div>
+                                                </td>
+                                            </tr>
+                                        ) : (<></>)
+                                    }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
-                            <ExecutionDiagram profilerData={functions}/>
+                        <div className="p-4 bg-white shadow rounded-lg mt-3">
+                            <h3 className="mb-4">Chart showing the usage of CPU, Disk, Memory and Network over
+                                time:</h3>
+                            <SessionUsageChart session={session} functions={functions}
+                                               hideTrackAnnotations={false}
+                                               targetUsages={['cpu', 'disk', 'memory']}/>
                         </div>
-                        <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
-                            <FuncCalls profilerData={functions} session={session}/>
+                        <div className="p-4 bg-white shadow rounded-lg mt-3">
+                            <h3 className="mb-4">Chart showing the usage of Network over time (in KB):</h3>
+                            <SessionUsageChart session={session} functions={functions}
+                                               hideTrackAnnotations={false}
+                                               targetUsages={['network']}/>
                         </div>
-                    </>
-                }
+                        {
+                            session.tokensusage && (
+                                <div className="p-4 bg-white shadow rounded-lg mt-3">
+                                    <h3 className="mb-4">Token usage over time:</h3>
+                                    <SessionUsageChart session={session} functions={functions}
+                                                       hideTrackAnnotations={false}
+                                                       targetUsages={['tokens']}/>
+                                </div>
+                            )
+                        }
+                    </div>
+                </div>
+                {/*
+                    (<>
+                        <div className="flex items-center justify-center h-[500px]">
+                            <ScienceIcon className="text-5xl text-gray-400"/>
+                            No data available
+                        </div>
+                    </>)
+                */}
+                <div className={`h-[730px] ${currentTab !== 'diagram' && 'hidden'}`}>
+                    {functions && <>
+                        <ExecutionDiagram profilerData={functions}/>
+                    </>}
+                </div>
+                <div className={`min-w-full ${currentTab !== 'func-calls' && 'hidden'}`}>
+                    {functions && <>
+                        <FuncCalls profilerData={functions} session={session}/>
+                    </>}
+                </div>
             </div>
         </>
     );

@@ -98,143 +98,142 @@ const LlmCosts = () => {
 
     return (
         <>
-            <div className="mb-4">
-                <h1 className="text-2xl font-bold">LLM Pricing</h1>
-            </div>
+        <div className="mb-4">
+            <h1 className="text-2xl font-bold">LLM Pricing</h1>
+        </div>
 
-            {/* Source Filter */}
-            <div className="mb-4 flex flex-col items-start">
-                <label className="mr-2">Select Source: </label>
-                <select
-                    value={selectedSource}
-                    onChange={(e) => {
-                        setSelectedSource(e.target.value);
-                        setFilteredData([]);
-                        setData(null);
-                    }}
-                    className="select select-bordered w-44 select-sm"
-                >
-                    {sources.map((source) => (
-                        <option key={source} value={source}>
-                            {source.charAt(0).toUpperCase() + source.slice(1)}
-                        </option>
-                    ))}
-                </select>
-            </div>
+        {/* Source Filter */}
+        <div className="mb-4 flex flex-col items-start">
+            <label className="mr-2">Select Source: </label>
+            <select
+                value={selectedSource}
+                onChange={(e) => {
+                    setSelectedSource(e.target.value);
+                    setFilteredData([]);
+                    setData(null);
+                }}
+                className="select select-bordered w-44 select-sm"
+            >
+                {sources.map((source) => (
+                    <option key={source} value={source}>
+                        {source.charAt(0).toUpperCase() + source.slice(1)}
+                    </option>
+                ))}
+            </select>
+        </div>
 
-            {/* Total */}
-            <div className="mb-4">
-                <p>Total: {filteredData ? filteredData.length : 0}</p>
-            </div>
+        {/* Total */}
+        <div className="mb-4">
+            <p>Total: {filteredData ? filteredData.length : 0}</p>
+        </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
-                <div className="min-w-[890px]">
-                    <table className="table">
-                        {/* Table head with Sortable Columns */}
-                        <thead>
-                        <tr className="bg-gray-100">
-                            <th onClick={() => handleSort('provider')} className="cursor-pointer">
-                                Provider {sortConfig.key === 'provider' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('model')} className="cursor-pointer">
-                                Model {sortConfig.key === 'model' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('context')} className="cursor-pointer">
-                                Context {sortConfig.key === 'context' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('input_tokens_price')} className="cursor-pointer">
-                                1M input
-                                tokens {sortConfig.key === 'input_tokens_price' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('output_tokens_price')} className="cursor-pointer">
-                                1M output
-                                tokens {sortConfig.key === 'output_tokens_price' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('average_price')} className="cursor-pointer">
-                                Average Price {sortConfig.key === 'average_price' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                            <th onClick={() => handleSort('updated')} className="cursor-pointer">
-                                Updated {sortConfig.key === 'updated' && (sortConfig.direction === 'ascending' ?
-                                <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
-                            </th>
-                        </tr>
-                        <tr className="bg-gray-50">
-                            <th className="p-3">
-                                <div>
-                                    <input
-                                        type="text"
-                                        placeholder="Search by Provider"
-                                        value={providerFilter}
-                                        onChange={(e) => setProviderFilter(e.target.value)}
-                                        className="input input-bordered w-44 input-sm"
-                                    />
-                                </div>
-                            </th>
-                            <th className="p-3">
-                                <input
-                                    type="text"
-                                    placeholder="Search by Model"
-                                    value={modelFilter}
-                                    onChange={(e) => setModelFilter(e.target.value)}
-                                    className="input input-bordered w-40 input-sm"
-                                />
-                            </th>
-                            <th className="p-3">
-                                <div>
-                                    <input
-                                        type="text"
-                                        placeholder="Search by Context"
-                                        value={contextFilter}
-                                        onChange={(e) => setContextFilter(e.target.value)}
-                                        className="input input-bordered w-44 input-sm"
-                                    />
-                                </div>
-                            </th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        </thead>
+        {/* Table */}
+        <div className="overflow-auto max-h-[calc(100vh-250px)]">
+            <table className="table table-pin-rows table-pin-cols">
+                {/* Table head with Sortable Columns */}
+                <thead>
+                <tr className="bg-gray-100">
+                    <th onClick={() => handleSort('provider')} className="cursor-pointer">
+                        Provider {sortConfig.key === 'provider' && (sortConfig.direction === 'ascending' ?
+                        <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                    </th>
+                    <th onClick={() => handleSort('model')} className="cursor-pointer">
+                        Model {sortConfig.key === 'model' && (sortConfig.direction === 'ascending' ?
+                        <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                    </th>
+                    <th onClick={() => handleSort('context')} className="cursor-pointer">
+                        Context {sortConfig.key === 'context' && (sortConfig.direction === 'ascending' ?
+                        <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                    </th>
+                    <th onClick={() => handleSort('input_tokens_price')} className="cursor-pointer">
+                        1M input
+                        tokens {sortConfig.key === 'input_tokens_price' && (sortConfig.direction === 'ascending' ?
+                        <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                    </th>
+                    <th onClick={() => handleSort('output_tokens_price')} className="cursor-pointer">
+                        1M output
+                        tokens {sortConfig.key === 'output_tokens_price' && (sortConfig.direction === 'ascending' ?
+                        <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                    </th>
+                    <th onClick={() => handleSort('average_price')} className="cursor-pointer">
+                        Average Price {sortConfig.key === 'average_price' && (sortConfig.direction === 'ascending' ?
+                        <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                    </th>
+                    <th onClick={() => handleSort('updated')} className="cursor-pointer">
+                        Updated {sortConfig.key === 'updated' && (sortConfig.direction === 'ascending' ?
+                        <ArrowDropUpIcon/> : <ArrowDropDownIcon/>)}
+                    </th>
+                </tr>
+                <tr className="bg-gray-50">
+                    <th className="p-3">
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Search by Provider"
+                                value={providerFilter}
+                                onChange={(e) => setProviderFilter(e.target.value)}
+                                className="input input-bordered w-44 input-sm"
+                            />
+                        </div>
+                    </th>
+                    <th className="p-3">
+                        <input
+                            type="text"
+                            placeholder="Search by Model"
+                            value={modelFilter}
+                            onChange={(e) => setModelFilter(e.target.value)}
+                            className="input input-bordered w-40 input-sm"
+                        />
+                    </th>
+                    <th className="p-3">
+                        <div>
+                            <input
+                                type="text"
+                                placeholder="Search by Context"
+                                value={contextFilter}
+                                onChange={(e) => setContextFilter(e.target.value)}
+                                className="input input-bordered w-44 input-sm"
+                            />
+                        </div>
+                    </th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
 
-                        {/* Table body */}
-                        <tbody>
-                        {filteredData && filteredData.length > 0 ? (
-                            filteredData.map((item: Model, index) => {
-                                const avgPrice = (item.input_tokens_price + item.output_tokens_price) / 2;
+                {/* Table body */}
+                <tbody>
+                {filteredData && filteredData.length > 0 ? (
+                    filteredData.map((item: Model, index) => {
+                        const avgPrice = (item.input_tokens_price + item.output_tokens_price) / 2;
 
-                                return (
-                                    <tr key={index}>
-                                        <td>{item.provider}</td>
-                                        <td>{item.model}</td>
-                                        <td>{item.context}</td>
-                                        <td>${item.input_tokens_price}</td>
-                                        <td>${item.output_tokens_price}</td>
-                                        <td>${avgPrice.toFixed(2)}</td>
-                                        <td>{new Date(item.updated).toLocaleDateString()}</td>
-                                    </tr>
-                                );
-                            })
-                        ) : (
-                            <tr>
-                                <td colSpan={8}>
-                                    Loading...
-                                </td>
+                        return (
+                            <tr key={index}>
+                                <td>{item.provider}</td>
+                                <td>{item.model}</td>
+                                <td>{item.context}</td>
+                                <td>${item.input_tokens_price}</td>
+                                <td>${item.output_tokens_price}</td>
+                                <td>${avgPrice.toFixed(2)}</td>
+                                <td>{new Date(item.updated).toLocaleDateString()}</td>
                             </tr>
-                        )}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </>
-    );
+                        );
+                    })
+                ) : (
+                    <tr>
+                        <td colSpan={8}>
+                            Loading...
+                        </td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
+        </div>
+    </>
+)
+    ;
 };
 
 export default LlmCosts;

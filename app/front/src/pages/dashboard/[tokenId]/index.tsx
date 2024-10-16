@@ -160,7 +160,28 @@ const TokenDashboard: React.FC = () => {
                 {/* delete button */}
                 <button
                     className={`btn btn-error btn-sm ${selectedSessions.length === 0 ? 'btn-disabled' : ''} text-white`}
-                    onClick={() => setSelectedSessions([])}>
+                    onClick={() => {
+                        // if (selectedSessions.length > 0) {
+                        //     selectedSessions.forEach(sessionId => {
+                        //         fetch(`/api/profiler/session?sessionuuid=${sessionId}`, {
+                        //             method: 'DELETE',
+                        //             headers: {
+                        //                 Authorization: `Bearer ${localStorage.getItem('token')}`
+                        //             }
+                        //         }).then(() => {
+                        //             setSelectedSessions(selectedSessions.filter(id => id !== sessionId));
+                        //         });
+                        //     });
+                        // }
+                        if (filteredSessions) {
+                            // remove selected sessions from the list
+                            const newGroupedSessions = filteredSessions.map(group => ({
+                                ...group,
+                                sessions: group.sessions.filter(session => !selectedSessions.includes(session._id))
+                            })).filter(group => group.sessions.length > 0);
+                        }
+                        setSelectedSessions([]);
+                    }}>
                     <DeleteIcon sx={{color: "white", fontSize: "20px"}}/>
                     Delete
                 </button>

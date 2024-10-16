@@ -4,10 +4,14 @@ import SessionInfo from "@/components/dashboard/session/SessionInfo";
 import useCompareSessions from "@/hooks/session/useCompareSessions";
 import {SessionData} from "@/types/SessionData";
 import React, {useEffect, useState} from "react";
+import Link from "next/link";
+import {useTokenController} from "@/hooks/app/useTokenController";
 
 const CompareSessionsPage = () => {
     const router = useRouter();
     const { tokenId, session1, session2 } = router.query;
+    const [tokenName, setTokenName] = useState<string | null>(null);
+    const {fetchTokenNameFromId} = useTokenController();
     const [sessionData1, setSessionData1] = useState<SessionData | null>(null);
     const [sessionData2, setSessionData2] = useState<SessionData | null>(null);
 
@@ -19,6 +23,14 @@ const CompareSessionsPage = () => {
         setSessionData2(data.session2.sessions[0]);
     }, [data]);
 
+    useEffect(() => {
+        if (tokenId) {
+            fetchTokenNameFromId(tokenId as string).then((response) => {
+                setTokenName(response);
+            });
+        }
+    }, [tokenId]);
+
     if (loading) return <p>Loading...</p>;
 
     if (error) return <p>Error: {error}</p>;
@@ -29,14 +41,26 @@ const CompareSessionsPage = () => {
 
     return (
         <>
-            <h1 className="text-2xl font-bold mb-6">Session Comparison</h1>
-
+            <div className="mb-4">
+                <div className="flex justify-between items-center">
+                    <h1 className="text-2xl font-bold">Session Comparison</h1>
+                </div>
+                <div className="breadcrumbs text-sm">
+                    <ul>
+                        <li><Link href={`/dashboard`}>Dashboard</Link></li>
+                        <li><Link href={`/dashboard/${tokenId}`}>{tokenName && tokenName}</Link></li>
+                        <li>Compare: {sessionData1 && sessionData1.sessiontag}/{sessionData2 && sessionData2.sessiontag}</li>
+                    </ul>
+                </div>
+            </div>
             {
                 !loading && !error && sessionData1 && sessionData2 && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <SessionInfo session={sessionData1} comparedSession={sessionData2} sessionTitle="Session 1 Information" color="blue"/>
-                            <SessionInfo session={sessionData2} comparedSession={sessionData1   } sessionTitle="Session 2 Information" color="red"/>
+                            <SessionInfo session={sessionData1} comparedSession={sessionData2}
+                                         sessionTitle="Session 1 Information" color="blue"/>
+                            <SessionInfo session={sessionData2} comparedSession={sessionData1}
+                                         sessionTitle="Session 2 Information" color="red"/>
                         </div>
 
                         <div>

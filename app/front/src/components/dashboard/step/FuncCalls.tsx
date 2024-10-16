@@ -20,11 +20,11 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
     return (
         <>
             <div className="flex justify-start flex-col-reverse lg:flex-row">
-                <div className="min-w-[30%] max-w-[50%] mt-6">
+                <div className="w-1/5 mt-6">
                     <ul className="steps steps-vertical">
                         {profilerData.map((data, index) => (
                             <li key={index} data-content=""
-                                className={`step cursor-pointer hover:bg-gray-100 p-2 ${targetFunction?._id === data._id ? 'step-error bg-gray-100' : 'step-accent'}`}
+                                className={`step cursor-pointer hover:bg-gray-100 p-2 ${targetFunction?._id === data._id ? 'step-primary bg-gray-100' : 'step-neutral'}`}
                                 onClick={() => setTargetFunction(data)}>
                                 <div className="flex items-start justify-start flex-col">
                                     <p>{data.functionname}</p>
@@ -35,88 +35,45 @@ const FuncCalls: React.FC<ExecutionDiagramProps> = ({ profilerData, session }) =
                     </ul>
                 </div>
                 <div className="divider lg:divider-horizontal"></div>
-                <div id="func-calls" className="sticky top-0">
-                    {
-                        targetFunction ? (
-                            <div>
-                                <h1 className="text-center text-l bold">{targetFunction.functionname}:</h1>
-                                <ul className="steps steps-vertical">
-                                    { targetFunction.funcparams && (
-                                        <>
-                                            <li className={`step step-accent`} data-content="">
-                                                <button className="btn" onClick={() => {
-                                                    const modal = document.getElementById('my_modal_2') as HTMLDialogElement | null;
-                                                    if (modal) modal.showModal();
-                                                }}>
-                                                    Show Params
-                                                </button>
-                                                <dialog id="my_modal_2" className="modal">
-                                                    <div className="modal-box text-left">
-                                                        <h3 className="font-bold text-lg">
-                                                            {targetFunction.functionname} params
-                                                        </h3>
-                                                        {targetFunction.funcparams.map((param, index) => (
-                                                            <div key={index}>
-                                                                <div className="bold">{param.argname} ({param.type}):
-                                                                </div>
-                                                                <div className="ml-4 max-w-[50em] overflow-x-auto">
-                                                                    <div>
-                                                                        {param.arg}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    <form method="dialog" className="modal-backdrop">
-                                                        <button>close</button>
-                                                    </form>
-                                                </dialog>
-                                            </li>
-                                        </>
-                                    )}
-                                    <li className={`step step-accent`} data-content="">
-                                    <div className="flex items-start justify-start flex-col">
-                                            <p>{targetFunction.functionname}</p>
-                                            <p>t+ {targetFunction.starttime - start}ms</p>
-                                        </div>
-                                    </li>
-                                    <li className={`step step-info`} data-content="">
-                                        <div className="flex items-start justify-start flex-col">
-                                            <button className="btn" onClick={() => {
-                                                const modal = document.getElementById('my_modal_3') as HTMLDialogElement | null;
-                                                if (modal) modal.showModal();
-                                            }}>
-                                                Show Returned Value
-                                            </button>
-                                            <dialog id="my_modal_3" className="modal">
-                                                <div className="modal-box text-left">
-                                                    <h3 className="font-bold text-lg">
-                                                        {targetFunction.functionname} returned value
-                                                    </h3>
-                                                    <div
-                                                        className="bold">type: {targetFunction.returnedvalue.type}</div>
-                                                    <div className="ml-4 max-w-[50em] overflow-x-auto">
-                                                        <div>
-                                                            {targetFunction.returnedvalue.value}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <form method="dialog" className="modal-backdrop">
-                                                    <button>close</button>
-                                                </form>
-                                            </dialog>
-                                        </div>
-                                    </li>
-                                </ul>
+                <div id="func-calls" className="w-4/5 mt-6">
+                    {targetFunction ? (
+                        <div>
+                            <div className="mb-2">
+                                <div className="badge badge-outline badge-lg">{targetFunction.functionname}</div>
                             </div>
-                        ) : (
-                            <div className="bg-gray-100 border rounded-lg m-4 h-full w-full">
-                                <div className="flex justify-center mt-72">
-                                    <h1>Click on a function to see its calls</h1>
+                            {targetFunction.funcparams && targetFunction.funcparams.length > 0 && (
+                                <div className="overflow-x-auto">
+                                    <table className="table">
+                                        {/* head */}
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Value</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {targetFunction.funcparams.map((param, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{param.argname}</td>
+                                                <td>{param.type}</td>
+                                                <td>{param.arg}</td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </table>
                                 </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="bg-gray-100 border rounded-lg m-4 h-full w-full">
+                            <div className="flex justify-center mt-72">
+                                <h1>Click on a function to see its calls</h1>
                             </div>
-                        )
-                    }
+                        </div>
+                    )}
                 </div>
             </div>
         </>

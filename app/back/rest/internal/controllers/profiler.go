@@ -381,6 +381,11 @@ func GroupSessions(c *gin.Context) {
 	c.JSON(http.StatusOK, results)
 }
 
+/*CompareSessions
+ * compares the execution time of two sessions
+ * based on the sessionuuid query parameters.
+ * Example: /api/profiler/compare-sessions?tokenid=123&sessionuuid=abc&sessionuuid=def
+ */
 func CompareSessions(c *gin.Context) {
 	claim, err := GetTokenValue(c)
 	if err != nil {
@@ -473,4 +478,56 @@ func CompareSessions(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+/*DeleteSession
+ * Delete a session and its related functions from the database
+ * Example request:
+ * DELETE /api/profiler/session?tokenid=123&sessionuuid=abc
+ */
+func DeleteSession(c *gin.Context) {
+	claim, err := GetTokenValue(c)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
+
+	tokenID := c.Query("tokenid")
+	sessionUUID := c.Query("sessionuuid")
+
+	if tokenID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
+		return
+	}
+
+	if sessionUUID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "sessionuuid query parameter is required"})
+		return
+	}
+
+	if !claim.IsAdmin && !utils.IsTokenOwner(tokenID, claim.Email) {
+		c.JSON(http.StatusForbidden, gin.H{"error": "you are not authorized to access this resource"})
+		return
+	}
+
+	// Initialize context from the request
+	ctx := c.Request.Context()
+
+	// Delete the session from the "sessions" collection
+	sessionFilter := bson.M{"tokenid": tokenID, "sessionuuid": sessionUUID}
+	result, err := config.GetCollection("sessions").DeleteOne(ctx, sessionFilter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Delete the functions for the session from the "profiler" collection
+	profilerFilter := bson.M{"sessionuuid": sessionUUID}
+	_, err = config.GetCollection("profiler").DeleteMany(ctx, profilerFilter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"deleted": result.DeletedCount})
 }

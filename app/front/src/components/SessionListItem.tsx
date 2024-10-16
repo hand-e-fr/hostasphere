@@ -11,11 +11,11 @@ interface Props {
 }
 
 const SessionListItem: React.FC<Props> = ({
-                                              session,
-                                              selectedSessions,
-                                              addSelectedSession,
-                                              removeSelectedSession,
-                                          }) => {
+    session,
+    selectedSessions,
+    addSelectedSession,
+    removeSelectedSession,
+}) => {
     return (
         <li>
             <summary

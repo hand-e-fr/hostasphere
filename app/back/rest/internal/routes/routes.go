@@ -45,6 +45,7 @@ func SetupRouter() *gin.Engine {
 
 		api.GET("/profiler", controllers.FetchProfilerData)
 		api.GET("/profiler/session", controllers.FetchSessionData)
+		api.DELETE("/profiler/session", controllers.DeleteSession)
 		api.GET("/profiler/sessions", controllers.GetSessions)
 		api.GET("/profiler/group-sessions", controllers.GroupSessions)
 		api.GET("/profiler/compare-sessions", controllers.CompareSessions)
