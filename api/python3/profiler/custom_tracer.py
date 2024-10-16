@@ -8,6 +8,7 @@
 from .tokens_usage import record_usage
 from abc import ABC, abstractmethod
 from typing import Callable
+import json
 
 
 class CustomTracer(ABC):
@@ -25,6 +26,11 @@ class OpenHostaTracer(CustomTracer):
             _last_response = getattr(func, "_last_response")
             result["_last_response"] = _last_response
             record_usage(_last_response["usage"]["total_tokens"])
+            # print("==========")
+            # print(result["_last_response"])
+            # print("==========")
+            # print(json.dumps(result["_last_response"]))
+            print("==========")
         return result
 
 

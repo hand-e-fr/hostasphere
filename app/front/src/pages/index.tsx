@@ -1,5 +1,5 @@
 import React from 'react';
-import { CodeBlock } from 'react-code-blocks';
+import {CodeBlock, CopyBlock} from 'react-code-blocks';
 
 const HomePage = () => {
     return (
@@ -19,7 +19,7 @@ const HomePage = () => {
                 <h2 className="card-title text-xl">Installation</h2>
                 <p className="mb-4">Install the required dependencies with pip:</p>
                 <CodeBlock
-                    text={`pip install hostasphere-profiler==v1.0-rc3`}
+                    text={`pip install hostasphere-profiler==v1.0`}
                     language="shell"
                     showLineNumbers={false}
                 />
@@ -32,16 +32,17 @@ const HomePage = () => {
                     text={`from profiler.core import Profiler
 
 profiler = Profiler(
-address='localhost:50051', # required, is the address of the datasource, default is 'localhost:50051'
-token='hsp_0d6d562910026e3ba0b511dd2c99a47d374f810055003c149eb5fbcdad693319', # required
-refresh_interval=0.1, # optional, double representing the interval in seconds between each refresh of recorded metrics, default is 0.1
-session_tag="dev-1", # optional, string representing the session tag, default is None, easier to identify the session in the monitoring interface
+    address='localhost:50051', # required, is the address of the datasource, default is 'localhost:50051'
+    token='hsp_0d6d562910026e3ba0b511dd2c99a47d374f810055003c149eb5fbcdad693319', # required
+    refresh_interval=0.1, # optional, double representing the interval in seconds between each refresh of recorded metrics, default is 0.1
+    session_tag="dev-1", # optional, string representing the session tag, default is None, easier to identify the session in the monitoring interface
 )
 
 @profiler.track()
 def my_func():
-# Function logic
-pass`}
+    # Function logic
+    pass
+`}
                     language="python"
                     showLineNumbers={false}
                 />

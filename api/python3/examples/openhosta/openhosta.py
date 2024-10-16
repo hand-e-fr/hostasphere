@@ -11,9 +11,9 @@ gpt4omini = config.Model(
 )
 
 profiler = Profiler(
-    address='california-a.tensordockmarketplace.com:20411',
-    token='hsp_3025e1ed24d554b4709f19fca36e9aa474567736793a8a6e1147185ba438f56f',
-    session_tag='openhosta-8'
+    address='localhost:50051',
+    token='hsp_cc5d7598657d83572553e648529bc2d2d9ec91f865d01e2b3b925843fedc1ca3',
+    session_tag='v1'
 )
 
 

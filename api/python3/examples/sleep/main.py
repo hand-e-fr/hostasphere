@@ -16,4 +16,4 @@ def wait(n):
 
 
 if __name__ == "__main__":
-    wait(2)
+    wait(3.52)

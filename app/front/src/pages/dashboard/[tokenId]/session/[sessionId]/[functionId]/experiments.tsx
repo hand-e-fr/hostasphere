@@ -8,7 +8,7 @@ import Loading from "@/components/Loading";
 const Session: React.FC = () => {
     const {authInfo} = useAppContext();
     const router = useRouter();
-    const {tokenId, sessionId} = router.query;
+    const {tokenId, sessionId, functionId} = router.query;
     const [tokenName, setTokenName] = useState<string | null>(null);
     const {fetchTokenNameFromId} = useTokenController();
     const {session, functions, loading, error, fetchData} = useSessionData(tokenId as string, sessionId as string);
@@ -22,6 +22,7 @@ const Session: React.FC = () => {
             <h1>Session</h1>
             <p>Session ID: {sessionId}</p>
             <p>Token ID: {tokenId}</p>
+            <p>Function ID: {functionId}</p>
             <p>Token Name: {tokenName}</p>
             <p>Session Tag: {session.sessiontag}</p>
         </div>

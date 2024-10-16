@@ -11,6 +11,7 @@ import ExecutionTimeline from '@/components/dashboard/timeline/ExecutionTimeline
 import {useAppContext} from "@/context/AppContext";
 import DifferenceIcon from '@mui/icons-material/Difference';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const TokenDashboard: React.FC = () => {
     const {authInfo} = useAppContext();
@@ -147,18 +148,27 @@ const TokenDashboard: React.FC = () => {
             <p className="text-gray-500">List of sessions</p>
             <div className="flex flex-row mb-4 space-x-2">
                 {/* compare button */}
-                <button className={`btn btn-info btn-sm ${selectedSessions.length !== 2 ? 'btn-disabled' : ''}`}
-                        onClick={() => {
-                            if (selectedSessions.length === 2)
-                                router.push(`/dashboard/${tokenId}/compare/${selectedSessions[0]}/${selectedSessions[1]}`);
-                        }}>
-                    <DifferenceIcon/>
+                <button
+                    className={`btn btn-info btn-sm ${selectedSessions.length !== 2 ? 'btn-disabled' : ''} text-white`}
+                    onClick={() => {
+                        if (selectedSessions.length === 2)
+                            router.push(`/dashboard/${tokenId}/compare/${selectedSessions[0]}/${selectedSessions[1]}`);
+                    }}>
+                    <DifferenceIcon sx={{color: "white", fontSize: "20px"}}/>
                     Compare 2 sessions
                 </button>
+                {/* delete button */}
+                <button
+                    className={`btn btn-error btn-sm ${selectedSessions.length === 0 ? 'btn-disabled' : ''} text-white`}
+                    onClick={() => setSelectedSessions([])}>
+                    <DeleteIcon sx={{color: "white", fontSize: "20px"}}/>
+                    Delete
+                </button>
                 {/* cancel selection button */}
-                <button className={`btn btn-warning btn-sm ${selectedSessions.length === 0 ? 'btn-disabled' : ''}`}
-                        onClick={() => setSelectedSessions([])}>
-                    <UnfoldMoreIcon/>
+                <button
+                    className={`btn btn-warning btn-sm ${selectedSessions.length === 0 ? 'btn-disabled' : ''} text-white`}
+                    onClick={() => setSelectedSessions([])}>
+                    <UnfoldMoreIcon sx={{color: "white", fontSize: "20px"}}/>
                     Cancel selection
                 </button>
             </div>
@@ -168,19 +178,18 @@ const TokenDashboard: React.FC = () => {
                         <ul className="menu rounded-box pl-0">
                             {filteredSessions && filteredSessions.map((group: GroupedSessionResponse, index) => (
                                 <>
-                                    {
+                                {
                                         grouping === 'all' || !group._id ? (
                                             <>
                                                 {group.sessions.map((session: SessionData) => (
                                                     <li key={session._id}>
                                                         <summary
                                                             className={`${selectedSessions.includes(session.sessionuuid) ? 'bg-gray-200' : ''}`}>
-                                                            <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session.sessionuuid)}
+                                                            <input type="checkbox" className="checkbox checkbox-xs"
+                                                                   checked={selectedSessions.includes(session.sessionuuid)}
                                                                    onChange={(e) => {
                                                                        if (e.target.checked) {
-                                                                            if (selectedSessions.length < 2) {
-                                                                                addSelectedSession(session.sessionuuid);
-                                                                            }
+                                                                           addSelectedSession(session.sessionuuid);
                                                                        } else {
                                                                            removeSelectedSession(session.sessionuuid);
                                                                        }
@@ -199,7 +208,7 @@ const TokenDashboard: React.FC = () => {
                                             </>
                                         ) : (
                                             <li key={index}>
-                                                <details>
+                                            <details>
                                                     <summary>
                                                         <FolderIcon/>
                                                         {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}
@@ -209,16 +218,16 @@ const TokenDashboard: React.FC = () => {
                                                             <li key={session._id}>
                                                                 <summary
                                                                     className={`${selectedSessions.includes(session.sessionuuid) ? 'bg-gray-200' : ''}`}>
-                                                                    <input type="checkbox" className="checkbox checkbox-xs" checked={selectedSessions.includes(session.sessionuuid)}
-                                                                        onChange={(e) => {
-                                                                            if (e.target.checked) {
-                                                                                 if (selectedSessions.length < 2) {
-                                                                                     addSelectedSession(session.sessionuuid);
-                                                                                 }
-                                                                            } else {
-                                                                                removeSelectedSession(session.sessionuuid);
-                                                                            }
-                                                                        }}/>
+                                                                    <input type="checkbox"
+                                                                           className="checkbox checkbox-xs"
+                                                                           checked={selectedSessions.includes(session.sessionuuid)}
+                                                                           onChange={(e) => {
+                                                                               if (e.target.checked) {
+                                                                                   addSelectedSession(session.sessionuuid);
+                                                                               } else {
+                                                                                   removeSelectedSession(session.sessionuuid);
+                                                                               }
+                                                                           }}/>
                                                                     <Link
                                                                         href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
                                                                         <div className="flex items-center space-x-2">
@@ -231,7 +240,7 @@ const TokenDashboard: React.FC = () => {
                                                             </li>
                                                         ))}
                                                     </ul>
-                                                </details>
+                                            </details>
                                             </li>
                                         )
                                     }

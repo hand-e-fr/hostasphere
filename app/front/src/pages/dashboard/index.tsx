@@ -42,7 +42,7 @@ const Dashboard: React.FC = () => {
                     Dashboard
                 </h1>
             </div>
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid lg:grid-cols-2 gap-4">
                 {!tokens || tokens.filter(token => authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email)).length <= 0 ? (
                     <div className="card bg-gray-50 shadow-xl">
                         <div className="card-body">
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
                 ) : tokens.map((token, index) => authInfo && authInfo.ok && (authInfo.is_admin || token.owner === authInfo.email) &&
                     (
                         <div key={index}>
-                            <div className="card shadow-md">
+                            <div className="card shadow-md h-full">
                                 <div className="card-body flex justify-between flex-row">
                                     <Link href={`/dashboard/${token.id}`} passHref>
                                         <div className="flex flex-col justify-start">

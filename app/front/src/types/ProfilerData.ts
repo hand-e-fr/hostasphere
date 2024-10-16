@@ -15,6 +15,15 @@ export interface FunctionCall {
     caller: string;
 }
 
+export interface CustomTracerData {
+    OpenHostaTracer: {
+        data: {
+            _last_request: string;
+            _last_response: string;
+        }
+    }
+}
+
 export interface ProfilerData {
     _id: string;
     cpuusage: number;
@@ -31,4 +40,6 @@ export interface ProfilerData {
     startdate: number;
     tokenid: string;
     sessionuuid: string;
+    sourcecode: string
+    customtracerdata: CustomTracerData;
 }

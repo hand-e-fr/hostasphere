@@ -9,6 +9,7 @@ import FuncCalls from "@/components/dashboard/step/FuncCalls";
 import Loading from "@/components/Loading";
 import {useAppContext} from "@/context/AppContext";
 import ScienceIcon from '@mui/icons-material/Science';
+import decodeOpenAIResponse from "@/types/OpenAIResponse";
 
 const Session: React.FC = () => {
     const {authInfo} = useAppContext();
@@ -22,6 +23,7 @@ const Session: React.FC = () => {
         if (router.asPath.includes('#func-calls')) return 'func-calls';
         return 'overview';
     });
+    const [usedModels, setUsedModels] = useState<string[]>([]);
 
     useEffect(() => {
         if (router.asPath.includes('#diagram')) {
@@ -35,7 +37,21 @@ const Session: React.FC = () => {
 
     useEffect(() => {
         if (tokenId && sessionId) {
-            fetchData().then();
+            fetchData().then(() => {
+                if (!functions) return;
+                const models = new Set<string>();
+                functions.forEach((func) => {
+                    if (func.customtracerdata && func.customtracerdata.OpenHostaTracer) {
+                        const data = func.customtracerdata.OpenHostaTracer.data;
+                        if (data && data._last_response) {
+                            data._last_response = data._last_response.replaceAll('\'', '"');
+                            data._last_response = data._last_response.replaceAll('None', 'null');
+                            const response = decodeOpenAIResponse(JSON.parse(data._last_response));
+                            console.log(JSON.parse(response.model));
+                        }
+                    }
+                });
+            });
             fetchTokenNameFromId(tokenId as string).then((response) => {
                 setTokenName(response);
             });
@@ -51,10 +67,6 @@ const Session: React.FC = () => {
             <div className="mb-4">
                 <div className="flex justify-between items-center">
                     <h1 className="text-2xl font-bold">Dashboard</h1>
-                    {/*<button className="btn btn-secondary text-white" onClick={() => router.push(`/dashboard/${tokenId}/session/${sessionId}/experiments`)}>
-                        <ScienceIcon className="mr-2"/>
-                        Experiments
-                    </button>*/}
                 </div>
                 <div className="breadcrumbs text-sm">
                     <ul>

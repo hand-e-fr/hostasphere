@@ -63,8 +63,8 @@ const SessionInfo: React.FC<SessionInfoProps> = ({ session, comparedSession, ses
                         <h3 className="text-lg font-semibold">Execution Information</h3>
                         <p>Start Time: {getColoredText(formatTime(session.startdate), formatTime(comparedSession.startdate))}</p>
                         <p>End Time: {getColoredText(formatTime(session.enddate), formatTime(comparedSession.enddate))}</p>
-                        <p>Execution Time: {getColoredText(session.executiontime, comparedSession.executiontime, true)} seconds</p>
-                        <p>Boot Time: {getColoredText(session.boottime, comparedSession.boottime, true)} seconds</p>
+                        <p>Execution Time: {getColoredText(session.executiontime, comparedSession.executiontime, true)} ms</p>
+                        <p>Boot Time: {getColoredText(session.boottime, comparedSession.boottime, true)} ms</p>
                     </div>
 
                     {/* Card: Tags and Tokens */}
