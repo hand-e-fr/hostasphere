@@ -6,12 +6,12 @@ import {useTokenController} from "@/hooks/app/useTokenController";
 import useGroupedSessions, {GroupedSessionResponse} from "@/hooks/session/useGroupedSessionsData";
 import FolderIcon from "@mui/icons-material/Folder";
 import {SessionData} from "@/types/SessionData";
-import CodeIcon from '@mui/icons-material/Code';
 import ExecutionTimeline from '@/components/dashboard/timeline/ExecutionTimeline';
 import {useAppContext} from "@/context/AppContext";
 import DifferenceIcon from '@mui/icons-material/Difference';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SessionListItem from "@/components/SessionListItem";
 
 const TokenDashboard: React.FC = () => {
     const {authInfo} = useAppContext();
@@ -172,84 +172,54 @@ const TokenDashboard: React.FC = () => {
                     Cancel selection
                 </button>
             </div>
-            {
-                loading ? <Loading/> : (
-                    <>
-                        <ul className="menu rounded-box pl-0">
-                            {filteredSessions && filteredSessions.map((group: GroupedSessionResponse, index) => (
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+                    <ul className="menu rounded-box pl-0">
+                        {filteredSessions &&
+                            filteredSessions.map((group: GroupedSessionResponse, index) => (
                                 <>
-                                {
-                                        grouping === 'all' || !group._id ? (
-                                            <>
-                                                {group.sessions.map((session: SessionData) => (
-                                                    <li key={session._id}>
-                                                        <summary
-                                                            className={`${selectedSessions.includes(session.sessionuuid) ? 'bg-gray-200' : ''}`}>
-                                                            <input type="checkbox" className="checkbox checkbox-xs"
-                                                                   checked={selectedSessions.includes(session.sessionuuid)}
-                                                                   onChange={(e) => {
-                                                                       if (e.target.checked) {
-                                                                           addSelectedSession(session.sessionuuid);
-                                                                       } else {
-                                                                           removeSelectedSession(session.sessionuuid);
-                                                                       }
-                                                                   }}/>
-                                                            <Link
-                                                                href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
-                                                                <div className="flex items-center space-x-2">
-                                                                    <CodeIcon/>
-                                                                    <p>{new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
-                                                                        ({session._id})</p>
-                                                                </div>
-                                                            </Link>
-                                                        </summary>
-                                                    </li>
-                                                ))}
-                                            </>
-                                        ) : (
-                                            <li key={index}>
+                                    {grouping === 'all' || !group._id ? (
+                                        <>
+                                            {group.sessions.map((session: SessionData) => (
+                                                <SessionListItem
+                                                    key={session._id}
+                                                    session={session}
+                                                    selectedSessions={selectedSessions}
+                                                    addSelectedSession={addSelectedSession}
+                                                    removeSelectedSession={removeSelectedSession}
+                                                />
+                                            ))}
+                                        </>
+                                    ) : (
+                                        <li key={index}>
                                             <details>
-                                                    <summary>
-                                                        <FolderIcon/>
-                                                        {typeof group._id === 'string' ? group._id : `Week ${group._id.week}, Year ${group._id.year}`}
-                                                    </summary>
-                                                    <ul>
-                                                        {group.sessions.map((session: SessionData) => (
-                                                            <li key={session._id}>
-                                                                <summary
-                                                                    className={`${selectedSessions.includes(session.sessionuuid) ? 'bg-gray-200' : ''}`}>
-                                                                    <input type="checkbox"
-                                                                           className="checkbox checkbox-xs"
-                                                                           checked={selectedSessions.includes(session.sessionuuid)}
-                                                                           onChange={(e) => {
-                                                                               if (e.target.checked) {
-                                                                                   addSelectedSession(session.sessionuuid);
-                                                                               } else {
-                                                                                   removeSelectedSession(session.sessionuuid);
-                                                                               }
-                                                                           }}/>
-                                                                    <Link
-                                                                        href={`/dashboard/${session.tokenid}/session/${session.sessionuuid}`}>
-                                                                        <div className="flex items-center space-x-2">
-                                                                            <CodeIcon/>
-                                                                            <p>{new Date(session.startdate).toLocaleString()} {session.sessiontag === "" ? "" : `(${session.sessiontag})`}- {session.executiontime}ms
-                                                                                ({session._id})</p>
-                                                                        </div>
-                                                                    </Link>
-                                                                </summary>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
+                                                <summary>
+                                                    <FolderIcon />
+                                                    {typeof group._id === 'string'
+                                                        ? group._id
+                                                        : `Week ${group._id.week}, Year ${group._id.year}`}
+                                                </summary>
+                                                <ul>
+                                                    {group.sessions.map((session: SessionData) => (
+                                                        <SessionListItem
+                                                            key={session._id}
+                                                            session={session}
+                                                            selectedSessions={selectedSessions}
+                                                            addSelectedSession={addSelectedSession}
+                                                            removeSelectedSession={removeSelectedSession}
+                                                        />
+                                                    ))}
+                                                </ul>
                                             </details>
-                                            </li>
-                                        )
-                                    }
+                                        </li>
+                                    )}
                                 </>
                             ))}
-                        </ul>
-                    </>
-                )
-            }
+                    </ul>
+                </>
+            )}
         </div>
     );
 };
