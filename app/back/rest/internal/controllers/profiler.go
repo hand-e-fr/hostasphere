@@ -5,6 +5,7 @@ import (
 	"app/internal/utils"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"net/http"
@@ -33,12 +34,16 @@ func FetchProfilerData(c *gin.Context) {
 	}
 
 	sortFields := c.Query("sort")
-	name := c.Query("name")
+	functionName := c.Query("functionName")
 	id := c.Query("id")
+	limit := int64(0)
 
-	if tokenID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "tokenid query parameter is required"})
-		return
+	if c.Query("limit") != "" {
+		limit, err = strconv.ParseInt(c.Query("limit"), 10, 64)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid limit parameter"})
+			return
+		}
 	}
 
 	// Initialize context from the request
@@ -46,12 +51,17 @@ func FetchProfilerData(c *gin.Context) {
 
 	filter := bson.M{"tokenid": tokenID}
 
-	if name != "" {
-		filter["name"] = name
+	if functionName != "" {
+		filter["functionname"] = functionName
 	}
 
 	if id != "" {
-		filter["id"] = id
+		objectID, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id parameter"})
+			return
+		}
+		filter["_id"] = objectID
 	}
 
 	findOptions := options.Find()
@@ -67,6 +77,10 @@ func FetchProfilerData(c *gin.Context) {
 			sortOptions = append(sortOptions, bson.E{Key: field, Value: sortOrder})
 		}
 		findOptions.SetSort(sortOptions)
+	}
+
+	if limit > 0 {
+		findOptions.SetLimit(limit)
 	}
 
 	cursor, err := config.GetCollection("profiler").Find(ctx, filter, findOptions)
@@ -204,28 +218,29 @@ func FetchSessionData(c *gin.Context) {
 		return
 	}
 
-	// Extract the sessionuuid for fetching related functions
-	sessionUUID = session["sessionuuid"].(string)
-
-	// Fetch related functions from the "profiler" collection
-	profilerFilter := bson.M{"sessionuuid": sessionUUID}
-	cursor, err := config.GetCollection("profiler").Find(ctx, profilerFilter)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
+	response := gin.H{
+		"session": session,
 	}
-	defer cursor.Close(ctx)
 
 	var functions []bson.M
-	if err = cursor.All(ctx, &functions); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+	if c.Query("returnFunctions") != "false" {
+		// Extract the sessionuuid for fetching related functions
+		sessionUUID = session["sessionuuid"].(string)
 
-	// Combine session and functions into the response
-	response := gin.H{
-		"session":   session,
-		"functions": functions,
+		// Fetch related functions from the "profiler" collection
+		profilerFilter := bson.M{"sessionuuid": sessionUUID}
+		cursor, err := config.GetCollection("profiler").Find(ctx, profilerFilter)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		defer cursor.Close(ctx)
+
+		if err = cursor.All(ctx, &functions); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		response["functions"] = functions
 	}
 
 	c.JSON(http.StatusOK, response)

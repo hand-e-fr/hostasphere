@@ -49,6 +49,8 @@ func SetupRouter() *gin.Engine {
 		api.GET("/profiler/sessions", controllers.GetSessions)
 		api.GET("/profiler/group-sessions", controllers.GroupSessions)
 		api.GET("/profiler/compare-sessions", controllers.CompareSessions)
+
+		api.POST("/experiments/execute", controllers.ExperimentsExecute)
 	}
 
 	r.GET("/api/app/isInitialized", controllers.IsAppInitialized)

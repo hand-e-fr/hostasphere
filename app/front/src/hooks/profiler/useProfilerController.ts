@@ -8,7 +8,7 @@ export interface UseProfilerDataResult {
     error: string | null;
 }
 
-const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfilerDataResult => {
+const useProfilerData = (tokenId: string, sortFields: string[] = [], limit: number = 0, id: string = "", functionName: string = ""): UseProfilerDataResult => {
     const [data, setData] = useState<ProfilerData[] | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -29,6 +29,15 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
                 queryParams.append('tokenid', tokenId);
                 if (sortFields.length > 0) {
                     queryParams.append('sort', sortFields.join(','));
+                }
+                if (limit > 0) {
+                    queryParams.append('limit', limit.toString());
+                }
+                if (id) {
+                    queryParams.append('id', id);
+                }
+                if (functionName) {
+                    queryParams.append('functionName', functionName);
                 }
 
                 const response = await fetch(`${restUrl}/api/profiler?${queryParams.toString()}`, {
@@ -51,7 +60,7 @@ const useProfilerData = (tokenId: string, sortFields: string[] = []): UseProfile
         };
 
         fetchData().then();
-    }, [tokenId, sortFields]);
+    }, []);
 
     return {data, loading, error};
 };

@@ -3,7 +3,7 @@ import {SessionData} from "@/types/SessionData";
 import {ProfilerData} from "@/types/ProfilerData";
 import {useAppContext} from '@/context/AppContext';
 
-const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: string | string[] | undefined, sessionTag: string = ''): {
+const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: string | string[] | undefined, sessionTag: string = '', returnFunctions: boolean = true): {
     fetchData: () => Promise<void>;
     functions: ProfilerData[] | null;
     session: SessionData | null;
@@ -39,6 +39,7 @@ const useSessionData = (tokenid: string | string[] | undefined, sessionuuid: str
                 setLoading(false);
                 return;
             }
+            queryParams.append('returnFunctions', returnFunctions ? 'true' : 'false');
 
             const response = await fetch(`${restUrl}/api/profiler/session?${queryParams.toString()}`, {
                 headers: {

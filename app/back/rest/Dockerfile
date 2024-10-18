@@ -18,6 +18,10 @@ COPY --from=builder /app/client_backend .
 
 COPY --from=builder /app/.env .
 
+ENV DOCKER_CLI_EXPERIMENTAL=enabled
+
+RUN apk add --no-cache docker-cli
+
 EXPOSE 8080
 
 RUN chmod +x client_backend
