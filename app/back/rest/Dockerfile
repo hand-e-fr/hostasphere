@@ -20,7 +20,7 @@ COPY --from=builder /app/.env .
 
 ENV DOCKER_CLI_EXPERIMENTAL=enabled
 
-RUN apk add --no-cache docker-cli
+RUN apk add --no-cache --virtual .build-deps --force docker-cli=19.03.13-r0
 
 EXPOSE 8080
 

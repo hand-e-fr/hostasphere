@@ -5,6 +5,8 @@ import {useTokenController} from "@/hooks/app/useTokenController";
 import useSessionData from "@/hooks/session/useSessionData";
 import Loading from "@/components/Loading";
 import useProfilerData from "@/hooks/profiler/useProfilerController";
+import {ProfilerData} from "@/types/ProfilerData";
+import ExperimentForm from "@/components/ExperimentForm";
 
 const Session: React.FC = () => {
     const {authInfo} = useAppContext();
@@ -21,18 +23,20 @@ const Session: React.FC = () => {
 
     return (
         <div>
-            <h1>Session</h1>
-            <p>Session ID: {sessionId}</p>
-            <p>Token ID: {tokenId}</p>
-            <p>Function ID: {functionId}</p>
-            <p>Token Name: {tokenName}</p>
-            <p>Session Tag: {session.sessiontag}</p>
-            { data.map((item) => (
-                <div key={item._id}>
-                    <p>{item._id}</p>
-                    <p>{item.functionname}</p>
-                </div>
-            ))}
+            {/*<h1>Session</h1>*/}
+            {/*<p>Session ID: {sessionId}</p>*/}
+            {/*<p>Token ID: {tokenId}</p>*/}
+            {/*<p>Function ID: {functionId}</p>*/}
+            {/*<p>Token Name: {tokenName}</p>*/}
+            {/*<p>Session Tag: {session.sessiontag}</p>*/}
+            {/*{ data.map((item: ProfilerData) => (*/}
+            {/*    <div key={item._id}>*/}
+            {/*        <p>{item._id}</p>*/}
+            {/*        <p>{item.functionname}</p>*/}
+            {/*        <textarea value={item.sourcecode} className="w-full h-64"/>*/}
+            {/*    </div>*/}
+            {/*))}*/}
+            <ExperimentForm />
         </div>
     );
 }

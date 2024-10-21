@@ -8,8 +8,6 @@ import {useTokenController} from "@/hooks/app/useTokenController";
 import FuncCalls from "@/components/dashboard/step/FuncCalls";
 import Loading from "@/components/Loading";
 import {useAppContext} from "@/context/AppContext";
-import ScienceIcon from '@mui/icons-material/Science';
-import decodeOpenAIResponse from "@/types/OpenAIResponse";
 
 const Session: React.FC = () => {
     const {authInfo} = useAppContext();

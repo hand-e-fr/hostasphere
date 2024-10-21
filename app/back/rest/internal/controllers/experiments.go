@@ -45,7 +45,12 @@ func ExperimentsExecute(c *gin.Context) {
 	c.Stream(func(w io.Writer) bool {
 		scanner := bufio.NewScanner(out)
 		for scanner.Scan() {
-			fmt.Fprintf(w, "%s\n", scanner.Text())
+			line := scanner.Text()
+			line = line[8:]
+			_, err := fmt.Fprintf(w, "%s\n", line)
+			if err != nil {
+				return false
+			}
 		}
 		return false
 	})
